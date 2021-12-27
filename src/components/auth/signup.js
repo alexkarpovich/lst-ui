@@ -35,7 +35,7 @@ const Signup = () => {
             errors.password = 'Required'
         }
 
-        if (values.password != values.repeatPassword) {
+        if (values.password !== values.repeatPassword) {
             errors.repeatPassword = 'Passwords do not match';
         }
 

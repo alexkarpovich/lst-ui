@@ -9,17 +9,21 @@ const SignupConfirmPage = () => {
     const [isFetching, setIsFetching] = useState(true)
     const [isConfirmed, setIsConfirmed] = useState(false);
 
-    useEffect(async () => {
-        try {
-            const res = await api.post(`/signup/${token}`);
-            setIsConfirmed(true);
-            setIsFetching(false);
-        } catch (err) {
-            setIsConfirmed(false);
-            setIsFetching(false);
-            console.log(err);
+    useEffect(() => {
+        const confirmEmail = async () => {
+            try {
+                const res = await api.post(`/signup/${token}`);
+                setIsConfirmed(true);
+                setIsFetching(false);
+            } catch (err) {
+                setIsConfirmed(false);
+                setIsFetching(false);
+                console.log(err);
+            }
         }
-    }, [])
+
+        confirmEmail();
+    })
 
     return (
         <div className="signup-confirm-page">
