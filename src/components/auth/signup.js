@@ -9,11 +9,11 @@ const Signup = () => {
     const navigate = useNavigate();
 
     async function onSubmit(values, {setSubmitting, setFieldError}) {
-        const {repeatPassword, ...data} = values;
+        const {repeatPassword, ...reqData} = values;
         
         try {
             setSubmitting(true);
-            const {data} = await api.post('/signup', data);
+            const {data} = await api.post('/signup', reqData);
             setSubmitting(false);
             console.log(data);
             navigate('/');

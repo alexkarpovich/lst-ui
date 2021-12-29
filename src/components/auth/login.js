@@ -18,7 +18,7 @@ const Login = () => {
             setSubmitting(true);
             const {data:res} = await api.post('/login', values);
             setSubmitting(false);
-            console.log(res);
+            console.log('login', res);
 
             if (res.data.token) {
                 setToken(res.data.token);

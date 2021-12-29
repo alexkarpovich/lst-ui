@@ -2,18 +2,22 @@ import axios from "axios";
 import { API_URL } from "../config";
 import { getToken } from "./session";
 
-let headers = {
-    'Content-Type': 'application/json'
-};
 
-const token = getToken();
-
-if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-}
-
-export default axios.create({
+const axiosInstance = axios.create({
     baseURL: API_URL,
     // timeout: 5000,
-    headers,
+    responseType: 'json',
+    responseEncoding: 'utf8',
 });
+
+axiosInstance.interceptors.request.use(config => {
+    const token = getToken();
+
+    if (token) {
+        config.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+    
+    return config;
+});
+
+export default axiosInstance;

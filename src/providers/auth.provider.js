@@ -1,8 +1,8 @@
-import React, { createContext, useReducer, useEffect, useContext } from "react";
+import React, { createContext, useState, useReducer, useEffect, useContext } from "react";
 import jwtDecode from "jwt-decode";
 
 import api from "../utils/api";
-import { getToken, removeToken, setToken } from "../utils/session";
+import { getToken, removeToken } from "../utils/session";
 
 const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
@@ -51,17 +51,20 @@ function authReducer(state, action) {
 }
 
 export function AuthProvider(props) {
+    const [isFetching, setIsFetching] = useState(false)
     const [state, dispatch] = useReducer(authReducer, initialState);
 
     console.log(state);
 
     useEffect(() => {
         token && !state.user && reloadUser();
-    }, []);
+    });
 
     async function reloadUser () {
-        const {data:res} = await api.get('/me');
+        setIsFetching(true);
+        const {data:res} = await api.get('/me');        
         login(res.data);
+        setIsFetching(false);
     }
 
     function login(userData) {
@@ -76,10 +79,10 @@ export function AuthProvider(props) {
         dispatch({ type: LOGOUT });
     }
 
-    return (
+    return ( isFetching ? 'Fetching...' : 
         <AuthContext.Provider
             value={{ ...state, login, logout, reloadUser }}
             {...props}
-        />
+        />        
     );
 }
