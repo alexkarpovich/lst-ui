@@ -1,12 +1,13 @@
-import React, { createContext, useReducer } from 'react';
-import jwtDecode from 'jwt-decode';
-import { getToken, removeToken, setToken } from '../utils/session';
+import React, { createContext, useReducer, useEffect, useContext } from "react";
+import jwtDecode from "jwt-decode";
+
+import api from "../utils/api";
+import { getToken, removeToken, setToken } from "../utils/session";
 
 const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
 
 let initialState = {
-    isAuthenticated: false,
     user: null
 };
 
@@ -16,31 +17,32 @@ if (token) {
     const decoded = jwtDecode(token);
 
     if (decoded.exp * 1000 < Date.now()) {
+        console.log('removing expired token');
         removeToken()
-    } else {
-        initialState.isAuthenticated = true;
     }
 }
 
-const AuthContext = createContext({
-    isAuthenticated: false,
+export const AuthContext = createContext({
     user: null,
     login: (data) => { },
-    logout: () => { }
+    logout: () => { },
+    reloadUser: async () => {},
 });
+
+export function useAuthContext() {
+   return useContext(AuthContext);
+}
 
 function authReducer(state, action) {
     switch (action.type) {
         case LOGIN:
             return {
                 ...state,
-                isAuthenticated: true,
-                user: action.payload.user
+                user: action.payload
             };
         case LOGOUT:
             return {
                 ...state,
-                isAuthenticated: false,
                 user: null
             };
         default:
@@ -48,13 +50,21 @@ function authReducer(state, action) {
     }
 }
 
-function AuthProvider(props) {
-    const data = null;
+export function AuthProvider(props) {
     const [state, dispatch] = useReducer(authReducer, initialState);
 
-    function login(userData) {
-        setToken(userData.token);
+    console.log(state);
 
+    useEffect(() => {
+        token && !state.user && reloadUser();
+    }, []);
+
+    async function reloadUser () {
+        const {data:res} = await api.get('/me');
+        login(res.data);
+    }
+
+    function login(userData) {
         dispatch({
             type: LOGIN,
             payload: userData
@@ -68,10 +78,8 @@ function AuthProvider(props) {
 
     return (
         <AuthContext.Provider
-            value={{ user: data ? data.me : null, login, logout }}
+            value={{ ...state, login, logout, reloadUser }}
             {...props}
         />
     );
 }
-
-export { AuthContext, AuthProvider };

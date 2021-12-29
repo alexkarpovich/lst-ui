@@ -1,16 +1,22 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
 import './signup.scss';
 import api from '../../utils/api';
 
 const Signup = () => {
+    const navigate = useNavigate();
+
     async function onSubmit(values, {setSubmitting, setFieldError}) {
         const {repeatPassword, ...data} = values;
         
         try {
-            const res = await api.post('/signup', data);
-            console.log(res);
+            setSubmitting(true);
+            const {data} = await api.post('/signup', data);
+            setSubmitting(false);
+            console.log(data);
+            navigate('/');
         } catch (err) {
             console.log(err);
         }
@@ -46,7 +52,7 @@ const Signup = () => {
         <div className="signup">
             <h3>Sign up</h3>
             <Formik
-                initialValues={{email: '', username: '', password: '', repeatPassword: '', firstName: '', lastName: ''}} 
+                initialValues={{email: '', username: '', password: '', repeatPassword: '' }} 
                 validate={validateForm}
                 onSubmit={onSubmit}>
                 {({isSubmitting}) => (
@@ -54,39 +60,27 @@ const Signup = () => {
                         <Field 
                             type="email"
                             name="email"
-                            placeholder="Enter email address *" 
+                            placeholder="Enter email address" 
                         />
                         <ErrorMessage name="email" component="div" />
                         <Field 
                             type="text" 
                             name="username"
-                            placeholder="Enter username *" 
+                            placeholder="Enter username" 
                         />
                         <ErrorMessage name="username" component="div" />
                         <Field 
                             type="password" 
                             name="password"
-                            placeholder="Enter password *" 
+                            placeholder="Enter password" 
                         />
                         <ErrorMessage name="password" component="div" />
                         <Field 
                             type="password" 
                             name="repeatPassword"
-                            placeholder="Repeat password *" 
+                            placeholder="Repeat password" 
                         />
                         <ErrorMessage name="repeatPassword" component="div" />
-                        <Field
-                            type="text"
-                            name="firstName" 
-                            placeholder="Enter first name" 
-                        />
-                        <ErrorMessage name="firstName" component="div" />
-                        <Field
-                            type="text" 
-                            name="lastName" 
-                            placeholder="Enter last name" 
-                        />
-                        <ErrorMessage name="lastName" component="div" />
                         <button type="submit" className="button" disabled={isSubmitting}>
                             Submit
                         </button>

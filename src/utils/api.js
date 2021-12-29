@@ -15,5 +15,5 @@ if (token) {
 export default axios.create({
     baseURL: API_URL,
     // timeout: 5000,
-    headers
+    headers,
 });
