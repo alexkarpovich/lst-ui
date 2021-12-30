@@ -24,7 +24,7 @@ const Login = () => {
                 setToken(res.data.token);
                 auth.reloadUser();
 
-                navigate('/');
+                navigate('/me');
             }
         } catch (err) {
             console.log(err);

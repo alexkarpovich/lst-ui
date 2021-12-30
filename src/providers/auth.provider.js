@@ -11,17 +11,6 @@ let initialState = {
     user: null
 };
 
-const token = getToken();
-
-if (token) {
-    const decoded = jwtDecode(token);
-
-    if (decoded.exp * 1000 < Date.now()) {
-        console.log('removing expired token');
-        removeToken()
-    }
-}
-
 export const AuthContext = createContext({
     user: null,
     login: (data) => { },
@@ -54,11 +43,20 @@ export function AuthProvider(props) {
     const [isFetching, setIsFetching] = useState(false)
     const [state, dispatch] = useReducer(authReducer, initialState);
 
-    console.log(state);
-
     useEffect(() => {
-        token && !state.user && reloadUser();
-    });
+        const token = getToken();
+
+        if (token) {
+            const decoded = jwtDecode(token);
+
+            if (decoded.exp * 1000 < Date.now()) {
+                console.log('removing expired token');
+                removeToken()
+            } else {
+                !state.user && reloadUser();
+            }
+        }
+    }, []);
 
     async function reloadUser () {
         setIsFetching(true);

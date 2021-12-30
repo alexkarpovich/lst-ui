@@ -23,7 +23,7 @@ const SignupConfirmPage = () => {
         }
 
         confirmEmail();
-    })
+    }, [])
 
     return (
         <div className="signup-confirm-page">

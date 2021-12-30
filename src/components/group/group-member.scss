@@ -1,0 +1,20 @@
+.group-member {
+    display: flex;
+    padding: 5px;
+
+    & > .username {
+        width: 30%;
+    }
+
+    & > .controls {
+        margin-left: auto;
+
+        & > * {
+            cursor: pointer;
+
+            &:hover {
+                color: rgb(224, 37, 37);
+            }
+        }
+    }
+}
