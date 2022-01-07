@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
 import "./login.scss";
@@ -9,6 +9,7 @@ import { useAuthContext } from "../../providers/auth.provider";
 
 const Login = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const auth = useAuthContext();
 
     console.log(auth);
@@ -24,7 +25,9 @@ const Login = () => {
                 setToken(res.data.token);
                 auth.reloadUser();
 
-                navigate('/me');
+                console.log(searchParams.get('next'));
+
+                navigate(searchParams.get('next') || '/me');
             }
         } catch (err) {
             console.log(err);

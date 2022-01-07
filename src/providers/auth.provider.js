@@ -4,10 +4,12 @@ import jwtDecode from "jwt-decode";
 import api from "../utils/api";
 import { getToken, removeToken } from "../utils/session";
 
-const LOGIN = 'LOGIN';
+const LOGIN_FETCHING = 'LOGIN_FETCHING';
+const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 const LOGOUT = 'LOGOUT';
 
 let initialState = {
+    isFetching: true,
     user: null
 };
 
@@ -24,9 +26,12 @@ export function useAuthContext() {
 
 function authReducer(state, action) {
     switch (action.type) {
-        case LOGIN:
+        case LOGIN_FETCHING:
+            return {...state, isFetching: true};
+        case LOGIN_SUCCESS:
             return {
                 ...state,
+                isFetching: false,
                 user: action.payload
             };
         case LOGOUT:
@@ -40,10 +45,10 @@ function authReducer(state, action) {
 }
 
 export function AuthProvider(props) {
-    const [isFetching, setIsFetching] = useState(false)
     const [state, dispatch] = useReducer(authReducer, initialState);
 
     useEffect(() => {
+        let isGuest = true;
         const token = getToken();
 
         if (token) {
@@ -53,21 +58,27 @@ export function AuthProvider(props) {
                 console.log('removing expired token');
                 removeToken()
             } else {
-                !state.user && reloadUser();
+                if (!state.user) {
+                    isGuest = false;
+                    reloadUser();
+                }
             }
+        }
+
+        if (isGuest) {
+            dispatch({ type: LOGIN_SUCCESS, payload: null});
         }
     }, []);
 
     async function reloadUser () {
-        setIsFetching(true);
+        dispatch({ type: LOGIN_FETCHING })
         const {data:res} = await api.get('/me');        
         login(res.data);
-        setIsFetching(false);
     }
 
     function login(userData) {
         dispatch({
-            type: LOGIN,
+            type: LOGIN_SUCCESS,
             payload: userData
         });
     }
@@ -77,10 +88,10 @@ export function AuthProvider(props) {
         dispatch({ type: LOGOUT });
     }
 
-    return ( isFetching ? 'Fetching...' : 
+    return ( state.isFetching ? 'Fetching...' : 
         <AuthContext.Provider
             value={{ ...state, login, logout, reloadUser }}
             {...props}
-        />        
+        />
     );
 }

@@ -1,10 +1,18 @@
 .group-member {
     display: flex;
-    padding: 5px;
+    padding: 5px 0;
 
     & > .username {
         width: 30%;
     }
+
+    & > .role {
+        width: 20%;
+    }
+    
+    & > .status {
+        width: 20%;
+    } 
 
     & > .controls {
         margin-left: auto;

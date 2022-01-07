@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { createSearchParams, useLocation, Navigate, Outlet } from 'react-router-dom';
 
 import { useAuthContext } from '../providers/auth.provider';
 
@@ -11,8 +11,12 @@ export function GuestRoute() {
 
 export function MemberRoute() {
     const {user} = useAuthContext();
-    console.log('Member router', user);
+    const location = useLocation();
 
-    return user ? <Outlet /> : <Navigate to="/" />;
+    console.log('member', user, location);
+
+    return user ? <Outlet /> : (
+        <Navigate to={`/auth?${createSearchParams({next: location.pathname})}`} />
+    );
 }
 
