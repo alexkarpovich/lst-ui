@@ -4,7 +4,9 @@ import AsyncSelect from 'react-select/async';
 
 import "./group-member.scss";
 import api from "../../utils/api";
-import { ADD_MEMBER, useGroupsContext } from "./groups.page";
+import { useGroupsContext } from "./groups.page";
+import { ADD_MEMBER } from "./groups.const";
+
 
 const InvitationInput = ({groupId}) => {
     const {dispatch} = useGroupsContext();

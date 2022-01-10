@@ -7,20 +7,38 @@
 
   .side-menu {
     position: fixed;
-    width: 320px;
+    width: 200px;
     height: 100%;
 
     &.close {
-        width: 64px;;
+        width: 46px;;
+
+        .menu-item {
+          i {
+            font-size: 2em;
+          }
+          .label {
+            display: none;
+          }
+        }
 
         & ~ .outlet {
-          padding-left: 64px;
+          padding-left: 46px;
         }
+    }
+
+    .menu-item {
+      i {
+        font-size: 1.1em;
+      }
+      .label {
+        margin-left: 5px;
+      }
     }
   }
 
   & > .outlet {
-    padding-left: 320px;
+    padding-left: 200px;
     width: 100%;
   }
 }

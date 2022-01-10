@@ -6,6 +6,7 @@
     border-radius: 5px;
     border-bottom: 1px solid #dfdfdf;
     box-shadow: 0 0 3px #dbdbdb;
+    box-sizing: content-box;
 
     & > .side-section {
         width: 32px;
@@ -54,6 +55,15 @@
                 }
             }
 
+            .slices-link {
+                margin: 0 auto;
+
+                a {
+                    color: #000;
+                    text-decoration: none;
+                }
+            }
+
             .controls {
                 margin-left: auto;
         
@@ -83,6 +93,8 @@
     }
 
     &.open {
+        height: none;
+
         .side-section {
             .toggle-btn {    
                 &::after {

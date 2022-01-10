@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 
 import "./index.scss";
 import reportWebVitals from './reportWebVitals';
@@ -12,7 +12,7 @@ import HomePage from "./components/home.page";
 import SignupConfirmPage from "./components/auth/signup-confirm.page";
 import DashboardPage from "./components/dashboard/dashboard.page";
 import GroupsPage from "./components/group/groups.page";
-import SlicesPage from "./components/slices/slices.page";
+import SlicesPage from "./components/slice/slices.page";
 import ConfirmInvitationPage from "./components/group/confirm-invitation.page";
 
 
@@ -29,9 +29,11 @@ ReactDOM.render(
                     <Route path="/me" element={<MemberRoute />}>
                         <Route path="/me" element={<App />}>
                             <Route index element={<DashboardPage />} />
-                            <Route exact path="groups" element={<GroupsPage />} />
-                            <Route exact path="groups/confirm-invitation/:token" element={<ConfirmInvitationPage />} />
-                            <Route path="slices" element={<SlicesPage />} />
+                            <Route exact path="groups" element={<Outlet />}>
+                                <Route index element={<GroupsPage />} />
+                                <Route exact path="confirm-invitation/:token" element={<ConfirmInvitationPage />} />
+                                <Route path=":groupId/slices" element={<SlicesPage />} />
+                            </Route>
                         </Route>
                     </Route>
                 </Routes>

@@ -23,12 +23,25 @@ const SideMenu = () => {
         <div className={`side-menu ${!isOpen ? 'close' : ''}`}>
             <div className="brand">#</div>
             <div className="menu-items">
-                <MenuItem to="/me/profile">User Profile</MenuItem>
-                <MenuItem to="/me/groups">Groups</MenuItem>
-                <MenuItem to="/me/slices">Slices</MenuItem>
-                <MenuItem onClick={logoutHandler}>Log out</MenuItem>
+                <MenuItem to="/me/profile">
+                    <i className="icon-user-profile" />
+                    <span className="label">Profile</span>
+                </MenuItem>
+                <MenuItem to="/me/groups">
+                    <i className="icon-group" />
+                    <span className="label">Groups</span>
+                </MenuItem>
+                <MenuItem to="/me/slices">
+                    <i className="icon-pie-chart" />
+                    <span className="label">Slices</span>
+                </MenuItem>
+                <hr />
+                <MenuItem onClick={logoutHandler}>
+                    <i className="icon-exit" />
+                    <span className="label">Log out</span>
+                </MenuItem>                
             </div>
-            <button className="toggle-button" onClick={toggle}>{isOpen ? '<<<' : '>>>'}</button>
+            <div className="toggle-button" onClick={toggle}>{isOpen ? '<<<' : '>>>'}</div>
         </div>
     );
 };

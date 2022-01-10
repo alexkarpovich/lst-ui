@@ -4,11 +4,13 @@
     cursor: pointer;
 
     &:hover {
-        &:hover {
-            background-color: rgb(104, 104, 104);
-        }
-        &:active {
-            background-color: rgb(61, 42, 42); 
-        }
+        background-color: #144678;
+        border-top: 1px solid #315274;
+        border-bottom: 1px solid #081624;
+    }
+    &:active {
+        background-color: #061422;
+        border-top: 1px solid #000;
+        border-bottom: 1px solid #1b2f42;
     }
 }

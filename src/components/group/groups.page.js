@@ -1,20 +1,18 @@
-import React, { createContext, useEffect, useState, useReducer, useContext } from "react";
+import React, { createContext, useEffect, useReducer, useContext } from "react";
+import axios from "axios";
 
 import "./groups.page.scss";
 import api from "../../utils/api";
+import { SET_CREATING_MODE, SET_FETCHING, SET_GROUPS_LANGS } from "./groups.const";
+import { groupsReducer } from "./groups.reducer";
 import GroupItem, {MODE_EDITING} from "./group-item";
 
-export const SET_CREATING_MODE = 'SET_CREATING_MODE';
-export const LOAD_GROUPS_FETCHING = 'LOAD_GROUPS_FETCHING';
-export const LOAD_GROUPS_SUCCESS = 'LOAD_GROUPS_SUCCESS';
-export const DELETE_GROUP = 'DELETE_GROUP';
-export const ADD_GROUP = 'ADD_GROUP';
-export const ADD_MEMBER = 'ADD_MEMBER';
 
 let initialState = {
     isFetching: true,
     isCreatingMode: false,
-    groups: []
+    groups: [],
+    langs: [],
 };
 
 export const GroupsContext = createContext(initialState);
@@ -23,65 +21,32 @@ export function useGroupsContext() {
    return useContext(GroupsContext);
 }
 
-function groupsReducer(state, action) {
-    switch (action.type) {
-        case SET_CREATING_MODE:
-            return {...state, isCreatingMode: action.payload}
-        case LOAD_GROUPS_FETCHING:
-            return {...state, isFetching: true};
-        case LOAD_GROUPS_SUCCESS:
-            return {...state, isFetching: false, groups: action.payload};
-        case DELETE_GROUP: {
-            const {groupId} = action.payload;
-            const groups = state.groups.filter(group => group.id !== groupId)
-            
-            return {...state, groups};
-        }
-        case ADD_GROUP: {
-            const {group} = action.payload;
-            const groups = [group, ...state.groups];
-
-            return {...state, groups, isCreatingMode: false};
-        }
-        case ADD_MEMBER: {
-            const {groupId, member} = action.payload;
-            const groups = state.groups.map(group => {
-                if (group.id == groupId) {
-                    group.members.push(member);
-                }
-
-                return group;
-            });
-
-            return {...state, groups};
-        }
-        
-        default:
-            return state;
-    }
-}
-
 const GroupsPage = () => {
     const [state, dispatch] = useReducer(groupsReducer, initialState);
 
     useEffect(() => {
         let isMounted = true;
 
-        async function loadGroups() {
-            dispatch({ type: LOAD_GROUPS_FETCHING });
+        async function loadInitialData() {
+            dispatch({ type: SET_FETCHING, payload: true });
 
-            const {data:res} = await api.get('/me/group');
-            console.log(res, isMounted);
+            const [groupsRes, langsRes] = await axios.all([
+                api.get('/me/group'),
+                api.get('/langs')
+            ]);
 
-            isMounted && dispatch({ type: LOAD_GROUPS_SUCCESS, payload: res.data});
+            if (isMounted) {
+                dispatch({ type: SET_GROUPS_LANGS, payload: {
+                    groups: groupsRes.data.data,
+                    langs: langsRes.data.data
+                }});
+            }
         }
 
-        loadGroups();
+        loadInitialData();
 
         return () => (isMounted = false);
     }, [])
-
-    console.log(state);
 
     return (
         <GroupsContext.Provider value={{ ...state, dispatch }}>

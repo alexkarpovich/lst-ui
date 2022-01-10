@@ -6,7 +6,6 @@ import SideMenu from "./components/menu/side-menu";
 
 
 function App() {
-    console.log('App');
     return (
         <div className="app-container">
             <SideMenu />

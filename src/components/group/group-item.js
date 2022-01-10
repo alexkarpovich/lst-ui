@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import EditableLabel from "react-inline-editing";
 
 import "./group-item.scss";
 import { useAuthContext } from "../../providers/auth.provider";
-import { useGroupsContext, DELETE_GROUP, SET_CREATING_MODE, ADD_GROUP } from "./groups.page";
+import { getAdminIds } from "./groups.service";
+import { useGroupsContext } from "./groups.page";
+import { DELETE_GROUP, ADD_GROUP, ROLE_ADMIN } from "./groups.const";
 import api from "../../utils/api";
 import GroupMember from "./group-member";
 import DropdownButton from "../shared/dropdown-button";
 import InvitationInput from "./invitation-input";
+import { Link } from "react-router-dom";
 
 
 export const MODE_DEFAULT = 0;
@@ -16,30 +19,13 @@ export const MODE_EDITING = 1;
 
 const GroupItem = ({obj, defaultMode}) => {
     const {user} = useAuthContext();
-    const {dispatch} = useGroupsContext();
+    const {langs, dispatch} = useGroupsContext();
     const [isOpen, setIsOpen] = useState(false);
-    const [langs, setLangs] = useState([]);
     const [mode, setMode] = useState(defaultMode);
+    const [adminIds] = useState(getAdminIds(obj.members));
     const [name, setName] = useState(obj.name || 'Undefined');
     const [targetLangCode, setTargetLangCode] = useState(obj.targetLangCode);
     const [nativeLangCode, setNativeLangCode] = useState(obj.nativeLangCode);
-
-    useEffect(() => {
-        let isMounted = true;
-
-        async function fetchLangs() {
-            try {
-                const {data:res} = await api.get('/langs');
-                isMounted && setLangs(res.data);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-
-        fetchLangs();
-
-        return () => (isMounted = false);
-    }, []);
 
     async function update() {
         if (obj.name === name && obj.targetLangCode === targetLangCode && obj.nativeLangCode === nativeLangCode) {
@@ -65,10 +51,9 @@ const GroupItem = ({obj, defaultMode}) => {
 
     async function detachGroup() {
         const userAsMember = obj.members.find(member => member.id === user.id);
-        console.log(userAsMember);
 
         try {
-            if (userAsMember.role === 0) {
+            if (userAsMember.role === ROLE_ADMIN) {
                 const {data:res} = await api.delete(`/me/group/${obj.id}`);
                 console.log(res);
             } else {
@@ -80,8 +65,6 @@ const GroupItem = ({obj, defaultMode}) => {
             console.log(err)
         }
     }
-
-    console.log(name, targetLangCode, nativeLangCode, mode);
 
     return (
         <div className={`group-item ${isOpen ? 'open' : ''}`}>
@@ -130,6 +113,9 @@ const GroupItem = ({obj, defaultMode}) => {
                             )}                            
                         </span>
                     </div>
+                    <div className="slices-link">
+                        <Link to={`/me/groups/${obj.id}/slices`}>slices</Link>
+                    </div>
                     <div className="controls">
                         {mode === MODE_DEFAULT ? (
                             <span className="icon-edit-box" onClick={() => setMode(MODE_EDITING)} />
@@ -144,7 +130,7 @@ const GroupItem = ({obj, defaultMode}) => {
                         <InvitationInput groupId={obj.id} />
                         {
                             obj.members && obj.members.map((member, i) => (
-                                <GroupMember key={i} groupId={obj.id} obj={member} />
+                                <GroupMember key={i} groupId={obj.id} adminIds={adminIds} obj={member} />
                             ))
                         }
                     </div>

@@ -13,8 +13,6 @@ export function MemberRoute() {
     const {user} = useAuthContext();
     const location = useLocation();
 
-    console.log('member', user, location);
-
     return user ? <Outlet /> : (
         <Navigate to={`/auth?${createSearchParams({next: location.pathname})}`} />
     );
