@@ -25,8 +25,6 @@ const Login = () => {
                 setToken(res.data.token);
                 auth.reloadUser();
 
-                console.log(searchParams.get('next'));
-
                 navigate(searchParams.get('next') || '/me');
             }
         } catch (err) {

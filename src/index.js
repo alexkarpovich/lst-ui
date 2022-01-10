@@ -32,8 +32,8 @@ ReactDOM.render(
                             <Route exact path="groups" element={<Outlet />}>
                                 <Route index element={<GroupsPage />} />
                                 <Route exact path="confirm-invitation/:token" element={<ConfirmInvitationPage />} />
-                                <Route path=":groupId/slices" element={<SlicesPage />} />
                             </Route>
+                            <Route path="slices" element={<SlicesPage />} />
                         </Route>
                     </Route>
                 </Routes>

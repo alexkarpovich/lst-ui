@@ -1,5 +1,5 @@
-import React, { createContext, useEffect, useReducer, useContext } from "react";
-import { useParams } from "react-router-dom";
+import React, { createContext, useEffect, useReducer, useContext, Fragment } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
 import "./slices.page.scss";
@@ -22,8 +22,10 @@ export function useSlicesContext() {
 }
 
 const SlicesPage = () => {
-    const {groupId} = useParams();
+    const [searchParams] = useSearchParams();
     const [state, dispatch] = useReducer(slicesReducer, initialState);
+    const groupId = +searchParams.get('group');
+    const activeSliceIds = JSON.parse(searchParams.get('slices') || '[]');
 
     useEffect(() => {
         async function loadInitialData() {
@@ -54,14 +56,30 @@ const SlicesPage = () => {
     return (
         <SlicesContext.Provider value={{ ...state, dispatch }}>
             <div className="slices-page">
-                <SlicesMenu 
-                    groupId={groupId ? +groupId : null}
-                    groups={state.groups}
-                    slices={state.slices} 
-                />
-                <div className="outlet">
-                    Content
-                </div>
+                {groupId ? (
+                    <Fragment>
+                        <SlicesMenu 
+                            groupId={groupId}
+                            groups={state.groups}
+                            slices={state.slices}
+                            activeSliceIds={activeSliceIds}
+                        />
+                        <div className="outlet">
+                            Content
+                        </div>
+                    </Fragment>
+                ) : (
+                    <div className="group-select-container">
+                        <h3>Select group</h3>
+
+                        <div className="groups-select">
+                            {state.groups.map(group => (
+                                <Link key={group.id} to={`/me/slices?group=${group.id}`}>{group.name}</Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                
             </div>
         </SlicesContext.Provider>
     );

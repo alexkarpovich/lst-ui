@@ -114,7 +114,7 @@ const GroupItem = ({obj, defaultMode}) => {
                         </span>
                     </div>
                     <div className="slices-link">
-                        <Link to={`/me/groups/${obj.id}/slices`}>slices</Link>
+                        <Link to={`/me/slices?group=${obj.id}`}>slices</Link>
                     </div>
                     <div className="controls">
                         {mode === MODE_DEFAULT ? (
