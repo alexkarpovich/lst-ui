@@ -31,7 +31,7 @@ const GroupsPage = () => {
             dispatch({ type: SET_FETCHING, payload: true });
 
             const [groupsRes, langsRes] = await axios.all([
-                api.get('/me/group'),
+                api.get('/me/groups'),
                 api.get('/langs')
             ]);
 

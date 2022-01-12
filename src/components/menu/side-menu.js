@@ -8,7 +8,7 @@ import "./side-menu.scss";
 const SideMenu = () => {
     const {logout} = useAuthContext();
     const navigate = useNavigate();
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     function toggle() {
         setIsOpen(prev => !prev);

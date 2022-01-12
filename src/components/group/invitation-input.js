@@ -66,7 +66,7 @@ const InvitationInput = ({groupId}) => {
                 onInputChange={value => setInputValue(value)}
                 getOptionLabel={option => option.email}
                 getOptionValue={option => option.id}
-            />   
+            />
         </div>
     );
 };

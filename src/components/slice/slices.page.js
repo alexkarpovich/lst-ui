@@ -5,14 +5,15 @@ import axios from "axios";
 import "./slices.page.scss";
 import api from "../../utils/api";
 import { slicesReducer } from "./slices.reducer";
-import { SET_FETCHING, SET_GROUPS, SET_GROUPS_SLICES } from "./slices.const";
+import { SET_FETCHING, SET_GROUPS, SET_GROUPS_NODES } from "./slices.const";
 import SlicesMenu from "./slices.menu";
+import SlicesView from "./slices.view";
 
 
 let initialState = {
     isFetching: true,
     groups: [],
-    slices: [],
+    nodes: [],
 };
 
 export const SlicesContext = createContext(initialState);
@@ -25,23 +26,23 @@ const SlicesPage = () => {
     const [searchParams] = useSearchParams();
     const [state, dispatch] = useReducer(slicesReducer, initialState);
     const groupId = +searchParams.get('group');
-    const activeSliceIds = JSON.parse(searchParams.get('slices') || '[]');
+    const activeNodeIds = JSON.parse(searchParams.get('nodes') || '[]');
 
     useEffect(() => {
         async function loadInitialData() {
             dispatch({ type: SET_FETCHING, payload: true});
             
             if (groupId) {
-                const [groupsRes, slicesRes] = await axios.all([
-                    api.get('/me/group'),
-                    api.get(`/me/group/${groupId}/slice`)
+                const [groupsRes, nodesRes] = await axios.all([
+                    api.get('/me/groups'),
+                    api.get(`/me/groups/${groupId}/nodes`)
                 ]);
-                dispatch({ type: SET_GROUPS_SLICES, payload: {
+                dispatch({ type: SET_GROUPS_NODES, payload: {
                     groups: groupsRes.data.data,
-                    slices: slicesRes.data.data
+                    nodes: nodesRes.data.data
                 }});
             } else {
-                const {data:res} = await api.get('/me/group');
+                const {data:res} = await api.get('/me/groups');
                 dispatch({ type: SET_GROUPS, payload: {
                     groups: res.data
                 }});
@@ -61,11 +62,11 @@ const SlicesPage = () => {
                         <SlicesMenu 
                             groupId={groupId}
                             groups={state.groups}
-                            slices={state.slices}
-                            activeSliceIds={activeSliceIds}
+                            nodes={state.nodes}
+                            activeNodeIds={activeNodeIds}
                         />
                         <div className="outlet">
-                            Content
+                            <SlicesView activeIds={activeNodeIds} />
                         </div>
                     </Fragment>
                 ) : (
