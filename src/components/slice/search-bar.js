@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import CreatableSelect from 'react-select/creatable';
 import { createSearchParams } from "react-router-dom";
 
 import "./slices.view.scss";
 import api from "../../utils/api";
+import { useSlicesContext } from "./slices.page";
+import { ATTACH_EXPRESSION, INCREASE_NODE_COUNT } from "./slices.const";
+import { useSlicesViewContext } from "./slices.view";
 
 const SearchBar = ({nodeId}) => {
+    const {dispatch} = useSlicesContext();
+    const {dispatch:dispatchView} = useSlicesViewContext();
     const [inputValue, setInputValue] = useState('');
     const [options, setOptions] = useState([]);
 
@@ -31,8 +36,8 @@ const SearchBar = ({nodeId}) => {
     async function attachExpression(expr) {
         try {
             const {data:res} = await api.post(`/me/nodes/${nodeId}/attach-expression`, expr);
-
-            console.log(res);
+            dispatchView({type: ATTACH_EXPRESSION, payload: res.data});
+            dispatch({type: INCREASE_NODE_COUNT, payload: {nodeId}});
         } catch (err) {
             console.log(err)
         }

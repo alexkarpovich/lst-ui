@@ -13,7 +13,7 @@ const SlicesMenuItem = ({obj}) => {
     }
 
     function select() {
-        setSearchParams({...Object.fromEntries(searchParams), nodes: JSON.stringify([obj.id])});
+        setSearchParams({...Object.fromEntries(searchParams), ids: JSON.stringify([obj.id])});
     }
 
     return (

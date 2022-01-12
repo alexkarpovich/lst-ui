@@ -26,9 +26,11 @@ const SlicesPage = () => {
     const [searchParams] = useSearchParams();
     const [state, dispatch] = useReducer(slicesReducer, initialState);
     const groupId = +searchParams.get('group');
-    const activeNodeIds = JSON.parse(searchParams.get('nodes') || '[]');
+    const activeNodeIds = JSON.parse(searchParams.get('ids') || '[]');
+
 
     useEffect(() => {
+        console.log('slices page', groupId);
         async function loadInitialData() {
             dispatch({ type: SET_FETCHING, payload: true});
             
@@ -54,7 +56,9 @@ const SlicesPage = () => {
         loadInitialData();
     }, [groupId])
 
-    return (
+    console.log('Page', activeNodeIds);
+
+    return state.isFetching ? 'Fetching...' : (
         <SlicesContext.Provider value={{ ...state, dispatch }}>
             <div className="slices-page">
                 {groupId ? (
