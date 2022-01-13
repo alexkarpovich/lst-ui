@@ -24,20 +24,28 @@ export const slicesReducer = (state, action) => {
         }
         case INCREASE_NODE_COUNT: {
             const {nodeId} = action.payload;
+            const nodes = [...state.nodes];
 
-            function mapNodes(node) {
-                if (node.id === nodeId) {
-                    node.count++;
+            function mapNodes(items) {
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].id === nodeId) {
+                        items[i].count++;
+
+                        return 1;
+                    }
+
+                    if (items[i].children) {
+                        const count = mapNodes(items[i].children);
+                        items[i].count += count;
+
+                        return count;
+                    }
                 }
 
-                if (node.children) {
-                    node.children = node.children.map(mapNodes);
-                }
-
-                return node;
+                return 0;
             }
 
-            const nodes = state.nodes.map(mapNodes);
+            mapNodes(nodes);
 
             return {...state, nodes};
         }
