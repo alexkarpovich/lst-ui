@@ -23,7 +23,6 @@ const SlicesView = ({activeIds}) => {
     const [state, dispatch] = useReducer(slicesViewReducer, initialState);
 
     useEffect(() => {
-        console.log('view ids', activeIds);
         async function loadData() {
             dispatch({type: SET_VIEW_FETCHING, payload: true});
             try {
@@ -42,8 +41,6 @@ const SlicesView = ({activeIds}) => {
             dispatch({type: SET_VIEW_FETCHING, payload: false});   
         }
     }, [activeIds])
-
-    console.log('view root', state);
 
     return state.isFetching ? 'Fetching...' : (
         <SlicesViewContext.Provider value={{ ...state, dispatch }}>

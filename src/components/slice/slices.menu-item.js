@@ -3,22 +3,26 @@ import PropTypes from "prop-types";
 import { useSearchParams } from "react-router-dom";
 
 import { NODE_FOLDER } from "./slices.const";
+import { getNestedNodeIds, prepareQueryParams } from "./slices.service";
 
 const SlicesMenuItem = ({obj}) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [isExpanded, setIsExpanded] = useState(false);
+    const qp = prepareQueryParams(searchParams);
 
     function toggle() {
         setIsExpanded(prev => !prev);
     }
 
     function select() {
-        setSearchParams({...Object.fromEntries(searchParams), ids: JSON.stringify([obj.id])});
+        const ids = getNestedNodeIds(obj);
+
+        setSearchParams({...qp, ids: JSON.stringify(ids)});
     }
 
     return (
         <div className={`slices-menu-item-container ${isExpanded ? 'expand' : ''}`}>
-            <div className={`slices-menu-item`} onClick={select}>
+            <div className={`slices-menu-item ${qp.ids.indexOf(obj.id) !== -1 ? 'active' : ''}`} onClick={select}>
                 <div className="expand-btn" onClick={toggle}>
                     {obj.type === NODE_FOLDER ? (
                         <i className={`${isExpanded ? 'icon-folder' : 'icon-folder-open'}`} />

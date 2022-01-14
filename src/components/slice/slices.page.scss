@@ -38,13 +38,11 @@
     
                 &:hover {
                     cursor: pointer;
-                    color: v.$side-menu-bg;
-                    background-color: rgb(255, 255, 255);
-                    border-radius: 5px 0 0 5px;;
+                    color: lighten(v.$side-menu-text-color, 15%);
                 }
     
-                &.active {
-                    border-radius: 15px 0 0 15px;
+                &:active, &.active {
+                    color: v.$side-menu-text-color;
                 }
             }
 

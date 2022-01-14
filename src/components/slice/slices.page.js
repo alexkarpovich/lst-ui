@@ -8,6 +8,7 @@ import { slicesReducer } from "./slices.reducer";
 import { SET_FETCHING, SET_GROUPS, SET_GROUPS_NODES } from "./slices.const";
 import SlicesMenu from "./slices.menu";
 import SlicesView from "./slices.view";
+import { prepareQueryParams } from "./slices.service";
 
 
 let initialState = {
@@ -25,19 +26,16 @@ export function useSlicesContext() {
 const SlicesPage = () => {
     const [searchParams] = useSearchParams();
     const [state, dispatch] = useReducer(slicesReducer, initialState);
-    const groupId = +searchParams.get('group');
-    const activeNodeIds = JSON.parse(searchParams.get('ids') || '[]');
-
+    const qp = prepareQueryParams(searchParams);
 
     useEffect(() => {
-        console.log('slices page', groupId);
         async function loadInitialData() {
             dispatch({ type: SET_FETCHING, payload: true});
             
-            if (groupId) {
+            if (qp.group) {
                 const [groupsRes, nodesRes] = await axios.all([
                     api.get('/me/groups'),
-                    api.get(`/me/groups/${groupId}/nodes`)
+                    api.get(`/me/groups/${qp.group}/nodes`)
                 ]);
                 dispatch({ type: SET_GROUPS_NODES, payload: {
                     groups: groupsRes.data.data,
@@ -54,23 +52,21 @@ const SlicesPage = () => {
         }
 
         loadInitialData();
-    }, [groupId])
-
-    console.log('Page', activeNodeIds);
+    }, [qp.group])
 
     return state.isFetching ? 'Fetching...' : (
         <SlicesContext.Provider value={{ ...state, dispatch }}>
             <div className="slices-page">
-                {groupId ? (
+                {qp.group ? (
                     <Fragment>
                         <SlicesMenu 
-                            groupId={groupId}
+                            groupId={qp.group}
                             groups={state.groups}
                             nodes={state.nodes}
-                            activeNodeIds={activeNodeIds}
+                            activeNodeIds={qp.ids}
                         />
                         <div className="outlet">
-                            <SlicesView activeIds={activeNodeIds} />
+                            <SlicesView activeIds={qp.ids} />
                         </div>
                     </Fragment>
                 ) : (
