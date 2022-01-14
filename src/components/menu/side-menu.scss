@@ -2,7 +2,7 @@
 
 .side-menu {
     background-color: v.$side-menu-bg;
-    border-right: 1px solid #17212b;
+    border-right: 1px solid v.$side-menu-active-bg;
 
     & > .brand {
         text-align: center;

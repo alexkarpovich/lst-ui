@@ -7,6 +7,7 @@ import api from "../../utils/api";
 import { SET_VIEW_FETCHING, SET_VIEW_DATA } from "./slices.const";
 import { slicesViewReducer } from "./view.reducer";
 import SearchBar from "./search-bar";
+import ExpressionRow from "./expression.row";
 
 let initialState = {
     isFetching: true,
@@ -21,6 +22,8 @@ export function useSlicesViewContext() {
 
 const SlicesView = ({activeIds}) => {
     const [state, dispatch] = useReducer(slicesViewReducer, initialState);
+    const isEditable = activeIds.length === 1;
+    const prefix = activeIds.join('');
 
     useEffect(() => {
         async function loadData() {
@@ -45,13 +48,17 @@ const SlicesView = ({activeIds}) => {
     return state.isFetching ? 'Fetching...' : (
         <SlicesViewContext.Provider value={{ ...state, dispatch }}>
             <div className="slices-view">
-                {activeIds.length === 1 && (
+                {isEditable && (
                     <SearchBar nodeId={activeIds[0]} />
                 )}
 
                 <div className="expressions">
                     {state.expressions.map(expr => (
-                        <div key={expr.id}>{expr.value}</div>
+                        <ExpressionRow
+                            key={`${prefix}_${expr.id}`} 
+                            obj={expr}
+                            isEditable={isEditable}
+                        />
                     ))}
                 </div>
             </div>
