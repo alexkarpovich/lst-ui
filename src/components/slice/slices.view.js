@@ -57,6 +57,7 @@ const SlicesView = ({activeIds}) => {
                         <ExpressionRow
                             key={`${prefix}_${expr.id}`} 
                             obj={expr}
+                            nodeId={activeIds[0]}
                             isEditable={isEditable}
                         />
                     ))}

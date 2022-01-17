@@ -6,10 +6,10 @@ import "./group-item.scss";
 import { useAuthContext } from "../../providers/auth.provider";
 import { getAdminIds } from "./groups.service";
 import { useGroupsContext } from "./groups.page";
-import { DELETE_GROUP, ADD_GROUP, ROLE_ADMIN } from "./groups.const";
+import { DELETE_GROUP, ADD_GROUP, ROLE_ADMIN, STATUS_ACTIVE } from "./groups.const";
 import api from "../../utils/api";
 import GroupMember from "./group-member";
-import DropdownButton from "../shared/dropdown-button";
+import { DropdownButton } from "../shared/dropdown-button";
 import InvitationInput from "./invitation-input";
 import { Link } from "react-router-dom";
 
@@ -34,7 +34,7 @@ const GroupItem = ({obj, defaultMode}) => {
         }
 
         try {
-            const {data:res} = await api.post(`/me/group${obj.id ? '/'+obj.id : ''}`, {
+            const {data:res} = await api.post(`/me/groups${obj.id ? '/'+obj.id : ''}`, {
                 name,
                 targetLangCode,
                 nativeLangCode,
@@ -42,7 +42,15 @@ const GroupItem = ({obj, defaultMode}) => {
             console.log(res);
             setMode(MODE_DEFAULT);
             dispatch({type: ADD_GROUP, payload: {
-                group: res.data
+                group: {
+                    ...res.data,
+                    members: [{
+                        id: user.id,
+                        username: user.username,
+                        role: ROLE_ADMIN,
+                        status: STATUS_ACTIVE,
+                    }]
+                }
             }});
         } catch(err) {
             console.error(err);
@@ -54,10 +62,10 @@ const GroupItem = ({obj, defaultMode}) => {
 
         try {
             if (userAsMember.role === ROLE_ADMIN) {
-                const {data:res} = await api.delete(`/me/group/${obj.id}`);
+                const {data:res} = await api.delete(`/me/groups/${obj.id}`);
                 console.log(res);
             } else {
-                const {data:res} = await api.post(`/me/group/${obj.id}/detach-member/${user.id}`);
+                const {data:res} = await api.post(`/me/groups/${obj.id}/detach-member/${user.id}`);
                 console.log(res);
             }
             dispatch({ type: DELETE_GROUP, payload: {groupId: obj.id}});

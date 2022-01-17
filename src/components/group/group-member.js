@@ -13,7 +13,7 @@ const GroupMember = ({groupId, adminIds, obj}) => {
 
     async function detachMember() {
         try {
-            const {data:res} = await api.post(`/me/group/${groupId}/detach-member/${obj.id}`);
+            const {data:res} = await api.post(`/me/groups/${groupId}/detach-member/${obj.id}`);
             console.log(res);
         } catch (err) {
             console.log(err);

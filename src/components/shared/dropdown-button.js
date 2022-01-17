@@ -4,7 +4,7 @@ import Select from "react-select";
 
 import "./dropdown-button.scss";
 
-const selectStyles = {
+export const selectStyles = {
   control: (provided) => ({
     ...provided,
     minWidth: 240,
@@ -13,7 +13,7 @@ const selectStyles = {
   menu: () => ({ boxShadow: 'inset 0 1px 0 rgba(0, 0, 0, 0.1)' }),
 };
 
-const DropdownButton = ({value, options, trigger, onChange, getOptionValue, getOptionLabel}) => {
+export const DropdownButton = ({value, options, trigger, onChange, getOptionValue, getOptionLabel}) => {
   const [isOpen, setIsOpen] = useState(false);
   
   function toggleOpen() {
@@ -57,11 +57,9 @@ DropdownButton.propTypes = {
     onChange: PropTypes.func,
 };
 
-export default DropdownButton;
-
 // styled components
 
-const Menu = (props) => {
+export const Menu = (props) => {
   const shadow = 'hsla(218, 50%, 10%, 0.1)';
   return (
     <div
@@ -77,7 +75,7 @@ const Menu = (props) => {
     />
   );
 };
-const Blanket = (props) => (
+export const Blanket = (props) => (
   <div
     style={{
       bottom: 0,
@@ -91,7 +89,7 @@ const Blanket = (props) => (
   />
 );
 
-const Dropdown = ({
+export const Dropdown = ({
   children,
   isOpen,
   trigger,

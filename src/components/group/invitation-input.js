@@ -28,7 +28,7 @@ const InvitationInput = ({groupId}) => {
 
     async function invitePerson(user) {
         try {
-            const {data:res} = await api.post(`/me/group/${groupId}/invite-user/${user.id}`);
+            const {data:res} = await api.post(`/me/groups/${groupId}/invite-user/${user.id}`);
             console.log('invite persion', user, res);
             setInputValue('');
             dispatch({ type: ADD_MEMBER, payload: {

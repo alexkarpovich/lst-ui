@@ -10,7 +10,7 @@ export const slicesReducer = (state, action) => {
         case SET_NODES: {
             const {nodes} = action.payload;
 
-            return {...state, nodes};
+            return {...state, nodes: nodes || []};
         }
         case SET_GROUPS: {
             const {groups} = action.payload;
@@ -20,7 +20,7 @@ export const slicesReducer = (state, action) => {
         case SET_GROUPS_NODES: {
             const {groups, nodes} = action.payload;
 
-            return {...state, groups, nodes};
+            return {...state, groups, nodes: nodes || []};
         }
         case INCREASE_NODE_COUNT: {
             const {nodeId} = action.payload;

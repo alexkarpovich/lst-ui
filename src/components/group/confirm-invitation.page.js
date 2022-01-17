@@ -18,7 +18,7 @@ const ConfirmInvitationPage = () => {
             }
 
             try {
-                const {data:res} = await api.post(`/me/group/confirm-invitation/${token}`);
+                const {data:res} = await api.post(`/me/groups/confirm-invitation/${token}`);
                 console.log(res);
             } catch (err) {
                 console.log(err)

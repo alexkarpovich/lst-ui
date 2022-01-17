@@ -8,10 +8,14 @@ export const ROLE_MAP = {
     [ROLE_EDITOR]: 'editor'
 }
 
+export const STATUS_PENDING = 0;
+export const STATUS_ACTIVE = 1;
+export const STATUS_DELETED = 2;
+
 export const STATUS_MAP = {
-    0: 'pending',
-    1: 'active',
-    2: 'deleted'
+    [STATUS_PENDING]: 'pending',
+    [STATUS_ACTIVE]: 'active',
+    [STATUS_DELETED]: 'deleted'
 };
 
 export const SET_CREATING_MODE = 'SET_CREATING_MODE';

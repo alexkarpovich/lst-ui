@@ -1,19 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
+import TranslationInput from "./translation.input";
 
 
-const ExpressionRow = ({obj, isEditable}) => {
+const ExpressionRow = ({obj, nodeId, isEditable}) => {
     return (
         <div className="expression-row">
             <div className="target-value">{obj.value}</div>
             <div className="translations">
                 {
                     obj.translations && obj.translations.map(trans => (
-                        <div className="translation">{JSON.stringify(trans)}</div>
+                        <div className="translation">{trans.value}</div>
                     ))
                 }
                 {isEditable && (
-                    <button className="link add-translation-btn">+ add translation</button>
+                    <TranslationInput 
+                        expressionId={obj.id} 
+                        nodeId={nodeId}
+                    />
                 )}
             </div>
         </div>
@@ -22,6 +26,7 @@ const ExpressionRow = ({obj, isEditable}) => {
 
 ExpressionRow.propTypes = {
     obj: PropTypes.object.isRequired,
+    nodeId: PropTypes.number.isRequired,
     isEditable: PropTypes.bool.isRequired,
 };
 

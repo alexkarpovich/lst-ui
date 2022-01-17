@@ -1,4 +1,4 @@
-import { SET_VIEW_FETCHING, SET_VIEW_DATA, ATTACH_EXPRESSION } from "./slices.const";
+import { SET_VIEW_FETCHING, SET_VIEW_DATA, ATTACH_EXPRESSION, ATTACH_TRANSLATION } from "./slices.const";
 
 
 export const slicesViewReducer = (state, action) => {
@@ -11,6 +11,19 @@ export const slicesViewReducer = (state, action) => {
         case ATTACH_EXPRESSION: {
             const expressions = [action.payload, state.expressions];
 
+            return {...state, expressions};
+        }
+        case ATTACH_TRANSLATION: {
+            const {translation, expressionId} = action.payload;
+            const expressions = state.expressions.map(expr => {
+                if (expr.id === expressionId) {
+                    expr.translations = expr.translations || [];
+
+                    expr.translations.push(translation);
+                }
+
+                return expr;
+            });
             return {...state, expressions};
         }
         default:

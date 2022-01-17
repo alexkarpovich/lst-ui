@@ -1,7 +1,34 @@
 .slices-view {
+    padding: 10px;
+
     .search-bar {
         width: 70%;
         margin: auto;
         padding: 10px 0;
+    }
+
+    .expressions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: 3px;
+        grid-row-gap: 2px;;
+
+        @media screen and (max-width: 860px) {
+            grid-template-columns: auto;
+        }
+
+        @media screen and (min-width: 860px) {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        & > .expression-row {
+            padding: 7px;
+            border: 1px solid #eee;
+            border-radius: 2px;
+
+            & > .target-value {
+                font-size: 1.2em;
+            }
+        }
     }
 }
