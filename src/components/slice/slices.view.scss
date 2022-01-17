@@ -22,12 +22,34 @@
         }
 
         & > .expression-row {
-            padding: 7px;
+            padding: 7px 7px 37px 7px;
             border: 1px solid #eee;
             border-radius: 2px;
+            position: relative;
 
             & > .target-value {
                 font-size: 1.2em;
+            }
+
+            & > .translations {
+                position: relative;
+
+                & > .translation-input {
+                    position: absolute;
+                    width: 100%;
+                    top: 17px;
+
+                    & > .placeholder {
+                        font-size: 0.8em;
+                        padding: 7px;
+                        border: 1px solid #fff;
+    
+                        &:hover {
+                            border: 1px solid #eee;
+                            border-radius: 2px;
+                        }
+                    }
+                }
             }
         }
     }

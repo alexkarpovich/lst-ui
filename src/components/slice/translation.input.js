@@ -1,10 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import CreatableSelect from "react-select/creatable";
 
 import api from "../../utils/api";
-import { selectStyles, Dropdown } from "../shared/dropdown-button";
-import { createSearchParams } from "react-router-dom";
 import { useSlicesViewContext } from "./slices.view";
 import { ATTACH_TRANSLATION } from "./slices.const";
 
@@ -27,8 +24,8 @@ const TranslationInput = ({expressionId, nodeId}) => {
         attachTranslation({id: selected.id});
     }
 
-    function onInputChange(value) {
-        setInputValue(value);
+    function onInputChange(e) {
+        setInputValue(e.target.value);
     }
 
     function onCreateOption(value) {
@@ -65,31 +62,30 @@ const TranslationInput = ({expressionId, nodeId}) => {
     console.log(nodeId, expressionId);
 
     return (
-        <Dropdown
-            isOpen={isOpen}
-            onClose={toggleOpen}
-            trigger={<span onClick={toggleOpen}>+ add translation</span>}
-        >
-            <CreatableSelect
-                autoFocus
-                menuIsOpen
-                backspaceRemovesValue={false}
-                components={{ IndicatorSeparator: null }}
-                controlShouldRenderValue={false}
-                hideSelectedOptions={false}
-                isClearable={false}
-                onChange={onSelectChange}
-                onInputChange={onInputChange}
-                onCreateOption={onCreateOption}
-                options={translations}
-                //placeholder="Search..."
-                styles={selectStyles}
-                tabSelectsValue={false}
-                getOptionLabel={option => option.value}
-                getOptionValue={option => option.id}
-                //value={value}
-            />
-        </Dropdown>
+        <div className="translation-input">
+            {isOpen ? (
+                <div>
+                    <div>
+                        Top control
+                    </div>
+                    <input
+                        autoFocus
+                        type="text"
+                        placeholder="+ add translation" 
+                        value={inputValue} 
+                        onChange={onInputChange} 
+                    />
+
+                    <div className="translations">
+                        {translations.map(trans => (
+                            <div>{trans.value}</div>
+                        ))}
+                    </div>
+                </div>
+            ) : (
+                <div className="placeholder" onClick={toggleOpen}>+ add transltion</div>
+            )}
+        </div>
     );
 }
 
