@@ -1,4 +1,4 @@
-import { SET_VIEW_FETCHING, SET_VIEW_DATA, ATTACH_EXPRESSION, ATTACH_TRANSLATION } from "./slices.const";
+import { SET_VIEW_FETCHING, SET_VIEW_DATA, ATTACH_EXPRESSION, ATTACH_TRANSLATION, DETACH_TRANSLATION, DETACH_EXPRESSION } from "./slices.const";
 
 
 export const slicesViewReducer = (state, action) => {
@@ -13,6 +13,12 @@ export const slicesViewReducer = (state, action) => {
 
             return {...state, expressions};
         }
+        case DETACH_EXPRESSION: {
+            const {expressionId} = action.payload;
+            const expressions = state.expressions.filter(expr => expr.id !== expressionId);
+
+            return {...state, expressions};
+        }
         case ATTACH_TRANSLATION: {
             const {translation, expressionId} = action.payload;
             const expressions = state.expressions.map(expr => {
@@ -24,6 +30,18 @@ export const slicesViewReducer = (state, action) => {
 
                 return expr;
             });
+            return {...state, expressions};
+        }
+        case DETACH_TRANSLATION: {
+            const {expressionId, translationId} = action.payload;
+            const expressions = state.expressions.map(expr => {
+                if (expr.id === expressionId) {
+                    expr.translations = expr.translations.filter(trans => trans.id !== translationId);
+                }
+
+                return expr;
+            });
+
             return {...state, expressions};
         }
         default:

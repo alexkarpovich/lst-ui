@@ -87,7 +87,7 @@ const TranslationInput = ({expressionId, nodeId}) => {
                     </div>
                 </div>
             ) : (
-                <div className="placeholder" onClick={toggleOpen}>+ add transltion</div>
+                <div className="placeholder" onClick={toggleOpen}>+ add translation</div>
             )}
         </div>
     );
