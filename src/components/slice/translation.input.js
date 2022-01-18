@@ -19,18 +19,18 @@ const TranslationInput = ({expressionId, nodeId}) => {
         setIsOpen(prev => !prev);
     }
 
-    function onSelectChange(selected) {
-        toggleOpen();
-        attachTranslation({id: selected.id});
-    }
-
     function onInputChange(e) {
         setInputValue(e.target.value);
     }
 
-    function onCreateOption(value) {
-        console.log(value);
-        attachTranslation({value});
+    function onKeyPress(e) {
+        if (e.key === "Enter") {
+            handleAttachNew();
+        }
+    }
+
+    function handleAttachNew() {
+        inputValue && attachTranslation({value: inputValue});
     }
 
     async function attachTranslation(translation) {
@@ -39,11 +39,12 @@ const TranslationInput = ({expressionId, nodeId}) => {
                 expressionId,
                 translation
             });
-            console.log(res);
             dispatch({ type: ATTACH_TRANSLATION, payload: {
                 expressionId,
                 translation: res.data,
             }});
+            setInputValue('');
+            fetchTranslations();
         } catch (err) {
             console.log(err)
         }
@@ -59,27 +60,30 @@ const TranslationInput = ({expressionId, nodeId}) => {
         }
     }
 
-    console.log(nodeId, expressionId);
-
     return (
         <div className="translation-input">
             {isOpen ? (
-                <div>
-                    <div>
-                        Top control
-                    </div>
+                <div className="content">
+                    <span className="close-btn" onClick={() => setIsOpen(false)}>✕</span>
                     <input
                         autoFocus
                         type="text"
                         placeholder="+ add translation" 
-                        value={inputValue} 
-                        onChange={onInputChange} 
+                        value={inputValue}
+                        onChange={onInputChange}
+                        onKeyPress={onKeyPress}
                     />
-
-                    <div className="translations">
-                        {translations.map(trans => (
-                            <div>{trans.value}</div>
-                        ))}
+                    <span className="attach-translation-btn" onClick={handleAttachNew}>↵</span>
+                    <div className="popover-content">
+                        <div className="translations">
+                            {
+                                translations.length > 0 ? translations.map(trans => (
+                                    <div key={trans.id} className="translation-item" onClick={() => attachTranslation({id: trans.id})}>{trans.value}</div>
+                                )) : (
+                                    <div className="no-records">No existing translations.</div>
+                                )
+                            }
+                        </div>
                     </div>
                 </div>
             ) : (

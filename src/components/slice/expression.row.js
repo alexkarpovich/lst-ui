@@ -10,7 +10,12 @@ const ExpressionRow = ({obj, nodeId, isEditable}) => {
             <div className="translations">
                 {
                     obj.translations && obj.translations.map(trans => (
-                        <div className="translation">{trans.value}</div>
+                        <div className="translation">
+                            <span>{trans.value}</span>
+                            <div className="controls">
+                                <span>✕</span>
+                            </div>   
+                        </div>
                     ))
                 }
                 {isEditable && (

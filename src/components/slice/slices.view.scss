@@ -22,7 +22,7 @@
         }
 
         & > .expression-row {
-            padding: 7px 7px 37px 7px;
+            padding: 7px;
             border: 1px solid #eee;
             border-radius: 2px;
             position: relative;
@@ -34,10 +34,114 @@
             & > .translations {
                 position: relative;
 
+                & > .translation {
+                    padding: 5px;
+
+                    &:not(:first-child) {
+                        border-top: 1px solid #f9f9f9;
+                    }
+
+                    &:hover {
+                        background: rgb(243, 243, 243);
+
+                        & > .controls {
+                            display: inherit;
+                        }
+                    }
+
+                    & > .controls {
+                        display: none;
+                        float: right;
+
+                        & > * {
+                            cursor: pointer;
+                        }
+                    }
+                }
+
                 & > .translation-input {
-                    position: absolute;
                     width: 100%;
-                    top: 17px;
+
+                    & > .content {
+                        position: relative;
+                        background: #333;
+                        border-radius: 4px 4px 0 0;
+
+                        input {
+                            margin-bottom: 0;
+                            border-radius: 3px 0 0 0;
+                            outline: none;
+                            padding-right: 25px;
+                        }
+
+                        & > .close-btn {
+                            cursor: pointer;
+                            position: absolute;
+                            background: rgb(255, 255, 255);
+                            top: -19px;
+                            right: 0;
+                            width: 32px;
+                            height: 20px;
+                            text-align: center;
+                            border-left: 1px solid #e7e7e7;
+                            border-top: 1px solid #e7e7e7;
+                            border-right: 1px solid #e7e7e7;
+                            border-radius: 5px 5px 0 0;
+                        }
+
+                        & > .attach-translation-btn {
+                            cursor: pointer;
+                            position: absolute;
+                            width: 20px;
+                            height: 20px;
+                            border-radius: 3px;
+                            border: 1px solid rgb(197, 197, 197);
+                            text-align: center;
+                            right: 5px;
+                            top: 5px;
+
+                            &:hover {
+                                background: rgb(241, 241, 241);
+                            }
+
+                            &:active {
+                                background: rgb(182, 182, 182);
+                            }
+                        }
+
+                        & > .popover-content {
+                            position: absolute;
+                            background: #fff;
+                            border-right: 1px solid #e7e7e7;
+                            border-bottom: 1px solid #e7e7e7;
+                            border-left: 1px solid #e7e7e7;
+                            border-radius: 0 0 3px 3px;
+                            width: 100%;
+                            z-index: 100;
+
+                            & > .translations {
+                                & > .no-records {
+                                    padding: 7px;
+                                    text-align: center;
+                                    font-size: 0.8em;
+                                    color: #8b8b8b;
+                                }
+
+                                & > .translation-item {
+                                    padding: 7px;
+
+                                    &:not(:first-child) {
+                                        border-top: 1px solid #ddd;
+                                    }
+
+                                    &:hover {
+                                        cursor: pointer;
+                                        background-color: #eee;
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     & > .placeholder {
                         font-size: 0.8em;
