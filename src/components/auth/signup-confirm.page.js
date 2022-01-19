@@ -11,7 +11,7 @@ const SignupConfirmPage = () => {
     useEffect(() => {
         const confirmEmail = async () => {
             try {
-                const res = await api.post(`/signup/${token}`);
+                await api.post(`/signup/${token}`);
                 setIsConfirmed(true);
                 setIsFetching(false);
             } catch (err) {

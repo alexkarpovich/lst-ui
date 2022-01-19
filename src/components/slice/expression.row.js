@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import TranslationInput from "./translation.input";
 import TranslationRow from "./translation.row";
@@ -25,7 +25,9 @@ const ExpressionRow = ({obj, nodeId, isEditable}) => {
 
     return (
         <div className="expression-row">
-            <i className="detach-btn icon-bin" onClick={detach} />
+            {isEditable && (
+                <i className="detach-btn icon-bin" onClick={detach} />
+            )}
             <div className="target-value">{obj.value}</div>
             <div className="translations">
                 {

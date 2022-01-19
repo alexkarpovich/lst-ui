@@ -1,64 +1,46 @@
-@import "variables.scss";
+// @import "variables.scss";
 
-body {
-  margin: 0;
-  box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
+// input {
+//   width: 100%;
+//   padding: 7px;
+//   margin-bottom: 5px;
+//   border: 1px solid #e7e7e7;
+//   border-radius: 3px;
+// }
 
-*, ::after, ::before {
-  box-sizing: border-box;
-}
+// .button {
+//   display: inline-block;
+//   padding: 7px;
+//   font-size: 0.8em;
+//   cursor: pointer;
+//   text-align: center;
+//   text-decoration: none;
+//   text-transform: uppercase;
+//   outline: none;
+//   color: #fff;
+//   background-color: #6eb4c9;
+//   border: none;
+//   border-radius: 5px;
+//   box-shadow: 0 1px #999;
+//   width: 100%;
 
-input {
-  width: 100%;
-  padding: 7px;
-  margin-bottom: 5px;
-  border: 1px solid #e7e7e7;
-  border-radius: 3px;
-}
-
-.button {
-  display: inline-block;
-  padding: 7px;
-  font-size: 0.8em;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-  outline: none;
-  color: #fff;
-  background-color: #6eb4c9;
-  border: none;
-  border-radius: 5px;
-  box-shadow: 0 1px #999;
-  width: 100%;
-
-  &:hover {
-    background-color: #7ac7df;
-  }
+//   &:hover {
+//     background-color: #7ac7df;
+//   }
   
-  &:active {
-    background-color: #5d97a8;
-    box-shadow: 0 0 #666;
-    transform: translateY(2px);
-  }
-}
+//   &:active {
+//     background-color: #5d97a8;
+//     box-shadow: 0 0 #666;
+//     transform: translateY(2px);
+//   }
+// }
 
-button.link {
-  background: none!important;
-  border: none;
-  padding: 0!important;
-  color: #069;
-  text-decoration: none;
-  cursor: pointer;
-}
+// button.link {
+//   background: none!important;
+//   border: none;
+//   padding: 0!important;
+//   color: #069;
+//   text-decoration: none;
+//   cursor: pointer;
+// }

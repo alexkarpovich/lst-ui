@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
 import { useAuthContext } from "../../providers/auth.provider";
 import MenuItem from "./menu-item";
 
-import "./side-menu.scss";
+const StyledSideMenu = styled.div`
+background-color: ${props => props.theme.colors.bgMenu};
+border-right: 1px solid ${props => props.theme.colors.bgActiveMenu};
+position: fixed;
+width: 48px;
+height: 100%;
+
+& > .brand {
+    text-align: center;
+    font-size: 1.2em;
+}
+`;
 
 const SideMenu = () => {
     const {logout} = useAuthContext();
     const navigate = useNavigate();
-    const [isOpen, setIsOpen] = useState(false);
-
-    function toggle() {
-        setIsOpen(prev => !prev);
-    }
 
     function logoutHandler() {
         logout();
@@ -20,29 +28,24 @@ const SideMenu = () => {
     }
 
     return (
-        <div className={`side-menu ${!isOpen ? 'close' : ''}`}>
+        <StyledSideMenu>
             <div className="brand">#</div>
             <div className="menu-items">
-                <MenuItem to="/me/profile">
+                <MenuItem to="/me/profile" title="Profile">
                     <i className="icon-user-profile" />
-                    <span className="label">Profile</span>
                 </MenuItem>
-                <MenuItem to="/me/groups">
+                <MenuItem to="/me/groups" title="Groups">
                     <i className="icon-group" />
-                    <span className="label">Groups</span>
                 </MenuItem>
-                <MenuItem to="/me/slices">
+                <MenuItem to="/me/slices" title="Slices">
                     <i className="icon-pie-chart" />
-                    <span className="label">Slices</span>
                 </MenuItem>
                 <hr />
-                <MenuItem onClick={logoutHandler}>
+                <MenuItem onClick={logoutHandler} title="Log out">
                     <i className="icon-exit" />
-                    <span className="label">Log out</span>
                 </MenuItem>                
             </div>
-            <div className="toggle-button" onClick={toggle}>{isOpen ? '<<<' : '>>>'}</div>
-        </div>
+        </StyledSideMenu>
     );
 };
 

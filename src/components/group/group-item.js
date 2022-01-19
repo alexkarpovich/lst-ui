@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import EditableLabel from "react-inline-editing";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-import "./group-item.scss";
 import { useAuthContext } from "../../providers/auth.provider";
 import { getAdminIds } from "./groups.service";
 import { useGroupsContext } from "./groups.page";
@@ -11,11 +12,125 @@ import api from "../../utils/api";
 import GroupMember from "./group-member";
 import { DropdownButton } from "../shared/dropdown-button";
 import InvitationInput from "./invitation-input";
-import { Link } from "react-router-dom";
 
 
 export const MODE_DEFAULT = 0;
 export const MODE_EDITING = 1;
+
+const StyledGroupItem = styled.div`
+display: flex;
+background-color: #fdfdfd;
+padding: 10px;
+margin: 7px 0;
+border-radius: 5px;
+border-bottom: 1px solid #dfdfdf;
+box-shadow: 0 0 3px #dbdbdb;
+box-sizing: content-box;
+
+& > .side-section {
+    width: 32px;
+
+    .toggle-btn {
+        --color: #b5b5b5;
+        position: relative;
+        cursor: pointer;
+        color: var(--color);
+        border: 1px solid var(--color);
+        width: 16px;
+        height: 16px;
+
+        &:hover {
+            --color: #818181;  
+        }
+
+        &::after {
+            content: "+";
+            position: absolute;
+            left: 3px;
+            top: -2px;
+        }
+    }
+}
+
+& > .content {
+    width: 100%;
+
+    & > .info {
+        display: flex;
+
+        .name {
+            width: 30%;
+        }
+
+        .dir {
+            display: flex;
+            background-color: #ddd;
+            padding: 2px 5px;
+            border-radius: 3px;
+
+            & > .divider {
+                margin: 0 5px;
+                color: #979797;
+            }
+        }
+
+        .slices-link {
+            margin: 0 auto;
+
+            a {
+                color: #000;
+                text-decoration: none;
+            }
+        }
+
+        .controls {
+            margin-left: auto;
+    
+            & > * {
+                cursor: pointer;
+                color: #bbb;
+
+                &:not(:first-child) {
+                    margin-left: 5px;
+                }
+    
+                &:hover {
+                    color: rgb(224, 37, 37);
+                }
+            }
+        }
+    }
+
+    & > .members {
+        display: none;
+    }
+}
+
+&:not(.open) {
+    align-items: center;
+    height: 25px;
+}
+
+&.open {
+    height: none;
+
+    .side-section {
+        .toggle-btn {    
+            &::after {
+                content: "–";
+            }
+        }
+    }
+    .content {
+        .members {
+            display: inherit;
+            margin-top: 10px;
+            border-top: 1px dashed #ededed;
+            padding-top: 5px;
+        }
+    }
+}
+`;
 
 const GroupItem = ({obj, defaultMode}) => {
     const {user} = useAuthContext();
@@ -75,7 +190,7 @@ const GroupItem = ({obj, defaultMode}) => {
     }
 
     return (
-        <div className={`group-item ${isOpen ? 'open' : ''}`}>
+        <StyledGroupItem open={isOpen}>
             <div className="side-section">
                 <div className="toggle-btn" onClick={() => setIsOpen(prev => !prev)} />
             </div>
@@ -144,7 +259,7 @@ const GroupItem = ({obj, defaultMode}) => {
                     </div>
                 )}
             </div>
-        </div>
+        </StyledGroupItem>
     );
 };
 

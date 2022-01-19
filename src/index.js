@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import "./index.scss";
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from "./providers/auth.provider";
+import { AppThemeProvider } from "./providers/theme.provider";
 import {GuestRoute, MemberRoute} from "./utils/routing.utils";
 import App from "./App";
 import AuthPage from "./components/auth/auth.page";
@@ -18,27 +19,29 @@ import ConfirmInvitationPage from "./components/group/confirm-invitation.page";
 
 ReactDOM.render(
     <React.StrictMode>
-        <AuthProvider>
-            <BrowserRouter basename='/'>
-                <Routes>
-                    <Route index element={<HomePage />} />
-                    <Route exact path="/auth" element={<GuestRoute />}>
-                        <Route index element={<AuthPage />} />
-                        <Route exact path="signup/:token" element={<SignupConfirmPage />} />
-                    </Route>
-                    <Route path="/me" element={<MemberRoute />}>
-                        <Route path="/me" element={<App />}>
-                            <Route index element={<DashboardPage />} />
-                            <Route exact path="groups" element={<Outlet />}>
-                                <Route index element={<GroupsPage />} />
-                                <Route exact path="confirm-invitation/:token" element={<ConfirmInvitationPage />} />
-                            </Route>
-                            <Route path="slices" element={<SlicesPage />} />
+        <AppThemeProvider>
+            <AuthProvider>
+                <BrowserRouter basename='/'>
+                    <Routes>
+                        <Route index element={<HomePage />} />
+                        <Route exact path="/auth" element={<GuestRoute />}>
+                            <Route index element={<AuthPage />} />
+                            <Route exact path="signup/:token" element={<SignupConfirmPage />} />
                         </Route>
-                    </Route>
-                </Routes>
-            </BrowserRouter>
-        </AuthProvider>
+                        <Route path="/me" element={<MemberRoute />}>
+                            <Route path="/me" element={<App />}>
+                                <Route index element={<DashboardPage />} />
+                                <Route exact path="groups" element={<Outlet />}>
+                                    <Route index element={<GroupsPage />} />
+                                    <Route exact path="confirm-invitation/:token" element={<ConfirmInvitationPage />} />
+                                </Route>
+                                <Route path="slices" element={<SlicesPage />} />
+                            </Route>
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
+            </AuthProvider>
+        </AppThemeProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

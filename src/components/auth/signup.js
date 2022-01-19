@@ -1,9 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import styled from "styled-components";
 
-import './signup.scss';
 import api from '../../utils/api';
+import Input from "../shared/input";
+import Button from "../shared/button";
+
+
+const StyledSignup = styled.div`
+h3 {
+    margin: 10px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+width: 250px;
+height: 300px;
+`;
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -49,7 +63,7 @@ const Signup = () => {
     }
 
     return (
-        <div className="signup">
+        <StyledSignup>
             <h3>Sign up</h3>
             <Formik
                 initialValues={{email: '', username: '', password: '', repeatPassword: '' }} 
@@ -60,34 +74,38 @@ const Signup = () => {
                         <Field 
                             type="email"
                             name="email"
-                            placeholder="Enter email address" 
+                            placeholder="Enter email address"
+                            component={Input}
                         />
                         <ErrorMessage name="email" component="div" />
                         <Field 
                             type="text" 
                             name="username"
-                            placeholder="Enter username" 
+                            placeholder="Enter username"
+                            component={Input}
                         />
                         <ErrorMessage name="username" component="div" />
                         <Field 
                             type="password" 
                             name="password"
-                            placeholder="Enter password" 
+                            placeholder="Enter password"
+                            component={Input}
                         />
                         <ErrorMessage name="password" component="div" />
                         <Field 
                             type="password" 
                             name="repeatPassword"
-                            placeholder="Repeat password" 
+                            placeholder="Repeat password"
+                            component={Input}
                         />
                         <ErrorMessage name="repeatPassword" component="div" />
-                        <button type="submit" className="button" disabled={isSubmitting}>
+                        <Button type="submit" className="button" disabled={isSubmitting}>
                             Submit
-                        </button>
+                        </Button>
                     </Form>
                 )}
             </Formik>
-        </div>
+        </StyledSignup>
     );
 };
 

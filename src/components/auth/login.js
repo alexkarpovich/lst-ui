@@ -1,11 +1,25 @@
 import React from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import styled from "styled-components";
 
-import "./login.scss";
 import api from "../../utils/api";
 import { setToken } from "../../utils/session";
 import { useAuthContext } from "../../providers/auth.provider";
+import Input from "../shared/input";
+import Button from "../shared/button";
+
+
+const StyledLogin = styled.div`
+h3 {
+    margin: 10px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+width: 250px;
+height: 300px;
+`;
 
 const Login = () => {
     const navigate = useNavigate();
@@ -51,7 +65,7 @@ const Login = () => {
     }
 
     return (
-        <div className="login">
+        <StyledLogin>
             <h3>Log in</h3>
             <Formik
                 initialValues={{ email: '', password: '' }} 
@@ -62,22 +76,24 @@ const Login = () => {
                         <Field 
                             type="email"
                             name="email"
-                            placeholder="Enter email address" 
+                            placeholder="Enter email address"
+                            component={Input}
                         />
                         <ErrorMessage name="email" component="div" />
                         <Field 
                             type="password" 
                             name="password"
-                            placeholder="Enter password" 
+                            placeholder="Enter password"
+                            component={Input}
                         />
                         <ErrorMessage name="password" component="div" />
-                        <button type="submit" className="button" disabled={isSubmitting}>
+                        <Button type="submit" className="button" disabled={isSubmitting}>
                             Submit
-                        </button>
+                        </Button>
                     </Form>
                 )}
             </Formik>
-        </div>
+        </StyledLogin>
     );
 };
 

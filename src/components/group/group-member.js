@@ -1,12 +1,41 @@
 import React from "react";
 import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-import "./group-member.scss";
 import api from "../../utils/api";
 import { useAuthContext } from "../../providers/auth.provider";
 import { ROLE_MAP, STATUS_MAP } from "./groups.const";
 
+
+const StyledGroupMember = styled.div`
+display: flex;
+padding: 5px 0;
+
+& > .username {
+    width: 30%;
+}
+
+& > .role {
+    width: 20%;
+}
+
+& > .status {
+    width: 20%;
+} 
+
+& > .controls {
+    margin-left: auto;
+
+    & > * {
+        cursor: pointer;
+
+        &:hover {
+            color: rgb(224, 37, 37);
+        }
+    }
+}
+`;
 
 const GroupMember = ({groupId, adminIds, obj}) => {
     const {user} = useAuthContext();
@@ -21,7 +50,7 @@ const GroupMember = ({groupId, adminIds, obj}) => {
     }
 
     return (
-        <div className="group-member">
+        <StyledGroupMember>
             <Link className="username" to={`/users/${obj.id}`}>{`@${obj.username}`}</Link>
             <span className="role">{ROLE_MAP[obj.role]}</span>
             <span className="status">{STATUS_MAP[obj.status]}</span>
@@ -30,7 +59,7 @@ const GroupMember = ({groupId, adminIds, obj}) => {
                     <span onClick={detachMember}>✕</span>  
                 )}
             </div>
-        </div>
+        </StyledGroupMember>
     );
 };
 

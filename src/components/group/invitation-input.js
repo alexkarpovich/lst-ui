@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { PropTypes } from "prop-types";
 import AsyncSelect from 'react-select/async';
 
-import "./group-member.scss";
 import api from "../../utils/api";
 import { useGroupsContext } from "./groups.page";
 import { ADD_MEMBER } from "./groups.const";

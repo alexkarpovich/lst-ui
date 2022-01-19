@@ -1,11 +1,13 @@
 import React, { createContext, useEffect, useReducer, useContext } from "react";
 import axios from "axios";
+import styled from "styled-components";
 
-import "./groups.page.scss";
 import api from "../../utils/api";
 import { SET_CREATING_MODE, SET_FETCHING, SET_GROUPS_LANGS } from "./groups.const";
 import { groupsReducer } from "./groups.reducer";
+import Button from "../shared/button";
 import GroupItem, {MODE_EDITING} from "./group-item";
+
 
 
 let initialState = {
@@ -20,6 +22,14 @@ export const GroupsContext = createContext(initialState);
 export function useGroupsContext() {
    return useContext(GroupsContext);
 }
+
+const StyledGroupPage = styled.div`
+padding: 15px;
+
+& > .add-new {
+    width: 120px;
+}
+`;
 
 const GroupsPage = () => {
     const [state, dispatch] = useReducer(groupsReducer, initialState);
@@ -50,12 +60,12 @@ const GroupsPage = () => {
 
     return (
         <GroupsContext.Provider value={{ ...state, dispatch }}>
-            <div className="groups-page">
+            <StyledGroupPage>
                 <h3>Group list</h3>
                 {state.isCreatingMode ? (
                     <GroupItem key="-1" defaultMode={MODE_EDITING}/>
                     ) : (
-                    <button className="button add-new" onClick={() => dispatch({type: SET_CREATING_MODE, payload: true})}>+ new group</button>
+                    <Button className="add-new" onClick={() => dispatch({type: SET_CREATING_MODE, payload: true})}>+ new group</Button>
                 )}
 
                 {
@@ -64,7 +74,7 @@ const GroupsPage = () => {
                     ))
                 }
                 
-            </div>
+            </StyledGroupPage>
         </GroupsContext.Provider>
     );
 };
