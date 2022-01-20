@@ -1,9 +1,113 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
+import styled from "styled-components";
 
 import api from "../../utils/api";
 import { useSlicesViewContext } from "./slices.view";
 import { ATTACH_TRANSLATION } from "./slices.const";
+import Input from"../shared/input";
+
+
+const StyledTranslationInput = styled.div`
+width: 100%;
+
+& > .content {
+    position: relative;
+    background: #333;
+    border-radius: 4px 4px 0 0;
+
+    input {
+        margin: 0;
+        border-radius: 3px 0 0 0;
+        outline: none;
+        padding-right: 25px;
+
+        &::placeholder {
+            color: #007bff
+        }
+    }
+
+    & > .close-btn {
+        cursor: pointer;
+        position: absolute;
+        background: rgb(255, 255, 255);
+        top: -19px;
+        right: 0;
+        width: 32px;
+        height: 20px;
+        text-align: center;
+        border-left: 1px solid #e7e7e7;
+        border-top: 1px solid #e7e7e7;
+        border-right: 1px solid #e7e7e7;
+        border-radius: 5px 5px 0 0;
+    }
+
+    & > .attach-translation-btn {
+        cursor: pointer;
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        border: 1px solid rgb(197, 197, 197);
+        text-align: center;
+        right: 5px;
+        top: 5px;
+
+        &:hover {
+            background: rgb(241, 241, 241);
+        }
+
+        &:active {
+            background: rgb(182, 182, 182);
+        }
+    }
+
+    & > .popover-content {
+        position: absolute;
+        background: #fff;
+        border-right: 1px solid #e7e7e7;
+        border-bottom: 1px solid #e7e7e7;
+        border-left: 1px solid #e7e7e7;
+        border-radius: 0 0 3px 3px;
+        width: 100%;
+        z-index: 100;
+
+        & > .translations {
+            & > .no-records {
+                padding: 7px;
+                text-align: center;
+                font-size: 0.8em;
+                color: #8b8b8b;
+            }
+
+            & > .translation-item {
+                padding: 7px;
+
+                &:not(:first-child) {
+                    border-top: 1px solid #ddd;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: #eee;
+                }
+            }
+        }
+    }
+}
+
+& > .placeholder {
+    color: #007bff;
+    font-size: 0.8em;
+    padding: 7px;
+    border: 1px solid #fff;
+
+    &:hover {
+        border: 1px solid #eee;
+        border-radius: 3px;
+    }
+}
+`;
 
 const TranslationInput = ({expressionId, nodeId}) => {
     const {dispatch} = useSlicesViewContext();
@@ -61,11 +165,11 @@ const TranslationInput = ({expressionId, nodeId}) => {
     }
 
     return (
-        <div className="translation-input">
+        <StyledTranslationInput>
             {isOpen ? (
                 <div className="content">
                     <span className="close-btn" onClick={() => setIsOpen(false)}>✕</span>
-                    <input
+                    <Input
                         autoFocus
                         type="text"
                         placeholder="+ add translation" 
@@ -89,7 +193,7 @@ const TranslationInput = ({expressionId, nodeId}) => {
             ) : (
                 <div className="placeholder" onClick={toggleOpen}>+ add translation</div>
             )}
-        </div>
+        </StyledTranslationInput>
     );
 }
 

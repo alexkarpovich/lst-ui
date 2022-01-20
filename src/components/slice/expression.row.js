@@ -1,12 +1,41 @@
 import React from "react";
 import PropTypes from "prop-types";
-import TranslationInput from "./translation.input";
-import TranslationRow from "./translation.row";
+import styled from "styled-components";
 
 import api from "../../utils/api";
 import { useSlicesViewContext } from "./slices.view";
 import { DETACH_EXPRESSION } from "./slices.const";
+import TranslationInput from "./translation.input";
+import TranslationRow from "./translation.row";
 
+const StyledExpressionRow = styled.div`
+padding: 3px 7px;
+border: 1px solid #eee;
+border-radius: 2px;
+position: relative;
+
+& > .detach-btn {
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 0.9em;
+    opacity: 10%;
+
+    &:hover {
+        opacity: 40%;
+    }
+}
+
+& > .target-value {
+    font-family: "KaiTi";
+    font-size: 1.5em;
+}
+
+& > .translations {
+    position: relative;
+}
+`;
 
 const ExpressionRow = ({obj, nodeId, isEditable}) => {
     const {dispatch} = useSlicesViewContext();
@@ -24,7 +53,7 @@ const ExpressionRow = ({obj, nodeId, isEditable}) => {
     }
 
     return (
-        <div className="expression-row">
+        <StyledExpressionRow>
             {isEditable && (
                 <i className="detach-btn icon-bin" onClick={detach} />
             )}
@@ -48,7 +77,7 @@ const ExpressionRow = ({obj, nodeId, isEditable}) => {
                     />
                 )}
             </div>
-        </div>
+        </StyledExpressionRow>
     );
 };
 

@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import { createSearchParams } from "react-router-dom";
+import styled from "styled-components";
 
-import "./slices.view.scss";
 import api from "../../utils/api";
 import { SET_VIEW_FETCHING, SET_VIEW_DATA } from "./slices.const";
 import { slicesViewReducer } from "./view.reducer";
@@ -19,6 +19,25 @@ export const SlicesViewContext = createContext(initialState);
 export function useSlicesViewContext() {
    return useContext(SlicesViewContext);
 }
+
+const StyledSlicesView = styled.div`
+padding: 10px;
+
+.expressions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 3px;
+    grid-row-gap: 2px;;
+
+    @media screen and (max-width: 860px) {
+        grid-template-columns: auto;
+    }
+
+    @media screen and (min-width: 860px) {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+`;
 
 const SlicesView = ({activeIds}) => {
     const [state, dispatch] = useReducer(slicesViewReducer, initialState);
@@ -47,7 +66,7 @@ const SlicesView = ({activeIds}) => {
 
     return state.isFetching ? 'Fetching...' : (
         <SlicesViewContext.Provider value={{ ...state, dispatch }}>
-            <div className="slices-view">
+            <StyledSlicesView>
                 {isEditable && (
                     <SearchBar nodeId={activeIds[0]} />
                 )}
@@ -62,7 +81,7 @@ const SlicesView = ({activeIds}) => {
                         />
                     ))}
                 </div>
-            </div>
+            </StyledSlicesView>
         </SlicesViewContext.Provider>
     );
 };

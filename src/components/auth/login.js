@@ -10,6 +10,10 @@ import Input from "../shared/input";
 import Button from "../shared/button";
 
 
+const CustomInput = ({field, form, ...props}) => (
+    <Input type="text" {...field} {...props} />
+);
+
 const StyledLogin = styled.div`
 h3 {
     margin: 10px;
@@ -77,14 +81,14 @@ const Login = () => {
                             type="email"
                             name="email"
                             placeholder="Enter email address"
-                            component={Input}
+                            component={CustomInput}
                         />
                         <ErrorMessage name="email" component="div" />
                         <Field 
                             type="password" 
                             name="password"
                             placeholder="Enter password"
-                            component={Input}
+                            component={CustomInput}
                         />
                         <ErrorMessage name="password" component="div" />
                         <Button type="submit" className="button" disabled={isSubmitting}>

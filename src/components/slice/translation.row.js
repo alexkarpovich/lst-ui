@@ -4,6 +4,42 @@ import PropTypes from "prop-types";
 import api from "../../utils/api";
 import { useSlicesViewContext } from "./slices.view";
 import { DETACH_TRANSLATION } from "./slices.const";
+import styled from "styled-components";
+
+const StyledTranslationRow = styled.div`
+padding: 2px;
+margin-left: 10px;
+font-size: 0.9em;
+color: #444;
+
+&::before {
+    content: "-";
+    color: #b1b1b1;
+    position: absolute;
+    left: 0;
+}
+
+&:not(:first-child) {
+    border-top: 1px solid #f9f9f9;
+}
+
+&:hover {
+    background: #f9f9f9;
+
+    & > .controls {
+        display: inherit;
+    }
+}
+
+& > .controls {
+    display: none;
+    float: right;
+
+    & > * {
+        cursor: pointer;
+    }
+}
+`;
 
 const TranslationRow = ({obj, nodeId, expressionId, isEditable}) => {
     const {dispatch} = useSlicesViewContext();
@@ -23,14 +59,14 @@ const TranslationRow = ({obj, nodeId, expressionId, isEditable}) => {
     }
 
     return (
-        <div className="translation">
+        <StyledTranslationRow>
             <span>{obj.value}</span>
             {isEditable && (
                 <div className="controls">
                     <span onClick={detach}>✕</span>
                 </div>
             )}
-        </div>
+        </StyledTranslationRow>
     );
 };
 

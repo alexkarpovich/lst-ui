@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import EditableLabel from "react-inline-editing";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 
 import { useAuthContext } from "../../providers/auth.provider";
 import { getAdminIds } from "./groups.service";
@@ -22,6 +22,7 @@ display: flex;
 background-color: #fdfdfd;
 padding: 10px;
 margin: 7px 0;
+height: ${props => props.open ? 'none' : '25px'};
 border-radius: 5px;
 border-bottom: 1px solid #dfdfdf;
 box-shadow: 0 0 3px #dbdbdb;
@@ -36,6 +37,7 @@ box-sizing: content-box;
         cursor: pointer;
         color: var(--color);
         border: 1px solid var(--color);
+        top: 5px;
         width: 16px;
         height: 16px;
 
@@ -44,7 +46,7 @@ box-sizing: content-box;
         }
 
         &::after {
-            content: "+";
+            content: "${props => props.open ? "–" : "+"}";
             position: absolute;
             left: 3px;
             top: -2px;
@@ -57,6 +59,7 @@ box-sizing: content-box;
 
     & > .info {
         display: flex;
+        align-items: center;
 
         .name {
             width: 30%;
@@ -102,32 +105,12 @@ box-sizing: content-box;
     }
 
     & > .members {
-        display: none;
-    }
-}
-
-&:not(.open) {
-    align-items: center;
-    height: 25px;
-}
-
-&.open {
-    height: none;
-
-    .side-section {
-        .toggle-btn {    
-            &::after {
-                content: "–";
-            }
-        }
-    }
-    .content {
-        .members {
-            display: inherit;
-            margin-top: 10px;
-            border-top: 1px dashed #ededed;
-            padding-top: 5px;
-        }
+        display: ${props => props.open ? 'inherit' : 'none'};
+        ${props => props.open && css`
+        margin-top: 10px;
+        border-top: 1px dashed #ededed;
+        padding-top: 5px;
+        `}
     }
 }
 `;

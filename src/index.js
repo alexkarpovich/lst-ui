@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 
-import "./index.scss";
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from "./providers/auth.provider";
 import { AppThemeProvider } from "./providers/theme.provider";

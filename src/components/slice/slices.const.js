@@ -13,3 +13,6 @@ export const DETACH_TRANSLATION = 'DETACH_TRANSLATION';
 
 export const NODE_FOLDER = 0;
 export const NODE_SLICE = 1;
+
+export const VISIBILITY_PRIVATE = 0;
+export const VISIBILITY_PUBLIC = 1;

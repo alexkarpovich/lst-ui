@@ -7,6 +7,9 @@ import api from '../../utils/api';
 import Input from "../shared/input";
 import Button from "../shared/button";
 
+const CustomInput = ({field, form, ...props}) => (
+    <Input type="text" {...field} {...props} />
+);
 
 const StyledSignup = styled.div`
 h3 {
@@ -75,28 +78,28 @@ const Signup = () => {
                             type="email"
                             name="email"
                             placeholder="Enter email address"
-                            component={Input}
+                            component={CustomInput}
                         />
                         <ErrorMessage name="email" component="div" />
                         <Field 
                             type="text" 
                             name="username"
                             placeholder="Enter username"
-                            component={Input}
+                            component={CustomInput}
                         />
                         <ErrorMessage name="username" component="div" />
                         <Field 
                             type="password" 
                             name="password"
                             placeholder="Enter password"
-                            component={Input}
+                            component={CustomInput}
                         />
                         <ErrorMessage name="password" component="div" />
                         <Field 
                             type="password" 
                             name="repeatPassword"
                             placeholder="Repeat password"
-                            component={Input}
+                            component={CustomInput}
                         />
                         <ErrorMessage name="repeatPassword" component="div" />
                         <Button type="submit" className="button" disabled={isSubmitting}>

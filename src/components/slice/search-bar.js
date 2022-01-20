@@ -2,12 +2,19 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import CreatableSelect from 'react-select/creatable';
 import { createSearchParams } from "react-router-dom";
+import styled from "styled-components";
 
-import "./slices.view.scss";
 import api from "../../utils/api";
 import { useSlicesContext } from "./slices.page";
 import { ATTACH_EXPRESSION, INCREASE_NODE_COUNT } from "./slices.const";
 import { useSlicesViewContext } from "./slices.view";
+
+
+const StyledSearchBar = styled.div`
+width: 70%;
+margin: auto;
+padding: 10px 0;
+`;
 
 const SearchBar = ({nodeId}) => {
     const {dispatch} = useSlicesContext();
@@ -61,7 +68,7 @@ const SearchBar = ({nodeId}) => {
     }
 
     return (
-        <div className="search-bar">
+        <StyledSearchBar>
             <CreatableSelect
                 isClearable
                 // isDisabled={isLoading}
@@ -76,7 +83,7 @@ const SearchBar = ({nodeId}) => {
                 getOptionLabel={option => option.value}
                 getOptionValue={option => option.id}
             />
-        </div>
+        </StyledSearchBar>
     );
 };
 
