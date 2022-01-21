@@ -45,6 +45,7 @@ const SlicesView = ({activeIds}) => {
     const prefix = activeIds.join('');
 
     useEffect(() => {
+        console.log('slices view active node ids', activeIds);
         async function loadData() {
             dispatch({type: SET_VIEW_FETCHING, payload: true});
             try {
@@ -62,7 +63,7 @@ const SlicesView = ({activeIds}) => {
         } else {
             dispatch({type: SET_VIEW_FETCHING, payload: false});   
         }
-    }, [activeIds])
+    }, [prefix])
 
     return state.isFetching ? 'Fetching...' : (
         <SlicesViewContext.Provider value={{ ...state, dispatch }}>

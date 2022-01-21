@@ -52,6 +52,7 @@ const SlicesPage = () => {
     const qp = prepareQueryParams(searchParams);
 
     useEffect(() => {
+        console.log('Slices page group change', qp.group);
         async function loadInitialData() {
             dispatch({ type: SET_FETCHING, payload: true});
             

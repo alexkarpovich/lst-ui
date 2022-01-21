@@ -5,12 +5,13 @@ import styled from "styled-components";
 import {lighten} from "polished";
 
 import api from "../../utils/api";
-import { NODE_FOLDER, VISIBILITY_PRIVATE, VISIBILITY_PUBLIC } from "./slices.const";
+import { NODE_FOLDER, UPDATE_NODE, VISIBILITY_PRIVATE, VISIBILITY_PUBLIC } from "./slices.const";
 import { getNestedNodeIds, prepareQueryParams } from "./slices.service";
+import { useSlicesContext } from "./slices.page";
 
 const StyledMenuItemContainer = styled.div`
 & > .children {
-    display: ${props => props.expanded ? 'inherit' : 'none'}
+    display: ${props => props.expanded ? 'inherit' : 'none'};
     margin-left: 3px;
     padding-left: 5px;
     border-left: 1px dashed #333;
@@ -39,12 +40,13 @@ color: ${props => props.active ? props.theme.colors.colorMenu : '#bbb'};
     }
 
     & > .visibility {
-        opacity: 15%;
-        font-size: 0.9em;
-        margin-left: ${props => props.type === 0 ? '0' : '3px'};
+        font-size: 0.7em;
+        margin-top: 3px;
+        font-size: 0.7em;
+        margin-left: ${props => props.type === 0 ? '1px' : '4px'};
 
         &:hover {
-            opacity: 100%;
+            color: #fc0;
         }
     }
 }
@@ -84,6 +86,7 @@ color: ${props => props.active ? props.theme.colors.colorMenu : '#bbb'};
 `;
 
 const SlicesMenuItem = ({obj}) => {
+    const {dispatch} = useSlicesContext();
     const [searchParams, setSearchParams] = useSearchParams();
     const [isExpanded, setIsExpanded] = useState(false);
     const qp = prepareQueryParams(searchParams);
@@ -99,12 +102,17 @@ const SlicesMenuItem = ({obj}) => {
     }
 
     async function toggleVisibility() {
+        const visibility = obj.visibility === VISIBILITY_PRIVATE ? VISIBILITY_PUBLIC : VISIBILITY_PRIVATE;
         try {
             await api.post(`/me/nodes/${obj.id}`, {
                 name: obj.name,
                 path: obj.path,
-                visibility: obj.visibility === VISIBILITY_PRIVATE ? VISIBILITY_PUBLIC : VISIBILITY_PRIVATE,
+                visibility,
             });
+            dispatch({type: UPDATE_NODE, payload: {
+                id: obj.id,
+                visibility,
+            }})
         } catch (err) {
             console.log(err);
         }
@@ -118,7 +126,7 @@ const SlicesMenuItem = ({obj}) => {
             >
                 <div className="expand-btn" onClick={toggle}>
                     {obj.type === NODE_FOLDER ? (
-                        <i className={`${isExpanded ? 'icon-folder' : 'icon-folder-open'}`} />
+                        <i className={`${isExpanded ? 'icon-folder-open' : 'icon-folder'}`} />
                     ) : (
                         <i className="icon-dot" />
                     )}
