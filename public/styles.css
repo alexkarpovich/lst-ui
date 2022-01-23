@@ -1,18 +1,18 @@
 @font-face {
-  font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?4g1xfn');
-  src:  url('fonts/icomoon.eot?4g1xfn#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?4g1xfn') format('truetype'),
-    url('fonts/icomoon.woff?4g1xfn') format('woff'),
-    url('fonts/icomoon.svg?4g1xfn#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal;
-  font-display: block;
+  font-family: 'KaiTi';
+  src: url('fonts/KaiTi.ttf')  format('truetype');
 }
 
 @font-face {
-  font-family: 'KaiTi';
-  src: url('fonts/KaiTi.ttf')  format('truetype');
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?oy4j2z');
+  src:  url('fonts/icomoon.eot?oy4j2z#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?oy4j2z') format('truetype'),
+    url('fonts/icomoon.woff?oy4j2z') format('woff'),
+    url('fonts/icomoon.svg?oy4j2z#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
 }
 
 [class^="icon-"], [class*=" icon-"] {
@@ -80,6 +80,12 @@
 }
 .icon-exit:before {
   content: "\ea14";
+}
+.icon-circle-right:before {
+  content: "\ea42";
+}
+.icon-circle-left:before {
+  content: "\ea44";
 }
 .icon-radio-unchecked:before {
   content: "\ea56";

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import {lighten} from "polished";
 
 import api from "../../utils/api";
-import { NODE_FOLDER, UPDATE_NODE, VISIBILITY_PRIVATE, VISIBILITY_PUBLIC } from "./slices.const";
+import { DELETE_NODE, NODE_FOLDER, UPDATE_NODE, VISIBILITY_PRIVATE, VISIBILITY_PUBLIC } from "./slices.const";
 import { getNestedNodeIds, prepareQueryParams } from "./slices.service";
 import { useSlicesContext } from "./slices.page";
 
@@ -21,13 +21,8 @@ const StyledMenuItemContainer = styled.div`
 const StyledMenuItem = styled.div`
 display: flex;
 padding: 7px 3px;
+position: relative;
 color: ${props => props.active ? props.theme.colors.colorMenu : '#bbb'};
-
-&:hover {
-    & > .controls {
-        display: block;
-    }
-}
 
 & > .expand-btn {
     font-size: 0.8em;
@@ -43,7 +38,7 @@ color: ${props => props.active ? props.theme.colors.colorMenu : '#bbb'};
         font-size: 0.7em;
         margin-top: 3px;
         font-size: 0.7em;
-        margin-left: ${props => props.type === 0 ? '1px' : '4px'};
+        margin-left: 4px;
 
         &:hover {
             color: #fc0;
@@ -70,16 +65,26 @@ color: ${props => props.active ? props.theme.colors.colorMenu : '#bbb'};
 }
 
 & > .controls {
-    cursor: pointer;
-    display: none;
-    font-size: 0.7em;
-    margin-top: auto;
-    margin-bottom: auto;
-    color: ${props => lighten(0.15, props.theme.colors.colorMenu)}
+    display: flex;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 42px;
+    background: ${props => props.showMenu ? props.theme.colors.colorMenu : 'none'};
+    border-left: 3px solid #1e1e1e;
+    
+    & > div {
+        cursor: pointer;
+        color: #fff;
+        height: 100%;
+        padding: 12px 2px;
 
-    i {
         &:not(:first-child) {
-            margin-left: 2px;
+            padding: 12px;
+        }
+
+        &:hover {
+            background: ${props => props.showMenu ? '#58aadd' : 'none'};
         }
     }
 }
@@ -89,6 +94,7 @@ const SlicesMenuItem = ({obj}) => {
     const {dispatch} = useSlicesContext();
     const [searchParams, setSearchParams] = useSearchParams();
     const [isExpanded, setIsExpanded] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
     const qp = prepareQueryParams(searchParams);
 
     function toggle() {
@@ -99,6 +105,17 @@ const SlicesMenuItem = ({obj}) => {
         const ids = getNestedNodeIds(obj);
 
         setSearchParams({...qp, ids: JSON.stringify(ids)});
+    }
+
+    async function deleteNode() {
+        try {
+            await api.delete(`/me/nodes/${obj.id}`);
+            dispatch({type: DELETE_NODE, payload: {
+                nodeId: obj.id
+            }});
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     async function toggleVisibility() {
@@ -123,6 +140,7 @@ const SlicesMenuItem = ({obj}) => {
             <StyledMenuItem 
                 active={qp.ids.indexOf(obj.id) !== -1} 
                 type={obj.type}
+                showMenu={showMenu}
             >
                 <div className="expand-btn" onClick={toggle}>
                     {obj.type === NODE_FOLDER ? (
@@ -141,8 +159,24 @@ const SlicesMenuItem = ({obj}) => {
                     <div className="details">{`${obj.count} expression(s)`}</div>
                 </div>
                 <div className="controls">
-                    <i className="icon-edit-box" />
-                    <i className="icon-bin" />
+                    {showMenu ? (
+                        <>
+                            <div onClick={() => setShowMenu(false)}>
+                                <span className="icon-circle-right" />
+                            </div>
+                            <div>
+                                <span className="icon-edit-box" />
+                            </div>
+                            <div onClick={deleteNode}>
+                                <span className="icon-bin" />
+                            </div>
+                        </>
+                    ) : (
+                        <div onClick={() => setShowMenu(true)} >
+                            <span className="icon-circle-left" /> 
+                        </div>
+                    )}
+                    
                 </div>
             </StyledMenuItem>
             {obj.children && (

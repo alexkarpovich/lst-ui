@@ -1,4 +1,4 @@
-import { SET_FETCHING, SET_VIEW_FETCHING, SET_GROUPS, SET_NODES, SET_GROUPS_NODES, INCREASE_NODE_COUNT, UPDATE_NODE } from "./slices.const";
+import { SET_FETCHING, SET_VIEW_FETCHING, SET_GROUPS, SET_NODES, SET_GROUPS_NODES, INCREASE_NODE_COUNT, UPDATE_NODE, DELETE_NODE } from "./slices.const";
 
 
 export const slicesReducer = (state, action) => {
@@ -64,6 +64,12 @@ export const slicesReducer = (state, action) => {
                 }
             }
             mapNodes(nodes)
+            return {...state, nodes};
+        }
+        case DELETE_NODE: {
+            const {nodeId} = action.payload;
+            const nodes = state.nodes.filter(node => node.id !== nodeId);
+            
             return {...state, nodes};
         }
         default:
