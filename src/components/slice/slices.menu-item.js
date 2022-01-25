@@ -71,7 +71,6 @@ color: ${props => props.active ? props.theme.colors.colorMenu : '#bbb'};
     top: 0;
     height: 42px;
     background: ${props => props.showMenu ? props.theme.colors.colorMenu : 'none'};
-    border-left: 3px solid #1e1e1e;
     
     & > div {
         cursor: pointer;

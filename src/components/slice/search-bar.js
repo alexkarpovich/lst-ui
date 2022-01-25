@@ -12,8 +12,6 @@ import { useSlicesViewContext } from "./slices.view";
 
 const StyledSearchBar = styled.div`
 width: 70%;
-margin: auto;
-padding: 10px 0;
 `;
 
 const SearchBar = ({nodeId}) => {

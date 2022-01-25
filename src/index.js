@@ -14,6 +14,7 @@ import DashboardPage from "./components/dashboard/dashboard.page";
 import GroupsPage from "./components/group/groups.page";
 import SlicesPage from "./components/slice/slices.page";
 import ConfirmInvitationPage from "./components/group/confirm-invitation.page";
+import TrainingPage from "./components/training/training.page";
 
 
 ReactDOM.render(
@@ -35,6 +36,7 @@ ReactDOM.render(
                                     <Route exact path="confirm-invitation/:token" element={<ConfirmInvitationPage />} />
                                 </Route>
                                 <Route path="slices" element={<SlicesPage />} />
+                                <Route path="trainings" element={<TrainingPage />} />
                             </Route>
                         </Route>
                     </Routes>

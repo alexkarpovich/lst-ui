@@ -21,7 +21,17 @@ export function useSlicesViewContext() {
 }
 
 const StyledSlicesView = styled.div`
-padding: 10px;
+.toolbar {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+
+    .training-items {
+        * {
+            padding: 7px;
+        }
+    }
+}
 
 .expressions {
     display: grid;
@@ -68,9 +78,15 @@ const SlicesView = ({activeIds}) => {
     return state.isFetching ? 'Fetching...' : (
         <SlicesViewContext.Provider value={{ ...state, dispatch }}>
             <StyledSlicesView>
-                {isEditable && (
-                    <SearchBar nodeId={activeIds[0]} />
-                )}
+                <div className="toolbar">
+                    {isEditable && (
+                        <SearchBar nodeId={activeIds[0]} />
+                    )}
+                    <div className="training-items">
+                        <span>Through</span>
+                        <span>Cycles</span>
+                    </div>
+                </div>
 
                 <div className="expressions">
                     {state.expressions.map(expr => (

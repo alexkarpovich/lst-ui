@@ -9,7 +9,7 @@ export const slicesViewReducer = (state, action) => {
             return {...state, isFetching: false, ...action.payload};
         }
         case ATTACH_EXPRESSION: {
-            const expressions = [action.payload, state.expressions];
+            const expressions = [action.payload, ...state.expressions];
 
             return {...state, expressions};
         }

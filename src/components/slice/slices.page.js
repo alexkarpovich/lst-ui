@@ -99,8 +99,8 @@ const SlicesPage = () => {
 
                         <div className="groups-select">
                             {state.groups.map(group => (
-                                <div>
-                                    <Link key={group.id} to={`/me/slices?group=${group.id}`}>{group.name}</Link>
+                                <div key={group.id}>
+                                    <Link to={`/me/slices?group=${group.id}`}>{group.name}</Link>
                                 </div>
                             ))}
                         </div>
