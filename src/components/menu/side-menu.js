@@ -41,7 +41,7 @@ const SideMenu = () => {
                     <i className="icon-pie-chart" />
                 </MenuItem>
                 <MenuItem to="/me/trainings" title="Trainings">
-                    <i className="icon-pie-chart" />
+                    <i className="icon-dumbbell" />
                 </MenuItem>
                 <hr />
                 <MenuItem onClick={logoutHandler} title="Log out">

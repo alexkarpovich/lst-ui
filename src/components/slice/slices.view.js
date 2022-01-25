@@ -6,7 +6,7 @@ import styled from "styled-components";
 import api from "../../utils/api";
 import { SET_VIEW_FETCHING, SET_VIEW_DATA } from "./slices.const";
 import { slicesViewReducer } from "./view.reducer";
-import SearchBar from "./search-bar";
+import ToolBar from "./toolbar";
 import ExpressionRow from "./expression.row";
 
 let initialState = {
@@ -21,18 +21,6 @@ export function useSlicesViewContext() {
 }
 
 const StyledSlicesView = styled.div`
-.toolbar {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-
-    .training-items {
-        * {
-            padding: 7px;
-        }
-    }
-}
-
 .expressions {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -78,16 +66,10 @@ const SlicesView = ({activeIds}) => {
     return state.isFetching ? 'Fetching...' : (
         <SlicesViewContext.Provider value={{ ...state, dispatch }}>
             <StyledSlicesView>
-                <div className="toolbar">
-                    {isEditable && (
-                        <SearchBar nodeId={activeIds[0]} />
-                    )}
-                    <div className="training-items">
-                        <span>Through</span>
-                        <span>Cycles</span>
-                    </div>
-                </div>
-
+                <ToolBar
+                    nodeId={activeIds[0]}
+                    isEditable={isEditable}
+                />
                 <div className="expressions">
                     {state.expressions.map(expr => (
                         <ExpressionRow

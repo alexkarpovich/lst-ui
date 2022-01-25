@@ -157,7 +157,6 @@ const TranslationInput = ({expressionId, nodeId}) => {
     async function fetchTranslations() {
         try {
             const {data:res} = await api.get(`/me/nodes/${nodeId}/translations?expression_id=${expressionId}`);
-            console.log(res);
             setTranslations(res.data);
         } catch (err) {
             console.log(err);

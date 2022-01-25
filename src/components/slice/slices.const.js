@@ -18,3 +18,8 @@ export const NODE_SLICE = 1;
 
 export const VISIBILITY_PRIVATE = 0;
 export const VISIBILITY_PUBLIC = 1;
+
+export const EXERCISE_DIRECT = 0;
+export const EXERCISE_REVERSE = 1;
+export const EXERCISE_CYCLES = 2;
+export const EXERCISE_LISTEN = 3;
