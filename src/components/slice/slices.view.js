@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+import React, { createContext, memo, useContext, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import { createSearchParams } from "react-router-dom";
+import { Plock } from "react-plock";
 import styled from "styled-components";
 
 import api from "../../utils/api";
@@ -21,19 +22,10 @@ export function useSlicesViewContext() {
 }
 
 const StyledSlicesView = styled.div`
+padding: 10px;
+
 .expressions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 3px;
-    grid-row-gap: 2px;;
-
-    @media screen and (max-width: 860px) {
-        grid-template-columns: auto;
-    }
-
-    @media screen and (min-width: 860px) {
-        grid-template-columns: 1fr 1fr;
-    }
+    max-width: 860px;
 }
 `;
 
@@ -67,10 +59,10 @@ const SlicesView = ({activeIds}) => {
         <SlicesViewContext.Provider value={{ ...state, dispatch }}>
             <StyledSlicesView>
                 <ToolBar
-                    nodeId={activeIds[0]}
+                    nodeIds={activeIds}
                     isEditable={isEditable}
                 />
-                <div className="expressions">
+                <Plock nColumns={2} gap={2} className="expressions">
                     {state.expressions.map(expr => (
                         <ExpressionRow
                             key={`${prefix}_${expr.id}`} 
@@ -79,7 +71,7 @@ const SlicesView = ({activeIds}) => {
                             isEditable={isEditable}
                         />
                     ))}
-                </div>
+                </Plock>
             </StyledSlicesView>
         </SlicesViewContext.Provider>
     );

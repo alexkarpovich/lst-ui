@@ -1,0 +1,3 @@
+export const SET_FETCHING = 'SET_FETCHING';
+export const SET_TRAINING = 'SET_TRAINING';
+export const SET_TRAINING_AND_ITEM = 'SET_TRAINING_AND_ITEM';

@@ -36,7 +36,9 @@ ReactDOM.render(
                                     <Route exact path="confirm-invitation/:token" element={<ConfirmInvitationPage />} />
                                 </Route>
                                 <Route path="slices" element={<SlicesPage />} />
-                                <Route path="trainings" element={<TrainingPage />} />
+                                <Route path="trainings" element={<Outlet />}>
+                                    <Route path=":id" element={<TrainingPage />} />
+                                </Route>
                             </Route>
                         </Route>
                     </Routes>

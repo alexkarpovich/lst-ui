@@ -13,7 +13,8 @@ import { useSlicesViewContext } from "./slices.view";
 const StyledToolBar = styled.div`
 display: flex;
 align-items: center;
-padding: 10px;
+margin-bottom: 10px;
+max-width: 860px;
 
 .training-items {
     * {
@@ -22,12 +23,12 @@ padding: 10px;
 }
 
 .searchbar {
-    width: 70%;
+    width: 100%;
 }
 
 `;
 
-const ToolBar = ({nodeId, isEditable}) => {
+const ToolBar = ({nodeIds, isEditable}) => {
     const navigate = useNavigate();
     const {dispatch} = useSlicesContext();
     const {dispatch:dispatchView} = useSlicesViewContext();
@@ -53,6 +54,7 @@ const ToolBar = ({nodeId, isEditable}) => {
     }
 
     async function attachExpression(expr) {
+        const nodeId = nodeIds[0];
         try {
             const {data:res} = await api.post(`/me/nodes/${nodeId}/attach-expression`, expr);
             dispatchView({type: ATTACH_EXPRESSION, payload: res.data});
@@ -66,7 +68,7 @@ const ToolBar = ({nodeId, isEditable}) => {
         try {
             const {data:res} = await api.post(`/me/trainings`, {
                 type,
-                slices: [],
+                slices: nodeIds,
             });
             console.log(res);
             navigate(`/me/trainings/${res.data.id}`);
@@ -121,7 +123,7 @@ const ToolBar = ({nodeId, isEditable}) => {
 };
 
 ToolBar.propTypes = {
-    nodeId: PropTypes.number.isRequired,
+    nodeIds: PropTypes.array.isRequired,
     isEditable: PropTypes.bool.isRequired,
 };
 

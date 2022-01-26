@@ -13,6 +13,8 @@ import { prepareQueryParams } from "./slices.service";
 
 let initialState = {
     isFetching: true,
+    groupId: null,
+    activeNodes: [],
     groups: [],
     nodes: [],
 };
