@@ -1,49 +1,88 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
 import api from "../../utils/api";
 import {useEventListener} from "../../hooks/event-listener";
 import {useTrainingContext} from "./training.page";
-import { SET_TRAINING_ITEM } from "./training.const";
+import {SET_TRAINING_ITEM, INCREASE_COMPLETE_COUNT} from "./training.const";
+import {isComplete} from "./training.service";
 
 const StyledTrainingCard = styled.div`
 font-size: 1.4em;
 `;
 
 const TrainingCard = ({obj}) => {
-    const {dispatch} = useTrainingContext();
+    const {training, dispatch} = useTrainingContext();
+    const [showAnswers, setShowAnswers] = useState(false);
+    const [answers, setAnswers] = useState([]);
 
     useEventListener("keydown", (event) => {
         if (event.key === ' ') {
-            if (event.shiftKey) {
-                next();
+            if (showAnswers) {
+                if (event.shiftKey) {
+                    next();
+                } else {
+                    complete()
+                }
             } else {
-                complete()
+                fetchAnswers();
             }
         }
     });
     async function next() {
         try {
             const {data:res} = await api.get(`/me/trainings/${obj.trainingId}/next`);
-            console.log(res);
             dispatch({type: SET_TRAINING_ITEM, payload: res.data});
+        } catch (err) {
+            console.log(err);
+            dispatch({type: SET_TRAINING_ITEM, payload: null});
+        }
+    }
+
+    async function fetchAnswers() {
+        try {
+            const {data:res} = await api.get(`/me/training-items/${obj.id}/answers`);
+            console.log(res);
+            setAnswers(res.data);
         } catch (err) {
             console.log(err);
         }
     }
 
     async function complete() {
+        const {completeCount} = training.meta;
+
         try {
             await api.post(`/me/training-items/${obj.id}/complete`);
-            await next();            
+            dispatch({type: INCREASE_COMPLETE_COUNT});
+
+            if (isComplete({...training.meta, completeCount: completeCount + 1})) {
+                dispatch({type: SET_TRAINING_ITEM, payload: null});
+            } else {
+                await next();
+            }
         } catch (err) {
             console.log(err);
         }
     }
+
+    console.log(answers);
+
     return (
         <StyledTrainingCard>
-            {obj.expression.value}
+            <div>{obj.expression.value}</div>
+            {showAnswers && (
+                <div>
+                    {
+                        answers.map((answer, i) => (
+                            <div key={i}>{answer.value}</div>
+                        ))
+                    }
+                </div>
+            )}
+            
+
         </StyledTrainingCard>
     );
 };

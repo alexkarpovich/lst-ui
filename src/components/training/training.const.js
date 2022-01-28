@@ -1,4 +1,11 @@
+export const TYPE_DIRECT = 0;
+export const TYPE_REVERSE = 1;
+export const TYPE_LISTEN = 2;
+export const TYPE_CYCLES = 3;
+
 export const SET_FETCHING = 'SET_FETCHING';
 export const SET_TRAINING = 'SET_TRAINING';
+export const RESET_TRAINING = 'RESET_TRAINING';
 export const SET_TRAINING_AND_ITEM = 'SET_TRAINING_AND_ITEM';
 export const SET_TRAINING_ITEM = 'SET_TRAINING_ITEM';
+export const INCREASE_COMPLETE_COUNT = 'INCREASE_COMPLETE_COUNT';

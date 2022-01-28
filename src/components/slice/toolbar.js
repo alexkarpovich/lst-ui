@@ -6,9 +6,9 @@ import styled from "styled-components";
 
 import api from "../../utils/api";
 import { useSlicesContext } from "./slices.page";
-import { ATTACH_EXPRESSION, EXERCISE_DIRECT, EXERCISE_CYCLES, INCREASE_NODE_COUNT } from "./slices.const";
+import { ATTACH_EXPRESSION, INCREASE_NODE_COUNT } from "./slices.const";
+import { TYPE_CYCLES, TYPE_DIRECT } from "../training/training.const";
 import { useSlicesViewContext } from "./slices.view";
-
 
 const StyledToolBar = styled.div`
 display: flex;
@@ -115,8 +115,8 @@ const ToolBar = ({nodeIds, isEditable}) => {
                 </div>
             )}
             <div className="training-items">
-                <span onClick={() => doExercise(EXERCISE_DIRECT)}>Through</span>
-                <span onClick={() => doExercise(EXERCISE_CYCLES)}>Cycles</span>
+                <span onClick={() => doExercise(TYPE_DIRECT)}>Direct</span>
+                <span onClick={() => doExercise(TYPE_CYCLES)}>Cycles</span>
             </div>
         </StyledToolBar>
     );
