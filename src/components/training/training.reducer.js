@@ -1,4 +1,4 @@
-import {SET_FETCHING, SET_TRAINING, SET_TRAINING_AND_ITEM} from "./training.const.js";
+import {SET_FETCHING, SET_TRAINING, SET_TRAINING_AND_ITEM, SET_TRAINING_ITEM} from "./training.const.js";
 
 
 export const trainingReducer = (state, action) => {
@@ -10,6 +10,9 @@ export const trainingReducer = (state, action) => {
         }
         case SET_TRAINING_AND_ITEM: {
             return {...state, isFetching: false, ...action.payload};
+        }
+        case SET_TRAINING_ITEM: {
+            return {...state, item: action.payload};
         }
         default:
             return state;
