@@ -37,7 +37,7 @@ flex-direction: column;
 .card-container {
     height: 100%;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: center;
 }
 `;

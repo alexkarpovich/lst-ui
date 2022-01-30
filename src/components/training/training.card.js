@@ -10,6 +10,16 @@ import {isComplete} from "./training.service";
 
 const StyledTrainingCard = styled.div`
 font-size: 1.4em;
+margin-top: 20vh;
+text-align: center;
+
+.answer-container {
+    .answer {
+        font-family: "KaiTi";
+        font-size: 1.5em;
+    }
+}
+
 `;
 
 const TrainingCard = ({obj}) => {
@@ -25,7 +35,9 @@ const TrainingCard = ({obj}) => {
                 } else {
                     complete()
                 }
+                setShowAnswers(false);
             } else {
+                setShowAnswers(true);
                 fetchAnswers();
             }
         }
@@ -67,16 +79,14 @@ const TrainingCard = ({obj}) => {
         }
     }
 
-    console.log(answers);
-
     return (
         <StyledTrainingCard>
             <div>{obj.expression.value}</div>
             {showAnswers && (
-                <div>
+                <div className="answer-container">
                     {
                         answers.map((answer, i) => (
-                            <div key={i}>{answer.value}</div>
+                            <div key={i} className="answer">{answer.value}</div>
                         ))
                     }
                 </div>
