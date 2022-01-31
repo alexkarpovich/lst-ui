@@ -8,9 +8,9 @@ import MenuItem from "./menu-item";
 const StyledSideMenu = styled.div`
 background-color: ${props => props.theme.colors.bgMenu};
 border-right: 1px solid ${props => props.theme.colors.bgActiveMenu};
-position: fixed;
-width: 48px;
-height: 100%;
+flex-basis: 48px;
+flex-grow: 0;
+flex-shrink: 0;
 
 & > .brand {
     text-align: center;

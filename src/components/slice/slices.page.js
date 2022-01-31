@@ -26,11 +26,17 @@ export function useSlicesContext() {
 }
 
 const StyledSlicesPage = styled.div`
+display: flex;
+height: 100%;
+
 & > .outlet {
-    margin-left: 200px;
+    width: 100%;
+    height: 100hv;
+    overflow-y: auto;
 }
 
 & > .group-select-container {
+    width: 100%;
     height: 100%;
     padding: 0;
     margin: 0;
