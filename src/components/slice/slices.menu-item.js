@@ -57,10 +57,12 @@ color: ${props => props.active ? props.theme.colors.colorMenu : '#bbb'};
     & > .label {
         font-size: 0.8em;
         font-weight: 500;
+        white-space: nowrap;
     }
 
     & > .details {
         font-size: 0.7em;
+        white-space: nowrap;
     }
 }
 

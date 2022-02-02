@@ -19,12 +19,12 @@ background-color: ${props => props.active ? props.theme.colors.bgActiveMenu : 'i
         height: 24px;
         position: absolute;
         background: ${props => props.theme.colors.bgMenu};
-        left: 50px;
+        left: 52px;
         font-weight: 700;
-        content: "${props => props.text}";
+        content: "${props => props.tooltip}";
         top: 11px;
         color: #fff;
-        border-radius: 5px;
+        border-radius: 2px;
         text-align: center;
         font-size: 12px;
         padding: 5px;
@@ -35,7 +35,7 @@ background-color: ${props => props.active ? props.theme.colors.bgActiveMenu : 'i
         width: 0;
         height: 0;
         position: absolute;
-        left: 40px;
+        left: 42px;
         border-left: 5px solid transparent;
         border-right: 5px solid ${props => props.theme.colors.bgMenu};
         border-bottom: 5px solid transparent;
@@ -70,7 +70,7 @@ const MenuItem = ({children, to, title, onClick}) => {
     return (
         <StyledMenuItem
             active={isActive}
-            text={title}
+            tooltip={title}
             onClick={open}>
             {children}
         </StyledMenuItem>
