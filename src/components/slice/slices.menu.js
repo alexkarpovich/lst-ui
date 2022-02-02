@@ -52,14 +52,12 @@ const SlicesMenu = ({groupId, groups, activeNodeIds, nodes}) => {
     });
 
     function handleHolderDown(e) {
-        console.log('down', e);
         setStartX(e.clientX);
         setStartWidth(width);
         setIsResizing(true);
     }
 
     function handleHolderUp(e) {
-        console.log('up', e);
         setIsResizing(false);
     }
 

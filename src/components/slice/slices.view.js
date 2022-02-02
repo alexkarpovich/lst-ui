@@ -8,7 +8,7 @@ import api from "../../utils/api";
 import { SET_VIEW_FETCHING, SET_VIEW_DATA } from "./slices.const";
 import { slicesViewReducer } from "./view.reducer";
 import ToolBar from "./toolbar";
-import ExpressionRow from "./expression.row";
+import ExpressionCard from "./expression-card/expression.card";
 
 let initialState = {
     isFetching: true,
@@ -64,7 +64,7 @@ const SlicesView = ({activeIds}) => {
                 />
                 <Plock nColumns={2} gap={2} className="expressions">
                     {state.expressions.map(expr => (
-                        <ExpressionRow
+                        <ExpressionCard
                             key={`${prefix}_${expr.id}`} 
                             obj={expr}
                             nodeId={activeIds[0]}

@@ -2,11 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import api from "../../utils/api";
-import { useSlicesViewContext } from "./slices.view";
-import { DETACH_EXPRESSION } from "./slices.const";
+import api from "../../../utils/api";
+import { useSlicesViewContext } from "../slices.view";
+import { DETACH_EXPRESSION } from "../slices.const";
 import TranslationInput from "./translation.input";
 import TranslationRow from "./translation.row";
+import ExpressionHeader from "./expression.header";
 
 const StyledExpressionRow = styled.div`
 padding: 3px 7px;
@@ -27,17 +28,14 @@ position: relative;
     }
 }
 
-& > .target-value {
-    font-family: "KaiTi";
-    font-size: 1.5em;
-}
-
 & > .translations {
     position: relative;
+    margin-top: 5px;
+    border-top: 1px solid #f9f9f9;
 }
 `;
 
-const ExpressionRow = ({obj, nodeId, isEditable}) => {
+const ExpressionCard = ({obj, nodeId, isEditable}) => {
     const {dispatch} = useSlicesViewContext();
 
     async function detach() {
@@ -57,7 +55,7 @@ const ExpressionRow = ({obj, nodeId, isEditable}) => {
             {isEditable && (
                 <i className="detach-btn icon-bin" onClick={detach} />
             )}
-            <div className="target-value">{obj.value}</div>
+            <ExpressionHeader expression={obj} />
             <div className="translations">
                 {
                     obj.translations && obj.translations.map(trans => (
@@ -81,10 +79,10 @@ const ExpressionRow = ({obj, nodeId, isEditable}) => {
     );
 };
 
-ExpressionRow.propTypes = {
+ExpressionCard.propTypes = {
     obj: PropTypes.object.isRequired,
     nodeId: PropTypes.number.isRequired,
     isEditable: PropTypes.bool.isRequired,
 };
 
-export default ExpressionRow;
+export default ExpressionCard;

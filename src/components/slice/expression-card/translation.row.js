@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-
-import api from "../../utils/api";
-import { useSlicesViewContext } from "./slices.view";
-import { DETACH_TRANSLATION } from "./slices.const";
 import styled from "styled-components";
+
+import api from "../../../utils/api";
+import {useSlicesViewContext} from "../slices.view";
+import {DETACH_TRANSLATION} from "../slices.const";
+
 
 const StyledTranslationRow = styled.div`
 padding: 2px;
@@ -17,10 +18,6 @@ color: #444;
     color: #b1b1b1;
     position: absolute;
     left: 0;
-}
-
-&:not(:first-child) {
-    border-top: 1px solid #f9f9f9;
 }
 
 &:hover {

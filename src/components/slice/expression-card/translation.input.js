@@ -2,10 +2,10 @@ import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import api from "../../utils/api";
-import { useSlicesViewContext } from "./slices.view";
-import { ATTACH_TRANSLATION } from "./slices.const";
-import Input from"../shared/input";
+import api from "../../../utils/api";
+import { useSlicesViewContext } from "../slices.view";
+import { ATTACH_TRANSLATION } from "../slices.const";
+import Input from"../../shared/input";
 
 
 const StyledTranslationInput = styled.div`
@@ -171,7 +171,7 @@ const TranslationInput = ({expressionId, nodeId}) => {
                     <Input
                         autoFocus
                         type="text"
-                        placeholder="+ add translation" 
+                        placeholder="+ translation" 
                         value={inputValue}
                         onChange={onInputChange}
                         onKeyPress={onKeyPress}
@@ -190,7 +190,7 @@ const TranslationInput = ({expressionId, nodeId}) => {
                     </div>
                 </div>
             ) : (
-                <div className="placeholder" onClick={toggleOpen}>+ add translation</div>
+                <div className="placeholder" onClick={toggleOpen}>+ translation</div>
             )}
         </StyledTranslationInput>
     );
