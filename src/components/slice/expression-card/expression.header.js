@@ -1,6 +1,8 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, isValidElement, useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+
+import TranscriptionEditor from "./transcription.editor";
 
 const StyledExpressionHeader = styled.div`
 position: relative;
@@ -31,17 +33,6 @@ border-bottom: 1px solid #fff;
     z-index: 9;
 }
 
-& > .transcription-management {
-    th {
-        font-weight: 100;
-        font-size: 1.6em;
-        font-family: "KaiTi";
-    }
-    td {
-        font-size: 0.8em;
-    }
-}
-
 & > .target-value {
     font-family: "KaiTi";
     font-size: 1.5em;
@@ -66,20 +57,7 @@ const ExpressionHeader = ({expression}) => {
         <StyledExpressionHeader>
             <span className="expand-btn" onClick={toggle} />
             {expanded ? (
-                <div className="transcription-management">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>知</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>zhi</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <TranscriptionEditor expression={expression} />
             ) : (
                 <Fragment>
                     <div className="target-value">{expression.value}</div>
