@@ -37,7 +37,7 @@ const TranscriptionEditor = ({expression}) => {
             try {
                 const {data:res} = await api.get(`/x/${expression.id}/transcription-parts?type=${1}`);
                 console.log(res);
-                setTranscMap(res.data);
+                res.data && setTranscMap(res.data);
             } catch (err) {
                 console.log(err);
             }
