@@ -38,7 +38,9 @@ border-bottom: 1px solid #fff;
     font-size: 1.5em;
 }
 & > .transcriptions {
-    & > .add-new {
+    padding-left: 5px;
+    
+    & > .tsc-item {
         cursor: pointer;
         color: #007bff;
         font-size: 0.8em;
@@ -62,7 +64,9 @@ const ExpressionHeader = ({expression}) => {
                 <Fragment>
                     <div className="target-value">{expression.value}</div>
                     <div className="transcriptions">
-                        <span className="add-new">nihao</span>    
+                        {expression.transcriptions?.map(t => (
+                            <span className="tsc-item">{t.value}</span>
+                        ))}
                     </div>
                 </Fragment>
             )}

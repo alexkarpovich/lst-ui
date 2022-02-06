@@ -64,6 +64,7 @@ const ExpressionCard = ({obj, nodeId, isEditable}) => {
                             obj={trans}
                             nodeId={nodeId}
                             expressionId={obj.id}
+                            availableTranscriptions={obj.transcriptions}
                             isEditable={isEditable} 
                         />
                     ))

@@ -21,10 +21,22 @@ color: #444;
 }
 
 &:hover {
-    background: #f9f9f9;
-
     & > .controls {
         display: inherit;
+    }
+}
+
+& > .transcriptions {
+    & > .tsc-item {
+        cursor: pointer;
+        font-size: 0.7em;
+        background: #e7e7e7;
+        padding: 3px 7px;
+        border-radius: 10px;
+
+        &:hover {
+            background: #f5f5f5;
+        }
     }
 }
 
@@ -38,7 +50,7 @@ color: #444;
 }
 `;
 
-const TranslationRow = ({obj, nodeId, expressionId, isEditable}) => {
+const TranslationRow = ({obj, nodeId, expressionId, availableTranscriptions, isEditable}) => {
     const {dispatch} = useSlicesViewContext();
 
     async function detach() {
@@ -55,9 +67,23 @@ const TranslationRow = ({obj, nodeId, expressionId, isEditable}) => {
         }
     }
 
+    const applyTranscription = (transcriptionId) => async () => {
+        try {
+            const {data:res} = api.post(`/translations/${obj.id}/transcriptions/${transcriptionId}`);
+            console.log(res);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     return (
         <StyledTranslationRow>
             <span>{obj.value}</span>
+            <div className="transcriptions">
+                {availableTranscriptions.map(t => (
+                    <span className="tsc-item" onClick={applyTranscription(t.id)}>{t.value}</span>
+                ))}
+            </div>
             {isEditable && (
                 <div className="controls">
                     <span onClick={detach}>✕</span>
@@ -72,6 +98,7 @@ TranslationRow.propTypes = {
     nodeId: PropTypes.number.isRequired,
     expressionId: PropTypes.number.isRequired,
     obj: PropTypes.object.isRequired,
+    availableTranscriptions: PropTypes.array.isRequired,
 };
 
 export default TranslationRow;
