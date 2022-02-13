@@ -2,7 +2,10 @@ import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 
 import api from "../../../utils/api";
+import {ATTACH_EXPRESSION_TRANSCRIPTION} from "../slices.const";
 import Input from "../../shared/input";
+import { useSlicesViewContext } from "../slices.view";
+import { useSlicesContext } from "../slices.page";
 
 const StyledTranscriptionEditor = styled.div`
 margin-bottom: 5px;
@@ -58,34 +61,44 @@ margin-bottom: 5px;
 `;
 
 const TranscriptionEditor = ({expression}) => {
+    const {group} = useSlicesContext();
+    const {dispatch} = useSlicesViewContext();
     const [transcMap, setTranscMap] = useState({});
     const [transcInput, setTranscInput] = useState(expression.value);
 
     useEffect(() => {
+        let isMounted = true;
+
         async function loadTranscriptionParts() {
             try {
-                const {data:res} = await api.get(`/x/${expression.id}/transcription-parts?type=${1}`);
-                console.log(res);
-                res.data && setTranscMap(res.data);
+                const {data:res} = await api.get(`/x/${expression.id}/transcription-map?type=${group.transcriptionTypeId}`);
+                isMounted && res.data && setTranscMap(res.data);
             } catch (err) {
                 console.log(err);
             }
         }
 
         loadTranscriptionParts();
+
+        return () => (isMounted = false);
     }, []);
 
     function handleTranscChange(e) {
         setTranscInput(e.target.value);
     }
 
-    function handleAddNew() {
+    async function handleAddNew() {
         console.log('add new transcription');
         try {
-            const {data:res} = api.post(`/x/${expression.id}/transcriptions`, {
+            const {data:res} = await api.post(`/x/${expression.id}/transcriptions`, {
                 type: 1,
                 value: transcInput.trim(),
             });
+            console.log(res);
+            dispatch({type: ATTACH_EXPRESSION_TRANSCRIPTION, payload: {
+                expressionId: expression.id,
+                transcription: res.data,
+            }});
             console.log(res);
         } catch (err) {
             console.log(err);
@@ -103,7 +116,7 @@ const TranscriptionEditor = ({expression}) => {
                     <div key={i} className="transc-column">
                         <span className="word">{item}</span>
                         {item in transcMap && transcMap[item].map(t => (
-                            <span onClick={applyWordTranscription(item, t.value)}>{t.value}</span>
+                            <span key={t.id} onClick={applyWordTranscription(item, t.value)}>{t.value}</span>
                         ))}
                     </div>
                 ))}

@@ -6,8 +6,11 @@ import styled from "styled-components";
 
 const StyledMenuItem = styled.div`
 position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
 padding: 7px;
-color: ${props => props.active ? props.theme.colors.colorMenu : '#c3c3c3'};
+color: ${props => props.active ? props.theme.colors.colorMenu : '#eee'};
 cursor: ${props => props.active ? 'default' : 'pointer'};
 border-top: 1px solid ${props => props.active ? `darken(${props.theme.colors.bgActiveMenu}, 5%)` : props.theme.colors.bgMenu};
 border-bottom: 1px solid ${props => props.active ? `lighten(${props.theme.colors.bgActiveMenu}, 15%)` : props.theme.colors.bgMenu};
@@ -46,7 +49,7 @@ background-color: ${props => props.active ? props.theme.colors.bgActiveMenu : 'i
 }
 
 i {
-    font-size: 2em;
+    font-size: 1.6em;
 }
 `;
 

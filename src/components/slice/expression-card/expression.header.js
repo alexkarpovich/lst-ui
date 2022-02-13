@@ -38,12 +38,27 @@ border-bottom: 1px solid #fff;
     font-size: 1.5em;
 }
 & > .transcriptions {
-    padding-left: 5px;
-    
+    padding-left: 2px;
+
     & > .tsc-item {
+        position: relative;
         cursor: pointer;
         color: #007bff;
         font-size: 0.8em;
+
+        &:not(:first-child) {
+            margin-left: 7px;
+
+            &::after {
+                content: ",";
+                position: absolute;
+                top: 0;
+                left: -7px;
+            }
+        }
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }
 `;
@@ -65,7 +80,7 @@ const ExpressionHeader = ({expression}) => {
                     <div className="target-value">{expression.value}</div>
                     <div className="transcriptions">
                         {expression.transcriptions?.map(t => (
-                            <span className="tsc-item">{t.value}</span>
+                            <span key={t.id} className="tsc-item">{t.value}</span>
                         ))}
                     </div>
                 </Fragment>

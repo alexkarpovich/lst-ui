@@ -1,4 +1,9 @@
-import { SET_VIEW_FETCHING, SET_VIEW_DATA, ATTACH_EXPRESSION, ATTACH_TRANSLATION, DETACH_TRANSLATION, DETACH_EXPRESSION } from "./slices.const";
+import { 
+    SET_VIEW_FETCHING, SET_VIEW_DATA, ATTACH_EXPRESSION, ATTACH_TRANSLATION, DETACH_TRANSLATION, 
+    DETACH_EXPRESSION, ATTACH_EXPRESSION_TRANSCRIPTION, ATTACH_TRANSLATION_TRANSCRIPTION, 
+    DETACH_TRANSLATION_TRANSCRIPTION,
+    SHOW_TRANSLATION_TRANSCRIPTIONS,
+} from "./slices.const";
 
 
 export const slicesViewReducer = (state, action) => {
@@ -43,6 +48,66 @@ export const slicesViewReducer = (state, action) => {
             });
 
             return {...state, expressions};
+        }
+        case ATTACH_EXPRESSION_TRANSCRIPTION: {
+            const {expressionId, transcription} = action.payload;
+            const expressions = state.expressions.map(expr => {
+                if (expr.id === expressionId) {
+                    if (!expr.transcriptions) {
+                        expr.transcriptions = [];
+                    }
+
+                    expr.transcriptions.push(transcription);
+                }
+                return expr;
+            })
+
+            console.log(expressions)
+            return {...state, expressions};
+        }
+        case ATTACH_TRANSLATION_TRANSCRIPTION: {
+            const {expressionId, translationId, transcription} = action.payload;
+            const expressions = state.expressions.map(expr => {
+                if (expr.id === expressionId) {
+                    expr.translations.map(tr => {
+                        if (tr.id === translationId) {
+                            if (!tr.transcriptions) {
+                                tr.transcriptions = [transcription];
+                            } else {
+                                tr.transcriptions.push(transcription);
+                            }
+                        }
+
+                        return tr;
+                    });
+                }
+
+                return expr;
+            });
+
+            return {...state, expressions};
+        }
+
+        case DETACH_TRANSLATION_TRANSCRIPTION: {
+            const {expressionId, translationId, transcription} = action.payload;
+            const expressions = state.expressions.map(expr => {
+                if (expr.id === expressionId) {
+                    expr.translations.map(tr => {
+                        if (tr.id === translationId) {
+                            tr.transcriptions = tr.transcriptions.filter(tsc => tsc.id !== transcription.id);
+                        }
+
+                        return tr;
+                    });
+                }
+
+                return expr;
+            });
+
+            return {...state, expressions};
+        }
+        case SHOW_TRANSLATION_TRANSCRIPTIONS: {
+            return {...state, showTranslationTranscriptions: action.payload};
         }
         default:
             return state;

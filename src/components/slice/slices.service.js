@@ -17,3 +17,11 @@ export const prepareQueryParams = (searchParams) => {
 
     return qp;
 }
+
+export const prepareNodePath = (node) => {
+    if (!node) {
+        return ""
+    }
+
+    return node.path === '' ? ''+node.id : `${node.path}.${node.id}`
+}

@@ -9,9 +9,11 @@ import { SET_VIEW_FETCHING, SET_VIEW_DATA } from "./slices.const";
 import { slicesViewReducer } from "./view.reducer";
 import ToolBar from "./toolbar";
 import ExpressionCard from "./expression-card/expression.card";
+import { useSlicesContext } from "./slices.page";
 
 let initialState = {
     isFetching: true,
+    showTranslationTranscriptions: false,
     expressions: []
 };
 
@@ -29,17 +31,18 @@ padding: 10px;
 }
 `;
 
-const SlicesView = ({activeIds}) => {
+const SlicesView = () => {
+    const {activeNodes} = useSlicesContext();
     const [state, dispatch] = useReducer(slicesViewReducer, initialState);
-    const isEditable = activeIds.length === 1;
-    const prefix = activeIds.join('');
+    const isEditable = activeNodes.length === 1;
+    const prefix = activeNodes.join('');
 
     useEffect(() => {
-        console.log('slices view active node ids', activeIds);
+        console.log('slices view active node ids', activeNodes);
         async function loadData() {
             dispatch({type: SET_VIEW_FETCHING, payload: true});
             try {
-                const queryString = createSearchParams({ids: activeIds});
+                const queryString = createSearchParams({ids: activeNodes});
                 const {data:res} = await api.get(`/me/nodes?${queryString}`);
                 
                 dispatch({type: SET_VIEW_DATA, payload: res.data});
@@ -48,7 +51,7 @@ const SlicesView = ({activeIds}) => {
             }
         }
 
-        if (activeIds.length) {
+        if (activeNodes.length) {
             loadData();
         } else {
             dispatch({type: SET_VIEW_FETCHING, payload: false});   
@@ -59,7 +62,7 @@ const SlicesView = ({activeIds}) => {
         <SlicesViewContext.Provider value={{ ...state, dispatch }}>
             <StyledSlicesView>
                 <ToolBar
-                    nodeIds={activeIds}
+                    nodeIds={activeNodes}
                     isEditable={isEditable}
                 />
                 <Plock nColumns={2} gap={2} className="expressions">
@@ -67,7 +70,7 @@ const SlicesView = ({activeIds}) => {
                         <ExpressionCard
                             key={`${prefix}_${expr.id}`} 
                             obj={expr}
-                            nodeId={activeIds[0]}
+                            nodeId={activeNodes[0]}
                             isEditable={isEditable}
                         />
                     ))}
@@ -77,8 +80,6 @@ const SlicesView = ({activeIds}) => {
     );
 };
 
-SlicesView.propTypes = {
-    activeIds: PropTypes.array.isRequired,
-};
+SlicesView.propTypes = {};
 
 export default SlicesView;

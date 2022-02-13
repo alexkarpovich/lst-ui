@@ -45,7 +45,7 @@ const SideMenu = () => {
                 </MenuItem>
                 <hr />
                 <MenuItem onClick={logoutHandler} title="Log out">
-                    <i className="icon-exit" />
+                    <i className="icon-arrow-right-from-bracket" />
                 </MenuItem>                
             </div>
         </StyledSideMenu>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import EditableLabel from "react-inline-editing";
 import { Link } from "react-router-dom";
@@ -77,6 +77,10 @@ box-sizing: content-box;
             }
         }
 
+        .transcription-type {
+            margin: 0 auto;
+        }
+
         .slices-link {
             margin: 0 auto;
 
@@ -121,12 +125,34 @@ const GroupItem = ({obj, defaultMode}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [mode, setMode] = useState(defaultMode);
     const [adminIds] = useState(getAdminIds(obj.members));
+    const [transcriptionTypes, setTranscriptionTypes] = useState([]);
     const [name, setName] = useState(obj.name || 'Undefined');
-    const [targetLangCode, setTargetLangCode] = useState(obj.targetLangCode);
-    const [nativeLangCode, setNativeLangCode] = useState(obj.nativeLangCode);
+    const [transcriptionType, setTranscriptionType] = useState(obj.transcriptionType);
+    const [targetLang, setTargetLang] = useState({code: obj.targetLangCode});
+    const [nativeLang, setNativeLang] = useState({code: obj.nativeLangCode});
+
+    useEffect(() => {
+        async function loadTranscriptionTypes() {
+            if (!targetLang.code) {
+                return
+            }
+            
+            try {
+                const {data:res} = await api.get(`/langs/${targetLang.code}/transcription-types`);
+                setTranscriptionTypes(res.data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        loadTranscriptionTypes();
+    }, [targetLang]);
 
     async function update() {
-        if (obj.name === name && obj.targetLangCode === targetLangCode && obj.nativeLangCode === nativeLangCode) {
+        if (obj.name === name && 
+            obj.targetLangCode === targetLang.code && 
+            obj.nativeLangCode === nativeLang.code &&
+            obj.transcriptionTypeId === transcriptionType.id
+        ) {
             setMode(MODE_DEFAULT);
             return
         }
@@ -134,8 +160,9 @@ const GroupItem = ({obj, defaultMode}) => {
         try {
             const {data:res} = await api.post(`/me/groups${obj.id ? '/'+obj.id : ''}`, {
                 name,
-                targetLangCode,
-                nativeLangCode,
+                transcriptionTypeId: transcriptionType.id,
+                targetLangCode: targetLang.code,
+                nativeLangCode: nativeLang.code,
             });
             console.log(res);
             setMode(MODE_DEFAULT);
@@ -194,30 +221,42 @@ const GroupItem = ({obj, defaultMode}) => {
                     </div>
                     <div className="dir">
                         <span className="target-lang">
-                            { !obj.isUntouched || mode === MODE_DEFAULT ? targetLangCode : (
+                            { !obj.isUntouched || mode === MODE_DEFAULT ? targetLang.code : (
                                 <DropdownButton
-                                    value={targetLangCode}
+                                    value={targetLang}
                                     options={langs}
-                                    trigger={<span>{targetLangCode || "target lang"}</span>}
+                                    trigger={<span>{targetLang.code || "target lang"}</span>}
                                     getOptionLabel={option => option.isoName}
                                     getOptionValue={option => option.code}
-                                    onChange={code => setTargetLangCode(code)}
+                                    onChange={tl => setTargetLang(tl)}
                                 />
                             )}
                         </span>
                         <span className="divider">→</span>
                         <span className="native-lang">
-                            { !obj.isUntouched || mode === MODE_DEFAULT ? nativeLangCode : (
+                            { !obj.isUntouched || mode === MODE_DEFAULT ? nativeLang.code : (
                                 <DropdownButton 
-                                    value={nativeLangCode}
+                                    value={nativeLang}
                                     options={langs}
-                                    trigger={<span>{nativeLangCode || "native lang"}</span>}
+                                    trigger={<span>{nativeLang.code || "native lang"}</span>}
                                     getOptionLabel={option => option.isoName}
                                     getOptionValue={option => option.code}
-                                    onChange={code => setNativeLangCode(code)}
+                                    onChange={nl => setNativeLang(nl)}
                                 />
                             )}                            
                         </span>
+                    </div>
+                    <div className="transcription-type">
+                        {mode === MODE_DEFAULT ? obj.transcriptionType.name : (
+                            <DropdownButton 
+                                value={transcriptionType}
+                                options={transcriptionTypes}
+                                trigger={<span>{transcriptionType.name || "transcription"}</span>}
+                                getOptionLabel={option => option.name}
+                                getOptionValue={option => option.id}
+                                onChange={t => setTranscriptionType(t)}
+                            />
+                        )}
                     </div>
                     <div className="slices-link">
                         <Link to={`/me/slices?group=${obj.id}`}>slices</Link>
@@ -247,7 +286,10 @@ const GroupItem = ({obj, defaultMode}) => {
 };
 
 GroupItem.defaultProps = {
-    obj: { isUntouched: true },
+    obj: { 
+        transcriptionType: {}, 
+        isUntouched: true 
+    },
     defaultMode: MODE_DEFAULT,
 };
 

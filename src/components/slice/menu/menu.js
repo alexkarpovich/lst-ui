@@ -1,9 +1,11 @@
 import React, {useState} from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import SlicesMenuItem from "./slices.menu-item";
-import { useEventListener } from "../../hooks/event-listener";
+import MenuToolbar from "./menu-toolbar";
+import ContextMenu from "./context-menu";
+import SlicesMenuItem from "./menu-item";
+import {useEventListener} from "../../../hooks/event-listener";
+import {useSlicesContext} from "../slices.page";
 
 const StyledSlicesMenu = styled.div.attrs(props => ({
     style: {
@@ -39,11 +41,14 @@ scrollbar-width: none;
 }  
 `
 
-const SlicesMenu = ({groupId, groups, activeNodeIds, nodes}) => {
+const SlicesMenu = () => {
+    const {allNodes} = useSlicesContext();
     const [width, setWidth] = useState(200);
     const [startWidth, setStartWidth] = useState(200);
     const [startX, setStartX] = useState(0);
     const [isResizing, setIsResizing] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [contextData, setContextData] = useState({});
 
     useEventListener("mousemove", (e) => {
         if (isResizing) {
@@ -61,11 +66,42 @@ const SlicesMenu = ({groupId, groups, activeNodeIds, nodes}) => {
         setIsResizing(false);
     }
 
+    function handleRootChange(e) {
+        console.log('root');
+        setContextData({
+            node: null,
+            x: e.clientX,
+            y: e.clientY,
+        });
+        setIsMenuOpen(true);
+        e.preventDefault();
+    }
+
+    function handleMenuChange(contextData) {
+        setContextData(contextData);
+        setIsMenuOpen(true);
+    }
+
+    function handleMenuClose() {
+        setIsMenuOpen(false);
+    }
+
     return (
         <StyledSlicesMenu width={width}>
             <div className="content">
-                {nodes && nodes.map(node => (
-                    <SlicesMenuItem key={node.id} obj={node} />
+                <MenuToolbar />
+                {isMenuOpen && (
+                    <ContextMenu 
+                        {...contextData} 
+                        onClose={handleMenuClose}
+                    />
+                )}
+                {allNodes && allNodes.map(node => (
+                    <SlicesMenuItem 
+                        key={node.id}
+                        obj={node}
+                        onMenuChange={handleMenuChange}
+                    />
                 ))}
             </div>
             <div 
@@ -78,10 +114,6 @@ const SlicesMenu = ({groupId, groups, activeNodeIds, nodes}) => {
 };
 
 SlicesMenu.propTypes = {
-    groupId: PropTypes.number.isRequired,
-    groups: PropTypes.array.isRequired,
-    nodes: PropTypes.array.isRequired,
-    activeNodeIds: PropTypes.array.isRequired,
 };
 
 export default SlicesMenu;

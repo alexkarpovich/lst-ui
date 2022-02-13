@@ -20,7 +20,7 @@ export const DropdownButton = ({value, options, trigger, onChange, getOptionValu
 
   function onSelectChange(selected) {
     toggleOpen();
-    onChange(getOptionValue(selected));
+    onChange(selected);
   }
 
   return (

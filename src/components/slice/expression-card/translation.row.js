@@ -4,10 +4,11 @@ import styled from "styled-components";
 
 import api from "../../../utils/api";
 import {useSlicesViewContext} from "../slices.view";
-import {DETACH_TRANSLATION} from "../slices.const";
+import {DETACH_TRANSLATION, ATTACH_TRANSLATION_TRANSCRIPTION, DETACH_TRANSLATION_TRANSCRIPTION} from "../slices.const";
 
 
 const StyledTranslationRow = styled.div`
+position: relative;
 padding: 2px;
 margin-left: 10px;
 font-size: 0.9em;
@@ -17,7 +18,7 @@ color: #444;
     content: "-";
     color: #b1b1b1;
     position: absolute;
-    left: 0;
+    left: -7px;
 }
 
 &:hover {
@@ -29,20 +30,30 @@ color: #444;
 & > .transcriptions {
     & > .tsc-item {
         cursor: pointer;
-        font-size: 0.7em;
-        background: #e7e7e7;
-        padding: 3px 7px;
+        font-size: 0.8em;
+        border: 1px solid #e7e7e7;
+        padding: 1px 5px;
         border-radius: 10px;
 
         &:hover {
-            background: #f5f5f5;
+            border: 1px solid #f5f5f5;
+        }
+
+        &.active {
+            border: 1px solid #bfdcff;
+        }
+
+        &:not(:first-child) {
+            margin-left: 3px;
         }
     }
 }
 
 & > .controls {
     display: none;
-    float: right;
+    position: absolute;
+    right: 0;
+    top: 3px;
 
     & > * {
         cursor: pointer;
@@ -51,7 +62,7 @@ color: #444;
 `;
 
 const TranslationRow = ({obj, nodeId, expressionId, availableTranscriptions, isEditable}) => {
-    const {dispatch} = useSlicesViewContext();
+    const {showTranslationTranscriptions, dispatch} = useSlicesViewContext();
 
     async function detach() {
         console.log('detach translation', obj.id);
@@ -67,10 +78,24 @@ const TranslationRow = ({obj, nodeId, expressionId, availableTranscriptions, isE
         }
     }
 
-    const applyTranscription = (transcriptionId) => async () => {
+    const toggleTranscription = (transcription, notSelected) => async () => {
+        const url = `/translations/${obj.id}/transcriptions/${transcription.id}`;
         try {
-            const {data:res} = api.post(`/translations/${obj.id}/transcriptions/${transcriptionId}`);
-            console.log(res);
+            if (notSelected) {
+                await api.post(url);
+                dispatch({type: ATTACH_TRANSLATION_TRANSCRIPTION, payload: {
+                    expressionId: expressionId,
+                    translationId: obj.id,
+                    transcription,
+                }})
+            } else {
+                await api.delete(url);
+                dispatch({type: DETACH_TRANSLATION_TRANSCRIPTION, payload: {
+                    expressionId: expressionId,
+                    translationId: obj.id,
+                    transcription,
+                }})
+            }
         } catch (err) {
             console.log(err);
         }
@@ -79,11 +104,22 @@ const TranslationRow = ({obj, nodeId, expressionId, availableTranscriptions, isE
     return (
         <StyledTranslationRow>
             <span>{obj.value}</span>
-            <div className="transcriptions">
-                {availableTranscriptions.map(t => (
-                    <span className="tsc-item" onClick={applyTranscription(t.id)}>{t.value}</span>
-                ))}
-            </div>
+            {showTranslationTranscriptions && (
+                <div className="transcriptions">
+                    {availableTranscriptions.map(t => {
+                        const notSelected = !obj.transcriptions || obj.transcriptions.find(tr => tr.id === t.id) === undefined;
+                        return (
+                            <span 
+                                key={t.id} 
+                                className={`tsc-item ${notSelected ? '' : 'active'}`} 
+                                onClick={toggleTranscription(t, notSelected)}
+                            >
+                                {t.value}
+                            </span>
+                        )
+                    })}
+                </div>
+            )}
             {isEditable && (
                 <div className="controls">
                     <span onClick={detach}>✕</span>

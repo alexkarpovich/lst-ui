@@ -84,7 +84,7 @@ width: 100%;
                 padding: 7px;
 
                 &:not(:first-child) {
-                    border-top: 1px solid #ddd;
+                    border-top: 1px solid #f9f9f9;
                 }
 
                 &:hover {
@@ -112,12 +112,25 @@ width: 100%;
 const TranslationInput = ({expressionId, nodeId}) => {
     const {dispatch} = useSlicesViewContext();
     const [isOpen, setIsOpen] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [translations, setTranslations] = useState([]);
 
     useEffect(() => {
+        setIsMounted(true);
         isOpen && fetchTranslations();
+
+        return () => (setIsMounted(false));
     }, [isOpen])
+
+    async function fetchTranslations() {
+        try {
+            const {data:res} = await api.get(`/me/nodes/${nodeId}/translations?expression_id=${expressionId}`);
+            isMounted && setTranslations(res.data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     function toggleOpen() {
         setIsOpen(prev => !prev);
@@ -151,15 +164,6 @@ const TranslationInput = ({expressionId, nodeId}) => {
             fetchTranslations();
         } catch (err) {
             console.log(err)
-        }
-    }
-
-    async function fetchTranslations() {
-        try {
-            const {data:res} = await api.get(`/me/nodes/${nodeId}/translations?expression_id=${expressionId}`);
-            setTranslations(res.data);
-        } catch (err) {
-            console.log(err);
         }
     }
 

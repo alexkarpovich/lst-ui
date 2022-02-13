@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -15,17 +15,27 @@ border: 1px solid #eee;
 border-radius: 2px;
 position: relative;
 
-& > .detach-btn {
-    cursor: pointer;
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    font-size: 0.9em;
-    opacity: 10%;
+&:hover {
+    & > .controls {
+        display: flex;
+        top: 2px;
+        right: 5px;
 
-    &:hover {
-        opacity: 40%;
+        span {
+            cursor: pointer;
+            font-size: 0.9em;
+            padding: 0 2px;
+        
+            &:hover {
+                color: #ba3;
+            }
+        }
     }
+}
+
+& > .controls {
+    display: none;
+    position: absolute;
 }
 
 & > .translations {
@@ -52,9 +62,6 @@ const ExpressionCard = ({obj, nodeId, isEditable}) => {
 
     return (
         <StyledExpressionRow>
-            {isEditable && (
-                <i className="detach-btn icon-bin" onClick={detach} />
-            )}
             <ExpressionHeader expression={obj} />
             <div className="translations">
                 {
@@ -74,6 +81,11 @@ const ExpressionCard = ({obj, nodeId, isEditable}) => {
                         expressionId={obj.id} 
                         nodeId={nodeId}
                     />
+                )}
+            </div>
+            <div className="controls">
+                {isEditable && (
+                    <span onClick={detach}>×</span>
                 )}
             </div>
         </StyledExpressionRow>

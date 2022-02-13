@@ -1,22 +1,24 @@
 import React, { createContext, useEffect, useReducer, useContext, Fragment } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, createSearchParams, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
 import api from "../../utils/api";
 import { slicesReducer } from "./slices.reducer";
-import { SET_FETCHING, SET_GROUPS, SET_GROUPS_NODES } from "./slices.const";
-import SlicesMenu from "./slices.menu";
+import { SET_FETCHING, SET_GROUPS, SET_GROUPS_NODES, MENU_MODE_DEFAULT } from "./slices.const";
+import SlicesMenu from "./menu/menu";
 import SlicesView from "./slices.view";
 import { prepareQueryParams } from "./slices.service";
 
 
 let initialState = {
     isFetching: true,
-    groupId: null,
+    activeGroup: {},
     activeNodes: [],
-    groups: [],
-    nodes: [],
+    allGroups: [],
+    allNodes: [],
+    menuMode: MENU_MODE_DEFAULT,
+    nodeSelection: [],
 };
 
 export const SlicesContext = createContext(initialState);
@@ -70,13 +72,16 @@ const SlicesPage = () => {
                     api.get(`/me/groups/${qp.group}/nodes`)
                 ]);
                 dispatch({ type: SET_GROUPS_NODES, payload: {
-                    groups: groupsRes.data.data,
-                    nodes: nodesRes.data.data
+                    groupId: +qp.group,
+                    allGroups: groupsRes.data.data,
+                    allNodes: nodesRes.data.data,
+                    activeNodes: qp.ids,
                 }});
             } else {
                 const {data:res} = await api.get('/me/groups');
                 dispatch({ type: SET_GROUPS, payload: {
-                    groups: res.data
+                    groupId: +qp.group,
+                    allGroups: res.data
                 }});
             }
             
@@ -86,19 +91,18 @@ const SlicesPage = () => {
         loadInitialData();
     }, [qp.group])
 
+    useEffect(() => {
+        window.history.replaceState(null, null, `?group=${state.activeGroup.id}&ids=[${state.activeNodes.join(',')}]`)
+    }, [state.activeNodes.join('')]);
+
     return state.isFetching ? 'Fetching...' : (
         <SlicesContext.Provider value={{ ...state, dispatch }}>
             <StyledSlicesPage>
-                {qp.group ? (
+                {state.activeGroup?.id ? (
                     <Fragment>
-                        <SlicesMenu 
-                            groupId={qp.group}
-                            groups={state.groups}
-                            nodes={state.nodes}
-                            activeNodeIds={qp.ids}
-                        />
+                        <SlicesMenu />
                         <div className="outlet">
-                            <SlicesView activeIds={qp.ids} />
+                            <SlicesView />
                         </div>
                     </Fragment>
                 ) : (
@@ -106,7 +110,7 @@ const SlicesPage = () => {
                         <h3>Select group</h3>
 
                         <div className="groups-select">
-                            {state.groups.map(group => (
+                            {state.allGroups.map(group => (
                                 <div key={group.id}>
                                     <Link to={`/me/slices?group=${group.id}`}>{group.name}</Link>
                                 </div>

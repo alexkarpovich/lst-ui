@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
 import CreatableSelect from 'react-select/creatable';
-import { createSearchParams, useNavigate } from "react-router-dom";
+import {createSearchParams, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 
 import api from "../../utils/api";
-import { useSlicesContext } from "./slices.page";
-import { ATTACH_EXPRESSION, INCREASE_NODE_COUNT } from "./slices.const";
-import { TYPE_CYCLES, TYPE_DIRECT } from "../training/training.const";
-import { useSlicesViewContext } from "./slices.view";
+import {useSlicesContext} from "./slices.page";
+import {ATTACH_EXPRESSION, INCREASE_NODE_COUNT, SHOW_TRANSLATION_TRANSCRIPTIONS} from "./slices.const";
+import {TYPE_CYCLES, TYPE_DIRECT} from "../training/training.const";
+import {useSlicesViewContext} from "./slices.view";
+import {DropdownMenu, DropdownItem} from "../shared/dropdown-menu";
 
 const StyledToolBar = styled.div`
 display: flex;
@@ -16,10 +17,15 @@ align-items: center;
 margin-bottom: 10px;
 max-width: 860px;
 
-.training-items {
-    * {
+.transcription-controls {
+    span {
         padding: 7px;
+        cursor: pointer;
     }
+}
+
+.exercise {
+    width: 110px;
 }
 
 .searchbar {
@@ -31,7 +37,7 @@ max-width: 860px;
 const ToolBar = ({nodeIds, isEditable}) => {
     const navigate = useNavigate();
     const {dispatch} = useSlicesContext();
-    const {dispatch:dispatchView} = useSlicesViewContext();
+    const {showTranslationTranscriptions, dispatch:dispatchView} = useSlicesViewContext();
     const [inputValue, setInputValue] = useState('');
     const [options, setOptions] = useState([]);
 
@@ -94,6 +100,10 @@ const ToolBar = ({nodeIds, isEditable}) => {
         attachExpression({value});
     }
 
+    function toggleTranscriptions() {
+        dispatchView({type: SHOW_TRANSLATION_TRANSCRIPTIONS, payload: !showTranslationTranscriptions})
+    }
+
     return (
         <StyledToolBar>
             {isEditable && (
@@ -114,10 +124,13 @@ const ToolBar = ({nodeIds, isEditable}) => {
                     />
                 </div>
             )}
-            <div className="training-items">
-                <span onClick={() => doExercise(TYPE_DIRECT)}>Direct</span>
-                <span onClick={() => doExercise(TYPE_CYCLES)}>Cycles</span>
+            <div className="transcription-controls">
+                <span onClick={toggleTranscriptions}>à</span>
             </div>
+            <DropdownMenu className="exercise" placeholder="Exercise">
+                <DropdownItem label="Direct" onClick={() => doExercise(TYPE_DIRECT)} />
+                <DropdownItem label="Cycles" onClick={() => doExercise(TYPE_CYCLES)} />
+            </DropdownMenu>
         </StyledToolBar>
     );
 };
