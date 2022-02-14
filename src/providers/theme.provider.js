@@ -6,6 +6,7 @@ const theme = {
         bgMenu: '#293a4c',
         bgActiveMenu: '#17212b',
         colorMenu: '#419fd9',
+        linkColor: '#007bff',
     },
 };
 

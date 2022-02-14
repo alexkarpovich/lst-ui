@@ -68,7 +68,7 @@ const SlicesView = () => {
                 <Plock nColumns={2} gap={2} className="expressions">
                     {state.expressions.map(expr => (
                         <ExpressionCard
-                            key={`${prefix}_${expr.id}`} 
+                            key={expr.id} 
                             obj={expr}
                             nodeId={activeNodes[0]}
                             isEditable={isEditable}

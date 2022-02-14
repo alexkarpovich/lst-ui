@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useLocation, useNavigate } from "react-router-dom";
-
+import {useLocation, useNavigate} from "react-router-dom";
 import styled from "styled-components";
+
+import { matchPaths } from "./side-menu.service";
 
 const StyledMenuItem = styled.div`
 position: relative;
@@ -53,13 +54,13 @@ i {
 }
 `;
 
-const MenuItem = ({children, to, title, onClick}) => {
+const MenuItem = ({children, to, title, onClick, paths}) => {
     const location = useLocation();
-    const navigate = useNavigate()
-    const [isActive, setIsActive] = useState(location.pathname.indexOf(to) !== -1)
+    const navigate = useNavigate();
+    const [isActive, setIsActive] = useState(matchPaths(location.pathname, to, paths))
 
     useEffect(() => {
-        setIsActive(location.pathname.indexOf(to) !== -1);
+        setIsActive(matchPaths(location.pathname, to, paths));
     }, [location, to])
 
     function open() {

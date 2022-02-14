@@ -40,7 +40,8 @@ color: #444;
         }
 
         &.active {
-            border: 1px solid #bfdcff;
+            border: 1px solid ${({theme}) => theme.colors.linkColor};
+            color: ${({theme}) => theme.colors.linkColor};
         }
 
         &:not(:first-child) {

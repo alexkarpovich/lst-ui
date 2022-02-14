@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -71,7 +71,7 @@ const ExpressionCard = ({obj, nodeId, isEditable}) => {
                             obj={trans}
                             nodeId={nodeId}
                             expressionId={obj.id}
-                            availableTranscriptions={obj.transcriptions}
+                            availableTranscriptions={obj.transcriptions || []}
                             isEditable={isEditable} 
                         />
                     ))

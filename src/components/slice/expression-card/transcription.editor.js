@@ -4,8 +4,8 @@ import styled from "styled-components";
 import api from "../../../utils/api";
 import {ATTACH_EXPRESSION_TRANSCRIPTION} from "../slices.const";
 import Input from "../../shared/input";
-import { useSlicesViewContext } from "../slices.view";
-import { useSlicesContext } from "../slices.page";
+import {useSlicesViewContext} from "../slices.view";
+import {useSlicesContext} from "../slices.page";
 
 const StyledTranscriptionEditor = styled.div`
 margin-bottom: 5px;
@@ -61,7 +61,7 @@ margin-bottom: 5px;
 `;
 
 const TranscriptionEditor = ({expression}) => {
-    const {group} = useSlicesContext();
+    const {activeGroup} = useSlicesContext();
     const {dispatch} = useSlicesViewContext();
     const [transcMap, setTranscMap] = useState({});
     const [transcInput, setTranscInput] = useState(expression.value);
@@ -71,7 +71,7 @@ const TranscriptionEditor = ({expression}) => {
 
         async function loadTranscriptionParts() {
             try {
-                const {data:res} = await api.get(`/x/${expression.id}/transcription-map?type=${group.transcriptionTypeId}`);
+                const {data:res} = await api.get(`/x/${expression.id}/transcription-map?type=${activeGroup.transcriptionTypeId}`);
                 isMounted && res.data && setTranscMap(res.data);
             } catch (err) {
                 console.log(err);

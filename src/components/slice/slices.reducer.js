@@ -50,7 +50,15 @@ export const slicesReducer = (state, action) => {
             const {groupId, allGroups, allNodes, activeNodes} = action.payload;
             const activeGroup = allGroups.find(g => g.id === groupId);
 
-            return {...state, activeGroup, allGroups, allNodes: allNodes || [], activeNodes, nodeSelection: activeNodes};
+            return {
+                ...state,
+                isFetching: false,
+                activeGroup, 
+                allGroups, 
+                allNodes: allNodes || [], 
+                activeNodes, 
+                nodeSelection: activeNodes
+            };
         }
         case SET_ACTIVE_NODES: {
             const ids = getNodeIds(action.payload, state.allNodes);
