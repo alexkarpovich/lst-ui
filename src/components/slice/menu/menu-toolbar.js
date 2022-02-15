@@ -11,6 +11,7 @@ position: sticky;
 top: 0;
 background: ${({theme}) => theme.colors.bgActiveMenu};
 border-bottom: 1px solid ${({theme}) => darken(0.05, theme.colors.bgActiveMenu)};
+box-shadow: 0 1px 5px ${({theme}) => darken(0.05, theme.colors.bgActiveMenu)};
 z-index: 9999;
 
 & > .content {
