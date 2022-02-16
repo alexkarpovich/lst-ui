@@ -16,7 +16,7 @@ text-align: center;
 .expression {
     padding: 7px;
     color: ${({showAnswer}) => showAnswer ? '#aaa' : '#000'};
-    border-bottom: 1px solid ${({showAnswer}) => showAnswer ? '#eee' : 'transparent'};
+    border-top: 1px solid ${({showAnswer}) => showAnswer ? '#eee' : 'transparent'};
 }
 
 .answer-container {
@@ -104,7 +104,6 @@ const TrainingCard = ({obj}) => {
 
     return (
         <StyledTrainingCard showAnswer={showAnswers}>
-            <div className="expression">{obj.expression.value}</div>
             {showAnswers && (
                 <div className="answer-container">
                     {
@@ -123,8 +122,7 @@ const TrainingCard = ({obj}) => {
                     }
                 </div>
             )}
-            
-
+            <div className="expression">{obj.expression.value}</div>
         </StyledTrainingCard>
     );
 };
