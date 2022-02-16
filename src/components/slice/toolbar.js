@@ -36,7 +36,7 @@ max-width: 860px;
 
 const ToolBar = ({nodeIds, isEditable}) => {
     const navigate = useNavigate();
-    const {dispatch} = useSlicesContext();
+    const {activeGroup, dispatch} = useSlicesContext();
     const {showTranslationTranscriptions, dispatch:dispatchView} = useSlicesViewContext();
     const [inputValue, setInputValue] = useState('');
     const [options, setOptions] = useState([]);
@@ -74,6 +74,7 @@ const ToolBar = ({nodeIds, isEditable}) => {
         try {
             const {data:res} = await api.post(`/me/trainings`, {
                 type,
+                transcriptionTypeId: activeGroup.transcriptionTypeId,
                 slices: nodeIds,
             });
             console.log(res);

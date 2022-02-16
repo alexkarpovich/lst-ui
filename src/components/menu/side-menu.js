@@ -40,7 +40,7 @@ const SideMenu = () => {
                 <MenuItem to="/me/slices" title="Slices" paths={['/me/groups/:id/slices']}>
                     <i className="icon-pie-chart" />
                 </MenuItem>
-                <MenuItem to="/me/trainings" title="Trainings">
+                <MenuItem to="/me/trainings" title="Trainings" paths={['/me/trainings/:id']}>
                     <i className="icon-dumbbell" />
                 </MenuItem>
                 <hr />

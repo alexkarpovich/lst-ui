@@ -27,6 +27,14 @@ color: #444;
     }
 }
 
+& > .main {
+    & > .comment {
+        color: #707070;
+        font-style: italic;
+        font-size: 0.9em;
+    }
+}
+
 & > .transcriptions {
     & > .tsc-item {
         cursor: pointer;
@@ -104,7 +112,10 @@ const TranslationRow = ({obj, nodeId, expressionId, availableTranscriptions, isE
 
     return (
         <StyledTranslationRow>
-            <span>{obj.value}</span>
+            <div className="main">
+                <div className="value">{obj.value}</div>
+                <div className="comment">{obj.comment}</div>
+            </div>
             {showTranslationTranscriptions && (
                 <div className="transcriptions">
                     {availableTranscriptions.map(t => {

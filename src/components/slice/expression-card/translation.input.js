@@ -116,8 +116,6 @@ const TranslationInput = ({expressionId, nodeId}) => {
     const [inputValue, setInputValue] = useState('');
     const [translations, setTranslations] = useState([]);
 
-    useEffect(() => {console.log('Translation input mount')}, [])
-
     useEffect(() => {
         setIsMounted(true);
         isOpen && fetchTranslations();

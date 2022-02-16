@@ -48,6 +48,13 @@ color: ${props => props.active ? props.theme.colors.colorMenu : '#eee'};
 
 & > .content {
     width: 100%;
+    overflow-y: hidden;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     &:hover {
         cursor: pointer;

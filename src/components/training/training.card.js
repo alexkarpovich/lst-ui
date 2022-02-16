@@ -13,10 +13,33 @@ font-size: 1.4em;
 margin-top: 20vh;
 text-align: center;
 
+.expression {
+    padding: 7px;
+    color: ${({showAnswer}) => showAnswer ? '#aaa' : '#000'};
+    border-bottom: 1px solid ${({showAnswer}) => showAnswer ? '#eee' : 'transparent'};
+}
+
 .answer-container {
+    display: flex;
+    justify-content: center;
+
     .answer {
-        font-family: "KaiTi";
-        font-size: 1.5em;
+        padding: 7px;
+
+        &:not(:first-child) {
+            border-left: 1px solid #eee;
+        }
+
+        .value {
+            font-family: "KaiTi";
+            font-size: 1.7em;
+            color: #000;
+        }
+
+        .transcriptions {
+            font-size: 0.7em;
+            color: ${({theme}) => theme.colors.linkColor};
+        }
     }
 }
 
@@ -35,9 +58,7 @@ const TrainingCard = ({obj}) => {
                 } else {
                     complete()
                 }
-                setShowAnswers(false);
             } else {
-                setShowAnswers(true);
                 fetchAnswers();
             }
         }
@@ -50,16 +71,17 @@ const TrainingCard = ({obj}) => {
             console.log(err);
             dispatch({type: SET_TRAINING_ITEM, payload: null});
         }
+        setShowAnswers(false);
     }
 
     async function fetchAnswers() {
         try {
             const {data:res} = await api.get(`/me/training-items/${obj.id}/answers`);
-            console.log(res);
             setAnswers(res.data);
         } catch (err) {
             console.log(err);
         }
+        setShowAnswers(true);
     }
 
     async function complete() {
@@ -77,16 +99,26 @@ const TrainingCard = ({obj}) => {
         } catch (err) {
             console.log(err);
         }
+        setShowAnswers(false);
     }
 
     return (
-        <StyledTrainingCard>
-            <div>{obj.expression.value}</div>
+        <StyledTrainingCard showAnswer={showAnswers}>
+            <div className="expression">{obj.expression.value}</div>
             {showAnswers && (
                 <div className="answer-container">
                     {
                         answers.map((answer, i) => (
-                            <div key={i} className="answer">{answer.value}</div>
+                            <div key={i} className="answer">
+                                <div className="value">{answer.value}</div>
+                                <div className="transcriptions">
+                                    {
+                                        answer.transcriptions?.map(tsc => (
+                                            <span key={tsc.id}>{tsc.value}</span>
+                                        ))
+                                    }
+                                </div>
+                            </div>
                         ))
                     }
                 </div>
