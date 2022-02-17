@@ -57,8 +57,8 @@ z-index: 9999;
 const MenuToolbar = () => {
     const {menuMode, activeGroup, dispatch} = useSlicesContext();
 
-    function switchToSelectMode() {
-        dispatch({type: SET_MENU_MODE, payload: MENU_MODE_SELECT});
+    function switchMode(mode) {
+        dispatch({type: SET_MENU_MODE, payload: mode});
     }
 
     function applySelection() {
@@ -92,11 +92,12 @@ const MenuToolbar = () => {
                 </div>
                 <div>
                     {menuMode === MENU_MODE_DEFAULT && (
-                        <div className="list-check icon-list-check-solid" onClick={switchToSelectMode} />
+                        <div className="list-check icon-list-check-solid" onClick={() => switchMode(MENU_MODE_SELECT)} />
                     )}
                     
                     {menuMode === MENU_MODE_SELECT && (
                         <Fragment>
+                            <div className="cancel-selection" onClick={() => switchMode(MENU_MODE_DEFAULT)}>×</div>
                             <div className="apply-selection icon-checkmark" onClick={applySelection} />
                             <div className="select-all icon-checkbox-unchecked" />
                         </Fragment>

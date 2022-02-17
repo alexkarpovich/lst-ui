@@ -14,9 +14,16 @@ margin-top: 20vh;
 text-align: center;
 
 .expression {
-    padding: 7px;
     color: ${({showAnswer}) => showAnswer ? '#aaa' : '#000'};
-    border-top: 1px solid ${({showAnswer}) => showAnswer ? '#eee' : 'transparent'};
+    padding: 7px;
+
+    .value {
+        border-top: 1px solid ${({showAnswer}) => showAnswer ? '#eee' : 'transparent'};
+    }
+    .comment {
+        font-style: italic;
+        font-size: 0.7em;
+    }
 }
 
 .answer-container {
@@ -122,7 +129,10 @@ const TrainingCard = ({obj}) => {
                     }
                 </div>
             )}
-            <div className="expression">{obj.expression.value}</div>
+            <div className="expression">
+                <div className="value">{obj.expression.value}</div>
+                <div className="comment">{obj.expression.comment}</div>
+            </div>
         </StyledTrainingCard>
     );
 };
