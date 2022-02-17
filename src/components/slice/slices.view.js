@@ -10,6 +10,7 @@ import { slicesViewReducer } from "./view.reducer";
 import ToolBar from "./toolbar";
 import ExpressionCard from "./expression-card/expression.card";
 import { useSlicesContext } from "./slices.page";
+import ExpressionRow from "./expression-table/expression-row";
 
 let initialState = {
     isFetching: true,
@@ -26,7 +27,7 @@ export function useSlicesViewContext() {
 const StyledSlicesView = styled.div`
 padding: 10px;
 
-.expressions {
+.expression-table {
     max-width: 860px;
 }
 `;
@@ -65,7 +66,7 @@ const SlicesView = () => {
                     nodeIds={activeNodes}
                     isEditable={isEditable}
                 />
-                <Plock nColumns={2} gap={2} className="expressions">
+                {/* <Plock nColumns={2} gap={2} className="expressions">
                     {state.expressions.map(expr => (
                         <ExpressionCard
                             key={expr.id} 
@@ -74,7 +75,18 @@ const SlicesView = () => {
                             isEditable={isEditable}
                         />
                     ))}
-                </Plock>
+                </Plock> */}
+                <div className="expression-table">
+                    {state.expressions.map((expr, i) => (
+                        <ExpressionRow
+                            key={expr.id}
+                            index={state.expressions.length - i}
+                            obj={expr}
+                            nodeId={activeNodes[0]}
+                            isEditable={isEditable}
+                        />
+                    ))}
+                </div>
             </StyledSlicesView>
         </SlicesViewContext.Provider>
     );
