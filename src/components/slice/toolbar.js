@@ -115,7 +115,7 @@ const ToolBar = ({nodeIds, isEditable}) => {
                         // isLoading={isLoading}
                         components={{ DropdownIndicator: null }}
                         options={options}
-                        placeholder="Type expression..."
+                        placeholder="Type expression here..."
                         value={inputValue}
                         onChange={handleSelectChange}
                         onInputChange={handleInputChange}

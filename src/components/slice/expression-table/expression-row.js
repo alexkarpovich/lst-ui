@@ -16,6 +16,10 @@ display: table-row;
     border-bottom: 1px solid #eee;
     padding: 5px;
 
+    &:not(:first-child) {
+        vertical-align: top;
+    }
+
     &.index {
         width: 20px;
         font-size: 0.7em;
@@ -24,7 +28,6 @@ display: table-row;
 
     &.target {
         width: 120px;
-        vertical-align: top;
 
         & > .value {
             font-family: "KaiTi";
