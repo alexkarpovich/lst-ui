@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -111,7 +111,8 @@ width: 100%;
 
 const TranslationInput = ({expressionId, nodeId}) => {
     const {dispatch} = useSlicesViewContext();
-    const [isOpen, setIsOpen] = useState(false);
+    const openState = useRef(false);
+    const [isOpen, setIsOpen] = useState(openState.current);
     const [isMounted, setIsMounted] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [translations, setTranslations] = useState([]);

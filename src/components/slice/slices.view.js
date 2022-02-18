@@ -1,16 +1,13 @@
-import React, { createContext, memo, useContext, useEffect, useReducer } from "react";
-import PropTypes from "prop-types";
-import { createSearchParams } from "react-router-dom";
-import { Plock } from "react-plock";
+import React, {createContext, useContext, useEffect, useReducer} from "react";
+import {createSearchParams} from "react-router-dom";
 import styled from "styled-components";
 
 import api from "../../utils/api";
 import { SET_VIEW_FETCHING, SET_VIEW_DATA } from "./slices.const";
 import { slicesViewReducer } from "./view.reducer";
-import ToolBar from "./toolbar";
-import ExpressionCard from "./expression-card/expression.card";
 import { useSlicesContext } from "./slices.page";
-import ExpressionRow from "./expression-table/expression-row";
+import ToolBar from "./toolbar";
+import ExpressionTable from "./expression-table/expression.table";
 
 let initialState = {
     isFetching: true,
@@ -26,6 +23,7 @@ export function useSlicesViewContext() {
 
 const StyledSlicesView = styled.div`
 padding: 10px;
+height: 100%;
 
 .expression-table {
     max-width: 860px;
@@ -66,27 +64,13 @@ const SlicesView = () => {
                     nodeIds={activeNodes}
                     isEditable={isEditable}
                 />
-                {/* <Plock nColumns={2} gap={2} className="expressions">
-                    {state.expressions.map(expr => (
-                        <ExpressionCard
-                            key={expr.id} 
-                            obj={expr}
-                            nodeId={activeNodes[0]}
-                            isEditable={isEditable}
-                        />
-                    ))}
-                </Plock> */}
-                <div className="expression-table">
-                    {state.expressions.map((expr, i) => (
-                        <ExpressionRow
-                            key={expr.id}
-                            index={state.expressions.length - i}
-                            obj={expr}
-                            nodeId={activeNodes[0]}
-                            isEditable={isEditable}
-                        />
-                    ))}
-                </div>
+                {state.expressions && (
+                    <ExpressionTable 
+                        nodeId={activeNodes[0]}
+                        expressions={state.expressions}
+                        isEditable={isEditable}
+                    />
+                )}
             </StyledSlicesView>
         </SlicesViewContext.Provider>
     );

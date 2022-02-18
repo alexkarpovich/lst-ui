@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -15,6 +15,7 @@ display: table-row;
     display: table-cell;
     border-bottom: 1px solid #eee;
     padding: 5px;
+    width: 100%;
 
     &:not(:first-child) {
         vertical-align: top;
@@ -28,6 +29,7 @@ display: table-row;
 
     &.target {
         width: 120px;
+        white-space: nowrap;
 
         & > .value {
             font-family: "KaiTi";
@@ -70,7 +72,7 @@ display: table-row;
 }
 `;
 
-const ExpressionRow = ({index, obj, nodeId, isEditable}) => {
+const ExpressionRow = forwardRef(({index, style, obj, nodeId, isEditable}, ref) => {
     const {dispatch} = useSlicesViewContext();
 
     async function detach() {
@@ -85,7 +87,7 @@ const ExpressionRow = ({index, obj, nodeId, isEditable}) => {
         }
     }
     return (
-        <StyledExpressionRow>
+        <StyledExpressionRow ref={ref}>
             <div className="col index">{index}</div>
             <div className="col target">
                 <div className="value">{obj.value}</div>
@@ -125,7 +127,7 @@ const ExpressionRow = ({index, obj, nodeId, isEditable}) => {
 
         </StyledExpressionRow>
     );
-};
+});
 
 ExpressionRow.propTypes = {
     index: PropTypes.number.isRequired,
