@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import {VariableSizeList} from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import ExpressionRow from "./expression-row";
+import ExpressionRow from "./expression.row";
 
 const StyledExpressionTable = styled.div`
 height: 100%;
