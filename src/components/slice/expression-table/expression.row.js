@@ -35,6 +35,7 @@ td {
 
             & > .expand-subrow {
                 cursor: pointer;
+                color: #ddd;
             }
         }
     }
@@ -100,6 +101,10 @@ const ExpressionRow = forwardRef(({index, style, obj, nodeId, isEditable}, ref) 
     const {dispatch} = useSlicesViewContext();
     const [showSubrow, setShowSubrow] = useState(false);
 
+    function toggleSubrow() {
+        setShowSubrow(prev => !prev);
+    }
+
     async function detach() {
         try {
             const {data:res} = await api.post(`/me/nodes/${nodeId}/detach-expression/${obj.id}`);
@@ -117,7 +122,7 @@ const ExpressionRow = forwardRef(({index, style, obj, nodeId, isEditable}, ref) 
                 <td className="index">
                     <div>
                         <div className="value">{index}</div>
-                        <div className="expand-subrow" onClick={() => setShowSubrow(true)}>+</div>
+                        <div className="expand-subrow" onClick={toggleSubrow}>{showSubrow ? '△' : '▽'}</div>
                     </div>
                 </td>
                 <td className="target">
