@@ -1,8 +1,7 @@
 import { 
     SET_VIEW_FETCHING, SET_VIEW_DATA, ATTACH_EXPRESSION, ATTACH_TRANSLATION, DETACH_TRANSLATION, 
     DETACH_EXPRESSION, ATTACH_EXPRESSION_TRANSCRIPTION, ATTACH_TRANSLATION_TRANSCRIPTION, 
-    DETACH_TRANSLATION_TRANSCRIPTION,
-    SHOW_TRANSLATION_TRANSCRIPTIONS,
+    DETACH_TRANSLATION_TRANSCRIPTION, SHOW_TRANSLATION_TRANSCRIPTIONS, SET_SUBROW_OBJECT_ID,
 } from "./slices.const";
 
 
@@ -108,6 +107,9 @@ export const slicesViewReducer = (state, action) => {
         }
         case SHOW_TRANSLATION_TRANSCRIPTIONS: {
             return {...state, showTranslationTranscriptions: action.payload};
+        }
+        case SET_SUBROW_OBJECT_ID: {
+            return {...state, subrowObjectId: action.payload};
         }
         default:
             return state;

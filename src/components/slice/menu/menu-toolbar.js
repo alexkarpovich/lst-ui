@@ -4,7 +4,11 @@ import {darken} from "polished";
 
 import api from "../../../utils/api";
 import {useSlicesContext} from "../slices.page";
-import {ADD_NODE, NODE_SLICE, NODE_FOLDER, MENU_MODE_DEFAULT, MENU_MODE_SELECT, SET_MENU_MODE} from "../slices.const";
+import {
+    ADD_NODE, NODE_SLICE, NODE_FOLDER, MENU_MODE_DEFAULT, 
+    MENU_MODE_SELECT, SET_MENU_MODE, SELECT_ALL_NODES,
+    CANCEL_SELECTION_MODE,
+} from "../slices.const";
 
 const StyledMenuToolbar = styled.div`
 position: sticky;
@@ -65,6 +69,14 @@ const MenuToolbar = () => {
         dispatch({type: SET_MENU_MODE, payload: MENU_MODE_DEFAULT});
     }
 
+    function cancelSelection() {
+        dispatch({type: CANCEL_SELECTION_MODE});
+    }
+
+    function selectAll() {
+        dispatch({type: SELECT_ALL_NODES});
+    }
+
     async function addNode(type) {
         try {
             const {data:res} = await api.post(`/me/groups/${activeGroup.id}/nodes`, {
@@ -97,9 +109,9 @@ const MenuToolbar = () => {
                     
                     {menuMode === MENU_MODE_SELECT && (
                         <Fragment>
-                            <div className="cancel-selection" onClick={() => switchMode(MENU_MODE_DEFAULT)}>×</div>
+                            <div className="cancel-selection" onClick={cancelSelection}>×</div>
                             <div className="apply-selection icon-checkmark" onClick={applySelection} />
-                            <div className="select-all icon-checkbox-unchecked" />
+                            <div className="select-all icon-checkbox-unchecked" onClick={selectAll} />
                         </Fragment>
                     )}
                 </div>

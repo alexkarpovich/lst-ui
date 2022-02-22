@@ -1,4 +1,9 @@
-import { SET_FETCHING, SET_VIEW_FETCHING, SET_GROUPS, SET_NODES, SET_GROUPS_NODES, INCREASE_NODE_COUNT, UPDATE_NODE, ADD_NODE, RENAME_NODE, DELETE_NODE, EDIT_NODE_MODE, SET_ACTIVE_NODES, SET_MENU_MODE, SELECTION_TOGGLE_NODE, MENU_MODE_DEFAULT } from "./slices.const";
+import { 
+    SET_FETCHING, SET_VIEW_FETCHING, SET_GROUPS, SET_NODES, SET_GROUPS_NODES, 
+    INCREASE_NODE_COUNT, UPDATE_NODE, ADD_NODE, RENAME_NODE, DELETE_NODE, 
+    EDIT_NODE_MODE, SET_ACTIVE_NODES, SET_MENU_MODE, SELECTION_TOGGLE_NODE, 
+    MENU_MODE_DEFAULT, SELECT_ALL_NODES, CANCEL_SELECTION_MODE,
+} from "./slices.const";
 import { getNestedNodeIds } from "./slices.service";
 
 function mapNodes(items, cmpFunc, editFunc) {
@@ -13,16 +18,16 @@ function mapNodes(items, cmpFunc, editFunc) {
     }
 }
 
-function getNodeIds(ids, nodes) {
+function getNodeIds(ids, nodes, all=false) {
     let result = [];
 
     for (let i = 0; i < nodes.length; i++) {
-        if (ids.indexOf(nodes[i].id) !== -1) {
+        if (all || ids.indexOf(nodes[i].id) !== -1) {
             result = result.concat(getNestedNodeIds(nodes[i]));
         }
         
         if (nodes[i].children) {
-            result = result.concat(getNodeIds(ids, nodes[i].children));
+            result = result.concat(getNodeIds(ids, nodes[i].children, all));
         }
     }
 
@@ -57,13 +62,12 @@ export const slicesReducer = (state, action) => {
                 allGroups, 
                 allNodes: allNodes || [], 
                 activeNodes, 
-                nodeSelection: activeNodes
             };
         }
         case SET_ACTIVE_NODES: {
             const ids = getNodeIds(action.payload, state.allNodes);
 
-            return {...state, activeNodes: ids, nodeSelection: ids};
+            return {...state, activeNodes: ids};
         }
         case INCREASE_NODE_COUNT: {
             const {nodeId} = action.payload;
@@ -162,8 +166,16 @@ export const slicesReducer = (state, action) => {
             if (menuMode === MENU_MODE_DEFAULT) {
                 return {...state, menuMode, activeNodes: state.nodeSelection};
             } else {
-                return {...state, menuMode};
+                return {...state, menuMode, nodeSelection: state.activeNodes};
             }
+        }
+        case CANCEL_SELECTION_MODE: {
+            return {...state, menuMode: MENU_MODE_DEFAULT};
+        }
+        case SELECT_ALL_NODES: {
+            const allIds = getNodeIds([], state.allNodes, true);
+
+            return {...state, nodeSelection: allIds};
         }
         case SELECTION_TOGGLE_NODE: {
             let nodeSelection;

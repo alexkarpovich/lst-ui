@@ -91,7 +91,7 @@ const TranscriptionEditor = ({expression}) => {
         console.log('add new transcription');
         try {
             const {data:res} = await api.post(`/x/${expression.id}/transcriptions`, {
-                type: 1,
+                type: activeGroup.transcriptionTypeId,
                 value: transcInput.trim(),
             });
             console.log(res);

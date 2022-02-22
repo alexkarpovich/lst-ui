@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import api from "../../../utils/api";
 import { useSlicesViewContext } from "../slices.view";
-import { DETACH_EXPRESSION } from "../slices.const";
+import { DETACH_EXPRESSION, SET_SUBROW_OBJECT_ID } from "../slices.const";
 import TranslationInput from "./translation.input";
 import TranslationRow from "./translation.row";
 import TranscriptionEditor from "./transcription.editor";
@@ -87,8 +87,11 @@ td {
 
 const StyledExpressionSubrow = styled.tr`
 border-bottom: 1px solid #eee;
+position: relative;
 
-& > .controls {
+.controls {
+    float: right;
+
     .detach {
         font-size: 0.8em;
         color: red;
@@ -98,11 +101,10 @@ border-bottom: 1px solid #eee;
 `;
 
 const ExpressionRow = forwardRef(({index, style, obj, nodeId, isEditable}, ref) => {
-    const {dispatch} = useSlicesViewContext();
-    const [showSubrow, setShowSubrow] = useState(false);
+    const {subrowObjectId, dispatch} = useSlicesViewContext();
 
     function toggleSubrow() {
-        setShowSubrow(prev => !prev);
+        dispatch({type: SET_SUBROW_OBJECT_ID, payload: subrowObjectId === obj.id ? null : obj.id});
     }
 
     async function detach() {
@@ -122,7 +124,7 @@ const ExpressionRow = forwardRef(({index, style, obj, nodeId, isEditable}, ref) 
                 <td className="index">
                     <div>
                         <div className="value">{index}</div>
-                        <div className="expand-subrow" onClick={toggleSubrow}>{showSubrow ? '△' : '▽'}</div>
+                        <div className="expand-subrow" onClick={toggleSubrow}>{subrowObjectId === obj.id ? '△' : '▽'}</div>
                     </div>
                 </td>
                 <td className="target">
@@ -161,7 +163,7 @@ const ExpressionRow = forwardRef(({index, style, obj, nodeId, isEditable}, ref) 
                     </div>
                 </td>
             </StyledExpressionRow>
-            {showSubrow && (
+            {subrowObjectId === obj.id && (
                 <StyledExpressionSubrow>
                     <td colSpan={3}>
                         <div className="controls">

@@ -12,6 +12,7 @@ import ExpressionTable from "./expression-table/expression.table";
 let initialState = {
     isFetching: true,
     showTranslationTranscriptions: false,
+    subrowObjectId: null,
     expressions: []
 };
 
