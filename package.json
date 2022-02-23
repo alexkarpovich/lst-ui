@@ -27,7 +27,8 @@
   },
   "scripts": {
     "start": "PORT=3333 react-scripts start",
-    "build": "react-scripts build",
+    "build:prod": "export $(cat .env.prod | xargs) && react-scripts build",
+    "build:dev": "export $(cat .env.dev | xargs) && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
