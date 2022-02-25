@@ -5,6 +5,7 @@
   "homepage": ".",
   "dependencies": {
     "@bakunya/react-masonry": "^0.0.5",
+    "@minoru/react-dnd-treeview": "^1.6.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",

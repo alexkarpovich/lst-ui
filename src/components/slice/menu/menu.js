@@ -1,11 +1,16 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
+import {Tree} from "@minoru/react-dnd-treeview";
 
+import api from "../../../utils/api";
 import MenuToolbar from "./menu-toolbar";
 import ContextMenu from "./context-menu";
-import SlicesMenuItem from "./menu-item";
+import {CustomNode} from "./custom-node";
+import {NodePlaceholder} from "./node-placeholder";
 import {useEventListener} from "../../../hooks/event-listener";
+import {UPDATE_NODE} from "../slices.const";
 import {useSlicesContext} from "../slices.page";
+import { prepareNodePath, prepareTreeData } from "../slices.service";
 
 const StyledSlicesMenu = styled.div.attrs(props => ({
     style: {
@@ -42,13 +47,18 @@ scrollbar-width: none;
 `
 
 const SlicesMenu = () => {
-    const {allNodes} = useSlicesContext();
+    const {activeGroup, allNodes, dispatch} = useSlicesContext();
     const [width, setWidth] = useState(200);
     const [startWidth, setStartWidth] = useState(200);
     const [startX, setStartX] = useState(0);
     const [isResizing, setIsResizing] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [contextData, setContextData] = useState({});
+    const [nodes, setNodes] = useState(prepareTreeData(allNodes));
+
+    useEffect(() => {
+        setNodes(prepareTreeData(allNodes)); 
+    }, [JSON.stringify(allNodes)]);
 
     useEventListener("mousemove", (e) => {
         if (isResizing) {
@@ -66,17 +76,6 @@ const SlicesMenu = () => {
         setIsResizing(false);
     }
 
-    function handleRootChange(e) {
-        console.log('root');
-        setContextData({
-            node: null,
-            x: e.clientX,
-            y: e.clientY,
-        });
-        setIsMenuOpen(true);
-        e.preventDefault();
-    }
-
     function handleMenuChange(contextData) {
         setContextData(contextData);
         setIsMenuOpen(true);
@@ -84,6 +83,24 @@ const SlicesMenu = () => {
 
     function handleMenuClose() {
         setIsMenuOpen(false);
+    }
+
+    const handleDrop = (newTree, {dragSourceId, dropTarget}) => {
+        const parentPath = prepareNodePath(dropTarget?.data);
+        moveNode(dragSourceId, parentPath, newTree.map(node => node.id));
+        setNodes(newTree);
+    }
+
+    async function moveNode(nodeId, parentPath, nodeOrder) {
+        try {
+            await api.post(`/me/groups/${activeGroup.id}/move-node`, {
+                nodeId,
+                parentPath,
+                nodeOrder,
+            });
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     return (
@@ -96,13 +113,31 @@ const SlicesMenu = () => {
                         onClose={handleMenuClose}
                     />
                 )}
-                {allNodes && allNodes.map(node => (
-                    <SlicesMenuItem 
-                        key={node.id}
-                        obj={node}
-                        onMenuChange={handleMenuChange}
-                    />
-                ))}
+                <Tree
+                    tree={nodes}
+                    rootId={null}
+                    render={(node, { depth, isOpen, onToggle }) => (
+                        <CustomNode
+                            node={node}
+                            depth={depth}
+                            isOpen={isOpen}
+                            onToggle={onToggle}
+                            onMenuChange={handleMenuChange}
+                        />
+                    )}
+                    onDrop={handleDrop}
+                    sort={false}
+                    insertDroppableFirst={false}
+                    canDrop={(tree, { dragSource, dropTargetId, dropTarget }) => {
+                        if (dragSource?.parent === dropTargetId) {
+                            return true;
+                        }
+                    }}
+                    dropTargetOffset={5}
+                    placeholderRender={(node, { depth }) => (
+                        <NodePlaceholder node={node} depth={depth} />
+                    )}
+                />
             </div>
             <div 
                 className="holder" 

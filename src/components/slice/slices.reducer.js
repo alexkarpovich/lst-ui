@@ -6,33 +6,6 @@ import {
 } from "./slices.const";
 import { getNestedNodeIds } from "./slices.service";
 
-function mapNodes(items, cmpFunc, editFunc) {
-    for (let i = 0; i < items.length; i++) {
-        if (cmpFunc(items[i])) {
-            items[i] = editFunc(items[i]);
-        }
-
-        if (items[i].children) {
-            mapNodes(items[i].children, cmpFunc, editFunc);
-        }
-    }
-}
-
-function getNodeIds(ids, nodes, all=false) {
-    let result = [];
-
-    for (let i = 0; i < nodes.length; i++) {
-        if (all || ids.indexOf(nodes[i].id) !== -1) {
-            result = result.concat(getNestedNodeIds(nodes[i]));
-        }
-        
-        if (nodes[i].children) {
-            result = result.concat(getNodeIds(ids, nodes[i].children, all));
-        }
-    }
-
-    return result;
-}
 
 export const slicesReducer = (state, action) => {
     switch (action.type) {
@@ -65,7 +38,7 @@ export const slicesReducer = (state, action) => {
             };
         }
         case SET_ACTIVE_NODES: {
-            const ids = getNodeIds(action.payload, state.allNodes);
+            const ids = getNestedNodeIds(action.payload, state.allNodes);
 
             return {...state, activeNodes: ids};
         }
@@ -98,59 +71,52 @@ export const slicesReducer = (state, action) => {
         }
         case UPDATE_NODE: {
             const {id, ...rest} = action.payload;
-            const allNodes = [...state.allNodes];
+            const allNodes = state.allNodes.map(node => {
+                if (node.id === id) {
+                    node = {...node, ...rest, editMode: false};
+                }
 
-            mapNodes(allNodes, 
-                (item) => (item.id === id),
-                (node) => ({...node, ...rest, editMode: false}));
+                return node
+            })
 
             return {...state, allNodes};
         }
         case ADD_NODE: {
             const {parentId, node} = action.payload;
+            const flatNode = {...node, count: 0};
             let allNodes = [...state.allNodes];
 
-            if (parentId === null) {
-                allNodes.push(node);
+            if (!parentId) {
+                allNodes.unshift(flatNode);
             } else {
-                allNodes = [...state.allNodes];
-                
-                mapNodes(allNodes, 
-                    (item) => (item.id === parentId),
-                    (item) => {
-                        item.children.push(node);
-
-                        return item;
-                    })
+                const idx = allNodes.findIndex((value) => value.id === parentId);
+                allNodes.splice(Math.min(idx, 0), 0, flatNode);
             }
             
             return {...state, allNodes};
         }
         case EDIT_NODE_MODE: {
             const {nodeId} = action.payload;
-            const allNodes = [...state.allNodes];
+            const allNodes = state.allNodes.map(node => {
+                if (node.id === nodeId) {
+                    node.editMode = true;
+                }
 
-            mapNodes(allNodes, 
-                (item) => (item.id === nodeId),
-                (item) => {
-                    item.editMode = true;
-                    return item;
-                })
+                return node;
+            });
 
             return {...state, allNodes};
         }
         case RENAME_NODE: {
             const {nodeId, name} = action.payload;
-            const allNodes = [...state.allNodes];
-            
-            mapNodes(allNodes, 
-                (item) => (item.id === nodeId),
-                (item) => {
-                    item.isEditing = false;
-                    item.name = name;
-                    
-                    return item;
-                })
+            const allNodes = state.allNodes.map(node => {
+                if (node.id === nodeId) {
+                    node.isEditing = false;
+                    node.name = name;
+                }
+
+                return node;
+            });
 
             return {...state, allNodes};
         }
@@ -173,14 +139,14 @@ export const slicesReducer = (state, action) => {
             return {...state, menuMode: MENU_MODE_DEFAULT};
         }
         case SELECT_ALL_NODES: {
-            const allIds = getNodeIds([], state.allNodes, true);
+            const allIds = state.allNodes.map(node => node.id);
 
             return {...state, nodeSelection: allIds};
         }
         case SELECTION_TOGGLE_NODE: {
             let nodeSelection;
             const nodeId = action.payload;
-            const ids = getNodeIds([nodeId], state.allNodes);
+            const ids = getNestedNodeIds([nodeId], state.allNodes);
 
             if (state.nodeSelection.indexOf(nodeId) !== -1) {
                 nodeSelection = state.nodeSelection.filter(i => ids.indexOf(i) === -1);
