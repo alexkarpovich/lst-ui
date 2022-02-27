@@ -8,19 +8,21 @@ import ContextMenu from "./context-menu";
 import {CustomNode} from "./custom-node";
 import {NodePlaceholder} from "./node-placeholder";
 import {useEventListener} from "../../../hooks/event-listener";
-import {UPDATE_NODE} from "../slices.const";
 import {useSlicesContext} from "../slices.page";
 import { prepareNodePath, prepareTreeData } from "../slices.service";
 
 const StyledSlicesMenu = styled.div.attrs(props => ({
     style: {
-        width: `${props.width}px`,
+        flexBasis: `${props.width}px`,
     },
 }))`
+display: flex;
+flex-shrink: 0;
 background-color: ${props => props.theme.colors.bgActiveMenu};
 position: fixed;
 
 & > .content {
+    width: inherit;
     height: 100vh;
 
     .node-tree {
@@ -38,7 +40,7 @@ position: fixed;
 
 & > .holder {
     cursor: col-resize;
-    height: 100%;
+    height: 100vh;
     background: ${props => props.theme.colors.bgMenu};
     width: 4px;
 
@@ -48,9 +50,8 @@ position: fixed;
 }  
 `
 
-const SlicesMenu = () => {
+const SlicesMenu = ({width, onWidthChange}) => {
     const {activeGroup, allNodes, dispatch} = useSlicesContext();
-    const [width, setWidth] = useState(200);
     const [startWidth, setStartWidth] = useState(200);
     const [startX, setStartX] = useState(0);
     const [isResizing, setIsResizing] = useState(false);
@@ -64,7 +65,7 @@ const SlicesMenu = () => {
 
     useEventListener("mousemove", (e) => {
         if (isResizing) {
-            setWidth(startWidth + e.clientX - startX);
+            onWidthChange(startWidth + e.clientX - startX);
         }
     });
 

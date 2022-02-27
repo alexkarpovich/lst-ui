@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useReducer, useContext, Fragment } from "react";
+import React, { createContext, useEffect, useState, useReducer, useContext, Fragment } from "react";
 import { Link, createSearchParams, useSearchParams, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
@@ -37,6 +37,7 @@ const SlicesPage = () => {
     const {groupId} = useParams();
     const [searchParams] = useSearchParams();
     const [state, dispatch] = useReducer(slicesReducer, initialState);
+    const [menuWidth, setMenuWidth] = useState(200);
     const qp = prepareQueryParams(searchParams);
 
     useEffect(() => {
@@ -66,7 +67,10 @@ const SlicesPage = () => {
     return state.isFetching ? 'Fetching...' : (
         <SlicesContext.Provider value={{ ...state, dispatch }}>
             <StyledSlicesPage>
-                <SlicesMenu />
+                <SlicesMenu 
+                    width={menuWidth} 
+                    onWidthChange={w => setMenuWidth(w)}
+                />
 
                 <div className="outlet">
                     <SlicesView />
