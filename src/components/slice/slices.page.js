@@ -28,13 +28,8 @@ export function useSlicesContext() {
 }
 
 const StyledSlicesPage = styled.div`
-display: flex;
-height: 100%;
-
 & > .outlet {
-    width: 100%;
-    height: 100hv;
-    overflow-y: auto;
+    margin-left: 200px;
 }
 `;
 

@@ -6,11 +6,12 @@ import { useAuthContext } from "../../providers/auth.provider";
 import MenuItem from "./menu-item";
 
 const StyledSideMenu = styled.div`
+position: fixed;
 background-color: ${props => props.theme.colors.bgMenu};
 border-right: 1px solid ${props => props.theme.colors.bgActiveMenu};
-flex-basis: 48px;
-flex-grow: 0;
-flex-shrink: 0;
+width: 48px;
+height: 100vh;
+z-index: 999;
 
 & > .brand {
     text-align: center;

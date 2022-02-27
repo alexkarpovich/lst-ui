@@ -5,14 +5,10 @@ import styled from "styled-components";
 import SideMenu from "./components/menu/side-menu";
 
 const StyledApp = styled.div`
-display: flex;
-height: 100%;
 width: 100%;
-position: absolute;
-overflow-y: auto;
 
 & > .outlet {
-    width: 100%;
+    margin-left: 48px;
 }
 `;
 

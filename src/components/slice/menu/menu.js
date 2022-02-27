@@ -14,24 +14,26 @@ import { prepareNodePath, prepareTreeData } from "../slices.service";
 
 const StyledSlicesMenu = styled.div.attrs(props => ({
     style: {
-        flexBasis: `${props.width}px`,
+        width: `${props.width}px`,
     },
 }))`
 background-color: ${props => props.theme.colors.bgActiveMenu};
-display: inline-flex;
-flex-grow: 0;
-flex-shrink: 0;
-height: 100vh;
-overflow-y: auto;
--ms-overflow-style: none;
-scrollbar-width: none;
-
-&::-webkit-scrollbar {
-    display: none;
-}
+position: fixed;
 
 & > .content {
-    width: 100%;
+    height: 100vh;
+
+    .node-tree {
+        height: 100vh;
+        padding-bottom: 64px;
+        overflow-y: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }   
+    }
 }
 
 & > .holder {
@@ -113,31 +115,33 @@ const SlicesMenu = () => {
                         onClose={handleMenuClose}
                     />
                 )}
-                <Tree
-                    tree={nodes}
-                    rootId={null}
-                    render={(node, { depth, isOpen, onToggle }) => (
-                        <CustomNode
-                            node={node}
-                            depth={depth}
-                            isOpen={isOpen}
-                            onToggle={onToggle}
-                            onMenuChange={handleMenuChange}
-                        />
-                    )}
-                    onDrop={handleDrop}
-                    sort={false}
-                    insertDroppableFirst={false}
-                    canDrop={(tree, { dragSource, dropTargetId, dropTarget }) => {
-                        if (dragSource?.parent === dropTargetId) {
-                            return true;
-                        }
-                    }}
-                    dropTargetOffset={5}
-                    placeholderRender={(node, { depth }) => (
-                        <NodePlaceholder node={node} depth={depth} />
-                    )}
-                />
+                <div className="node-tree">
+                    <Tree
+                        tree={nodes}
+                        rootId={null}
+                        render={(node, { depth, isOpen, onToggle }) => (
+                            <CustomNode
+                                node={node}
+                                depth={depth}
+                                isOpen={isOpen}
+                                onToggle={onToggle}
+                                onMenuChange={handleMenuChange}
+                            />
+                        )}
+                        onDrop={handleDrop}
+                        sort={false}
+                        insertDroppableFirst={false}
+                        canDrop={(tree, { dragSource, dropTargetId, dropTarget }) => {
+                            if (dragSource?.parent === dropTargetId) {
+                                return true;
+                            }
+                        }}
+                        dropTargetOffset={5}
+                        placeholderRender={(node, { depth }) => (
+                            <NodePlaceholder node={node} depth={depth} />
+                        )}
+                    />
+                </div>
             </div>
             <div 
                 className="holder" 

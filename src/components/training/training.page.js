@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useEffect, useMemo, useReducer} from "react";
+import React, {createContext, useContext, useEffect, useMemo, useState, useReducer, useRef} from "react";
 import {useParams} from "react-router-dom";
 import styled from "styled-components";
 
@@ -44,6 +44,8 @@ flex-direction: column;
 
 const TrainingPage = () => {
     const {id} = useParams();
+    const headerRef = useRef();
+    const [headerWidth, setHeaderWidth] = useState(0);
     const [state, dispatch] = useReducer(trainingReducer, initialState);
     const steps = useMemo(() => prepereSteps(state.training?.meta), [JSON.stringify(state.training)]);
 
@@ -67,6 +69,12 @@ const TrainingPage = () => {
         fetchTraining();
     }, [id])
 
+    useEffect(() => {
+        if (headerRef.current) {
+            setHeaderWidth(headerRef.current.clientWidth);
+        }
+    }, [headerRef.current]);
+
     async function reset() {
         try {
             await api.post(`/me/trainings/${id}/reset`);
@@ -81,8 +89,14 @@ const TrainingPage = () => {
     return state.isFetching ? 'Fetching...' : (
         <TrainingContext.Provider value={{ ...state, dispatch }}>
             <StyledTrainingPage>
-                <div className="header">
-                    <Stepper steps={steps} onResetClick={reset} />
+                <div ref={headerRef} className="header">
+                    {headerWidth && (
+                        <Stepper 
+                            steps={steps}
+                            width={headerWidth}
+                            onResetClick={reset} 
+                        />
+                    )}
                 </div>
                 <div className="card-container">
                     {state.item ? (

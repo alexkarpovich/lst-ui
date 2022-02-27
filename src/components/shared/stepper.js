@@ -56,7 +56,7 @@ svg#checkbox {
 }
 
 .progress-line {
-    width: 140px;
+    width: ${({width}) => width}px;
     margin: 0 10px;
     height: 4px;
     overflow: hidden;
@@ -77,8 +77,9 @@ svg#checkbox {
 }
 `;
 
-const Stepper = ({steps, onResetClick}) => {
+const Stepper = ({steps, width, onResetClick}) => {
     const [stepStates, setStepStates] = useState(prepareStepStates(steps));
+    const progressWidth = width / steps.length - 50;
 
     useEffect(() => {
         setStepStates(prepareStepStates(steps));
@@ -113,7 +114,12 @@ const Stepper = ({steps, onResetClick}) => {
                     </svg>
                 </StyledCheckbox>
                 {stepStates.map((step, i) => (
-                    <StyledCheckbox key={i} active={step.active} progress={step.progress}>
+                    <StyledCheckbox 
+                        key={i} 
+                        active={step.active} 
+                        progress={step.progress}
+                        width={progressWidth}
+                    >
                         <div className="progress-line">
                             <div className="progress-percent" />
                         </div>
@@ -132,6 +138,7 @@ const Stepper = ({steps, onResetClick}) => {
 
 Stepper.propTypes = {
     steps: PropTypes.array.isRequired,
+    width: PropTypes.number.isRequired,
     onResetClick: PropTypes.func,
 };
 

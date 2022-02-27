@@ -141,9 +141,13 @@ const TranslationInput = ({expressionId, nodeId}) => {
         setInputValue(e.target.value);
     }
 
-    function onKeyPress(e) {
+    function onKeyUp(e) {
         if (e.key === "Enter") {
             handleAttachNew();
+        }
+        if (e.key === "Escape") {
+            setIsOpen(false);
+            setInputValue('');
         }
     }
 
@@ -179,7 +183,7 @@ const TranslationInput = ({expressionId, nodeId}) => {
                         placeholder="+ translation" 
                         value={inputValue}
                         onChange={onInputChange}
-                        onKeyPress={onKeyPress}
+                        onKeyUp={onKeyUp}
                     />
                     <span className="attach-translation-btn" onClick={handleAttachNew}>↵</span>
                     <div className="popover-content">

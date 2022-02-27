@@ -8,6 +8,7 @@ import { slicesViewReducer } from "./view.reducer";
 import { useSlicesContext } from "./slices.page";
 import ToolBar from "./toolbar";
 import ExpressionTable from "./expression-table/expression.table";
+import EmptyNodeView from "./empty-node.view";
 
 let initialState = {
     isFetching: true,
@@ -60,19 +61,23 @@ const SlicesView = () => {
 
     return state.isFetching ? 'Fetching...' : (
         <SlicesViewContext.Provider value={{ ...state, dispatch }}>
-            <StyledSlicesView>
-                <ToolBar
-                    nodeIds={activeNodes}
-                    isEditable={isEditable}
-                />
-                {state.expressions && (
-                    <ExpressionTable 
-                        nodeId={activeNodes[0]}
-                        expressions={state.expressions}
+            {activeNodes.length ? (
+                <StyledSlicesView>
+                    <ToolBar
+                        nodeIds={activeNodes}
                         isEditable={isEditable}
                     />
-                )}
-            </StyledSlicesView>
+                    {state.expressions && (
+                        <ExpressionTable 
+                            nodeId={activeNodes[0]}
+                            expressions={state.expressions}
+                            isEditable={isEditable}
+                        />
+                    )}
+                </StyledSlicesView>
+            ) : (
+                <EmptyNodeView />
+            )}
         </SlicesViewContext.Provider>
     );
 };
