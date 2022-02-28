@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {lighten} from "polished";
 
 import api from "../../../utils/api";
-import {MENU_MODE_DEFAULT, MENU_MODE_SELECT, NODE_FOLDER, SELECTION_TOGGLE_NODE, SET_ACTIVE_NODES, UPDATE_NODE, VISIBILITY_PRIVATE, VISIBILITY_PUBLIC } from "../slices.const";
+import {MENU_MODE_DEFAULT, MENU_MODE_SELECT, SELECTION_TOGGLE_NODE, SET_ACTIVE_NODES, UPDATE_NODE, VISIBILITY_PRIVATE, VISIBILITY_PUBLIC} from "../slices.const";
 import {useSlicesContext} from "../slices.page";
 import EditableName from "./editable-name";
 
@@ -100,7 +100,7 @@ export const CustomNode = ({depth, node, isOpen, onToggle, onMenuChange}) => {
 
     async function update(obj) {
         try {
-            const params = Object.assign(obj, data);
+            const params = Object.assign(data, obj);
 
             await api.post(`/me/nodes/${data.id}`, params);
             dispatch({type: UPDATE_NODE, payload: {

@@ -13,16 +13,15 @@ import { prepareNodePath, prepareTreeData } from "../slices.service";
 
 const StyledSlicesMenu = styled.div.attrs(props => ({
     style: {
-        flexBasis: `${props.width}px`,
+        width: `${props.width}px`,
     },
 }))`
-display: flex;
-flex-shrink: 0;
 background-color: ${props => props.theme.colors.bgActiveMenu};
 position: fixed;
+display: flex;
 
 & > .content {
-    width: inherit;
+    width: 100%;
     height: 100vh;
 
     .node-tree {
@@ -39,10 +38,12 @@ position: fixed;
 }
 
 & > .holder {
+    position: absolute;
+    right: -${({holderWidth}) => holderWidth}px;
     cursor: col-resize;
     height: 100vh;
     background: ${props => props.theme.colors.bgMenu};
-    width: 4px;
+    width: ${({holderWidth}) => holderWidth}px;
 
     &:hover {
         background: ${props => props.theme.colors.colorMenu};
@@ -50,7 +51,7 @@ position: fixed;
 }  
 `
 
-const SlicesMenu = ({width, onWidthChange}) => {
+const SlicesMenu = ({width, holderWidth, onWidthChange}) => {
     const {activeGroup, allNodes, dispatch} = useSlicesContext();
     const [startWidth, setStartWidth] = useState(200);
     const [startX, setStartX] = useState(0);
@@ -65,7 +66,7 @@ const SlicesMenu = ({width, onWidthChange}) => {
 
     useEventListener("mousemove", (e) => {
         if (isResizing) {
-            onWidthChange(startWidth + e.clientX - startX);
+            onWidthChange(Math.max(startWidth + e.clientX - startX, 0));
         }
     });
 
@@ -107,7 +108,7 @@ const SlicesMenu = ({width, onWidthChange}) => {
     }
 
     return (
-        <StyledSlicesMenu width={width}>
+        <StyledSlicesMenu width={width} holderWidth={holderWidth}>
             <div className="content">
                 <MenuToolbar />
                 {isMenuOpen && (

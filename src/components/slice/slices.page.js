@@ -21,17 +21,19 @@ let initialState = {
     nodeSelection: [],
 };
 
+const HOLDER_WIDTH = 7;
+
 export const SlicesContext = createContext(initialState);
 
 export function useSlicesContext() {
    return useContext(SlicesContext);
 }
 
-const StyledSlicesPage = styled.div`
-& > .outlet {
-    margin-left: 200px;
-}
-`;
+const StyledSlicesPageOutlet = styled.div.attrs(props => ({
+    style: {
+        marginLeft: `${props.marginLeft}px`,
+    },
+}))``;
 
 const SlicesPage = () => {
     const {groupId} = useParams();
@@ -66,16 +68,17 @@ const SlicesPage = () => {
 
     return state.isFetching ? 'Fetching...' : (
         <SlicesContext.Provider value={{ ...state, dispatch }}>
-            <StyledSlicesPage>
+            <div className="slices-page">
                 <SlicesMenu 
-                    width={menuWidth} 
+                    width={menuWidth}
+                    holderWidth={HOLDER_WIDTH}
                     onWidthChange={w => setMenuWidth(w)}
                 />
 
-                <div className="outlet">
+                <StyledSlicesPageOutlet marginLeft={menuWidth + HOLDER_WIDTH}>
                     <SlicesView />
-                </div>
-            </StyledSlicesPage>
+                </StyledSlicesPageOutlet>
+            </div>
         </SlicesContext.Provider>
     );
 };
