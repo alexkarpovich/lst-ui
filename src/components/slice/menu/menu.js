@@ -18,7 +18,6 @@ const StyledSlicesMenu = styled.div.attrs(props => ({
 }))`
 background-color: ${props => props.theme.colors.bgActiveMenu};
 position: fixed;
-display: flex;
 
 & > .content {
     width: 100%;
@@ -38,17 +37,17 @@ display: flex;
 }
 
 & > .holder {
+    color: #fff;
+    font-size: 1.2em;
+    padding: 4px;
     position: absolute;
-    right: -${({holderWidth}) => holderWidth}px;
+    top: 0;
+    right: 0;
+    transform: translate(100%,0);
+    background: #17212b;
+    border: 1px solid #17212b;
     cursor: col-resize;
-    height: 100vh;
-    background: ${props => props.theme.colors.bgMenu};
-    width: ${({holderWidth}) => holderWidth}px;
-
-    &:hover {
-        background: ${props => props.theme.colors.colorMenu};
-    }
-}  
+}
 `
 
 const SlicesMenu = ({width, holderWidth, onWidthChange}) => {
@@ -145,8 +144,7 @@ const SlicesMenu = ({width, holderWidth, onWidthChange}) => {
                     />
                 </div>
             </div>
-            <div 
-                className="holder" 
+            <i className="holder icon-grip-lines-vertical-solid" 
                 onMouseDown={handleHolderDown} 
                 onMouseUp={handleHolderUp}
             />

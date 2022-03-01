@@ -4,7 +4,7 @@ export const getNestedNodeIds = (ids, allNodes) => {
     const parentNodes = allNodes.filter(node => ids.indexOf(node.id) !== -1);
     const parentPaths = parentNodes.map(node => prepareNodePath(node));
 
-    return parentNodes.concat(allNodes.filter(node => parentPaths.some(path => node.path.startsWith(path))))
+    return parentNodes.concat(allNodes.filter(node => parentPaths.some(path => `${node.path}.`.startsWith(`${path}.`))))
         .map(node => node.id);
 };
 
