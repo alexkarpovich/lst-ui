@@ -9,6 +9,7 @@ import { useSlicesContext } from "./slices.page";
 import ToolBar from "./toolbar";
 import ExpressionTable from "./expression-table/expression.table";
 import EmptyNodeView from "./empty-node.view";
+import TextView from "./text-view";
 
 let initialState = {
     isFetching: true,
@@ -67,6 +68,7 @@ const SlicesView = () => {
                         nodeIds={activeNodes}
                         isEditable={isEditable}
                     />
+                    <TextView />
                     {state.expressions && (
                         <ExpressionTable 
                             nodeId={activeNodes[0]}
