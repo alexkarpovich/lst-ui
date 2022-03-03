@@ -37,15 +37,14 @@ position: fixed;
 }
 
 & > .holder {
-    color: #fff;
-    font-size: 1.2em;
-    padding: 4px;
+    color: ${props => props.theme.colors.bgActiveMenu};
+    font-size: 0.8em;
+    padding: 50vh 4px 4px 4px;
     position: absolute;
     top: 0;
+    bottom: 0;
     right: 0;
     transform: translate(100%,0);
-    background: #17212b;
-    border: 1px solid #17212b;
     cursor: col-resize;
 }
 `
@@ -69,14 +68,14 @@ const SlicesMenu = ({width, holderWidth, onWidthChange}) => {
         }
     });
 
+    useEventListener("mouseup", (e) => {
+        isResizing && setIsResizing(false);
+    });
+
     function handleHolderDown(e) {
         setStartX(e.clientX);
         setStartWidth(width);
         setIsResizing(true);
-    }
-
-    function handleHolderUp(e) {
-        setIsResizing(false);
     }
 
     function handleMenuChange(contextData) {
@@ -144,10 +143,10 @@ const SlicesMenu = ({width, holderWidth, onWidthChange}) => {
                     />
                 </div>
             </div>
-            <i className="holder icon-grip-lines-vertical-solid" 
-                onMouseDown={handleHolderDown} 
-                onMouseUp={handleHolderUp}
-            />
+            <div className="holder" onMouseDown={handleHolderDown}>
+                <span className="icon-grip-lines-vertical-solid" />
+            </div>
+            
         </StyledSlicesMenu>
     );
 };

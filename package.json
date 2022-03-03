@@ -5,6 +5,8 @@
   "homepage": ".",
   "dependencies": {
     "@bakunya/react-masonry": "^0.0.5",
+    "@draft-js-plugins/editor": "^4.1.2",
+    "@draft-js-plugins/inline-toolbar": "^4.1.2",
     "@minoru/react-dnd-treeview": "^1.6.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",

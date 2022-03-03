@@ -25,12 +25,9 @@ export function useSlicesViewContext() {
 }
 
 const StyledSlicesView = styled.div`
-padding: 10px;
+padding: 10px 10px 10px 20px;
 height: 100%;
-
-.expression-table {
-    max-width: 860px;
-}
+max-width: 860px;
 `;
 
 const SlicesView = () => {
