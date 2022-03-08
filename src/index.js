@@ -20,36 +20,34 @@ import UserProfilePage from "./components/user-profile/user-profile.page";
 
 
 ReactDOM.render(
-    <React.StrictMode>
-        <AppThemeProvider>
-            <AuthProvider>
-                <BrowserRouter basename='/'>
-                    <Routes>
-                        <Route index element={<HomePage />} />
-                        <Route exact path="/auth" element={<GuestRoute />}>
-                            <Route index element={<AuthPage />} />
-                            <Route exact path="signup/:token" element={<SignupConfirmPage />} />
-                        </Route>
-                        <Route path="/me" element={<MemberRoute />}>
-                            <Route path="/me" element={<App />}>
-                                <Route index element={<DashboardPage />} />
-                                <Route exact path="profile" element={<UserProfilePage />} />
-                                <Route exact path="groups" element={<Outlet />}>
-                                    <Route index element={<GroupsPage />} />
-                                    <Route path=":groupId/slices" element={<SlicesPage />} />
-                                    <Route exact path="confirm-invitation/:token" element={<ConfirmInvitationPage />} />
-                                </Route>
-                                <Route path="slices" element={<GroupSelectPage />} />
-                                <Route path="trainings" element={<Outlet />}>
-                                    <Route path=":id" element={<TrainingPage />} />
-                                </Route>
+    <AppThemeProvider>
+        <AuthProvider>
+            <BrowserRouter basename='/'>
+                <Routes>
+                    <Route index element={<HomePage />} />
+                    <Route exact path="/auth" element={<GuestRoute />}>
+                        <Route index element={<AuthPage />} />
+                        <Route exact path="signup/:token" element={<SignupConfirmPage />} />
+                    </Route>
+                    <Route path="/me" element={<MemberRoute />}>
+                        <Route path="/me" element={<App />}>
+                            <Route index element={<DashboardPage />} />
+                            <Route exact path="profile" element={<UserProfilePage />} />
+                            <Route exact path="groups" element={<Outlet />}>
+                                <Route index element={<GroupsPage />} />
+                                <Route path=":groupId/slices" element={<SlicesPage />} />
+                                <Route exact path="confirm-invitation/:token" element={<ConfirmInvitationPage />} />
+                            </Route>
+                            <Route path="slices" element={<GroupSelectPage />} />
+                            <Route path="trainings" element={<Outlet />}>
+                                <Route path=":id" element={<TrainingPage />} />
                             </Route>
                         </Route>
-                    </Routes>
-                </BrowserRouter>
-            </AuthProvider>
-        </AppThemeProvider>
-    </React.StrictMode>,
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
+    </AppThemeProvider>,
     document.getElementById('root')
 );
 
