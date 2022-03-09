@@ -1,14 +1,14 @@
 /* eslint-disable react/no-multi-comp */
-import React, { useRef, useState, useEffect, ReactElement } from 'react';
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
-import {EditorState, RichUtils, Modifier} from 'draft-js';
-import Editor, { createEditorStateWithText } from '@draft-js-plugins/editor';
+import { KeyBindingUtil, RichUtils, Modifier, EditorState, getDefaultKeyBinding } from "draft-js";
+import Editor, { createEditorStateWithText } from "@draft-js-plugins/editor";
 
 import createInlineToolbarPlugin, {
   Separator,
-} from '@draft-js-plugins/inline-toolbar';
+} from "@draft-js-plugins/inline-toolbar";
 
-import createTextAlignmentPlugin from '@draft-js-plugins/text-alignment';
+import createTextAlignmentPlugin from "@draft-js-plugins/text-alignment";
 
 import {
   ItalicButton,
@@ -22,8 +22,8 @@ import {
   OrderedListButton,
   BlockquoteButton,
   CodeBlockButton,
-} from '@draft-js-plugins/buttons';
-import '@draft-js-plugins/inline-toolbar/lib/plugin.css';
+} from "@draft-js-plugins/buttons";
+import "@draft-js-plugins/inline-toolbar/lib/plugin.css";
 import "@draft-js-plugins/text-alignment/lib/plugin.css";
 
 const HeadlinesPicker = (props) => {
@@ -103,7 +103,7 @@ const HeadlinesButton = ({ onOverrideContent }) => {
 
 const textAlignmentPlugin = createTextAlignmentPlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin();
-const {InlineToolbar} = inlineToolbarPlugin;
+const { InlineToolbar } = inlineToolbarPlugin;
 const plugins = [inlineToolbarPlugin, textAlignmentPlugin];
 const text =
   'In this editor a toolbar shows up once you select part of the text …';
@@ -114,10 +114,15 @@ border: 1px solid #ddd;
 cursor: text;
 padding: 16px;
 border-radius: 2px;
-margin-bottom: 2em;
+margin-bottom: 1em;
 
 & :global(.public-DraftEditor-content) {
   min-height: 140px;
+}
+
+.public-DraftEditorPlaceholder-root {
+  position: absolute;
+  color: #aaa;
 }
 
 pre {
@@ -146,35 +151,47 @@ export const TextEditor = () => {
     editor.current.focus();
   };
 
-  const onTab = (e) => {
-    e.preventDefault();
-
-    const selection = editorState.getSelection();
-    const blockType = editorState
-        .getCurrentContent()
-        .getBlockForKey(selection.getStartKey())
-        .getType();
-
-    if (blockType === "unordered-list-item" || blockType === "ordered-list-item") {
-        setEditorState(RichUtils.onTab(e, editorState, 3));
-    } else {
-        let newContentState = Modifier.replaceText(
-            editorState.getCurrentContent(),
-            editorState.getSelection(),
-            '    '
-        );
-        
-        setEditorState(EditorState.push(editorState, newContentState, 'insert-characters'))
+  // this function maps keys we press to strings that represent some action (eg 'undo', or 'underline')
+  // then the this.handleKeyCommand('underline') function gets called with this string.
+  const keyBindingFn = (event) => {
+    console.log(event);
+    if (event.keyCode === 9) {
+      // Preventing default behavior to keep cursor in the editor
+      event.preventDefault();
+            
+      // Defining number of spaces to apply after tab press
+      let tabIndent = '    ';
+      
+      // Getting current state
+      let currentState = editorState;
+      
+      // Getting variables to know text selection 
+      let selectionState      = editorState.getSelection();
+      let anchorKey           = selectionState.getAnchorKey();
+      let currentContent      = editorState.getCurrentContent();
+      let currentContentBlock = currentContent.getBlockForKey(anchorKey);
+      let start               = selectionState.getStartOffset();
+      let end                 = selectionState.getEndOffset();
+      let selectedText        = currentContentBlock.getText().slice(start, end);
+      
+      // Defining next state
+      let nextState = Modifier.replaceText(currentContent, selectionState, tabIndent + selectedText);
+      
+      // Setting next state
+      setEditorState(EditorState.push(currentState, nextState, 'indent'));
     }
-}
+
+    return getDefaultKeyBinding(event)
+  }
 
   return (
     <StyledTextEditor onClick={focus}>
       <Editor
         editorState={editorState}
         onChange={onChange}
-        onTab={onTab}
+        keyBindingFn={keyBindingFn}
         plugins={plugins}
+        placeholder="Type text here..."
         ref={(element) => {
           editor.current = element;
         }}
