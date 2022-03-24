@@ -1,13 +1,9 @@
 /* eslint-disable react/no-multi-comp */
-import React, { useRef, useState, useEffect } from "react";
+import React, {useRef, useState, useEffect} from "react";
 import styled from "styled-components";
-import { KeyBindingUtil, RichUtils, Modifier, EditorState, getDefaultKeyBinding } from "draft-js";
+import {Modifier, EditorState, getDefaultKeyBinding} from "draft-js";
 import Editor, { createEditorStateWithText } from "@draft-js-plugins/editor";
-
-import createInlineToolbarPlugin, {
-  Separator,
-} from "@draft-js-plugins/inline-toolbar";
-
+import createInlineToolbarPlugin from "@draft-js-plugins/inline-toolbar";
 import createTextAlignmentPlugin from "@draft-js-plugins/text-alignment";
 
 import {
@@ -105,16 +101,26 @@ const textAlignmentPlugin = createTextAlignmentPlugin();
 const inlineToolbarPlugin = createInlineToolbarPlugin();
 const { InlineToolbar } = inlineToolbarPlugin;
 const plugins = [inlineToolbarPlugin, textAlignmentPlugin];
-const text =
-  'In this editor a toolbar shows up once you select part of the text …';
 
 const StyledTextEditor = styled.div`
 box-sizing: border-box;
 border: 1px solid #ddd;
 cursor: text;
 padding: 16px;
+position: relative;
 border-radius: 2px;
 margin-bottom: 1em;
+
+& > .save {
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  opacity: 0.5;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
 
 & :global(.public-DraftEditor-content) {
   min-height: 140px;
@@ -137,9 +143,9 @@ ul, ol {
 }
 `;
 
-export const TextEditor = () => {
+export const TextEditor = ({onSave}) => {
   const [editorState, setEditorState] = useState(
-    createEditorStateWithText(text)
+    createEditorStateWithText('')
   );
   const editor = useRef();
 
@@ -154,7 +160,6 @@ export const TextEditor = () => {
   // this function maps keys we press to strings that represent some action (eg 'undo', or 'underline')
   // then the this.handleKeyCommand('underline') function gets called with this string.
   const keyBindingFn = (event) => {
-    console.log(event);
     if (event.keyCode === 9) {
       // Preventing default behavior to keep cursor in the editor
       event.preventDefault();
@@ -184,8 +189,13 @@ export const TextEditor = () => {
     return getDefaultKeyBinding(event)
   }
 
+  function handleSave() {
+    onSave && onSave(editorState);
+  }
+
   return (
     <StyledTextEditor onClick={focus}>
+      <span className="save" onClick={handleSave}>save</span>
       <Editor
         editorState={editorState}
         onChange={onChange}
@@ -205,7 +215,6 @@ export const TextEditor = () => {
               <ItalicButton {...externalProps} />
               <UnderlineButton {...externalProps} />
               <CodeButton {...externalProps} />
-              <Separator {...externalProps} />
               <HeadlinesButton {...externalProps} />
               <UnorderedListButton {...externalProps} />
               <OrderedListButton {...externalProps} />
